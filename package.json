@@ -1,0 +1,14 @@
+{
+  "name": "monei-lending-app",
+  "version": "1.0.0",
+  "description": "Micro-lending platform for monei.co.bw",
+  "main": "index.html",
+  "scripts": {
+    "dev": "echo 'Starting development server...'",
+    "build": "echo 'Building project...'",
+    "deploy": "echo 'Ready to deploy to Cloudflare'"
+  },
+  "keywords": ["lending", "microfinance", "botswana", "business-loans"],
+  "author": "Monei Team",
+  "license": "MIT"
+}
