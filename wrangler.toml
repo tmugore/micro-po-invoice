@@ -1,0 +1,15 @@
+# wrangler.toml
+name = "monei-api"
+compatibility_date = "2024-01-01"
+
+# Environment variables for production
+[vars]
+CONTACT_EMAIL = "info@monei.co.bw"
+APP_ENVIRONMENT = "production"
+
+# For different environments
+[env.development]
+vars = { APP_ENVIRONMENT = "development" }
+
+[env.production] 
+vars = { APP_ENVIRONMENT = "production" }

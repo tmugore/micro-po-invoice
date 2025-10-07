@@ -4,11 +4,28 @@
   "description": "Micro-lending platform for monei.co.bw",
   "main": "index.html",
   "scripts": {
-    "dev": "echo 'Starting development server...'",
-    "build": "echo 'Building project...'",
-    "deploy": "echo 'Ready to deploy to Cloudflare'"
+    "test:env": "node test-env.js",
+    "test:cloudflare": "node test-cloudflare.js",
+    "test:db": "node test-database.js",
+    "test:all": "npm run test:env && npm run test:cloudflare && npm run test:db"
   },
-  "keywords": ["lending", "microfinance", "botswana", "business-loans"],
+  "keywords": [
+    "lending",
+    "microfinance",
+    "botswana",
+    "business-loans"
+  ],
   "author": "Monei Team",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tmugore/micro-po-invoice.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tmugore/micro-po-invoice/issues"
+  },
+  "homepage": "https://github.com/tmugore/micro-po-invoice#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  }
 }
