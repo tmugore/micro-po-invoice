@@ -1,42 +1,21 @@
-// TEMPORARY FIX - Add these function definitions at the top of your existing app.js
-window.showCalculator = function() {
-    console.log('Calculator clicked');
-    alert('Calculator will be implemented soon!');
-};
+// Microlending Platform Frontend JavaScript - FIXED VERSION
 
-window.showApplication = function() {
-    console.log('Application clicked');
-    alert('Application form will open soon!');
-};
-
-window.applyForProduct = function(productId) {
-    console.log('Apply for product:', productId);
-    alert(`Applying for ${productId} loan - feature coming soon!`);
-};
-
-window.showLogin = function() {
-    console.log('Login clicked');
-    alert('Login modal will open soon!');
-};
-
-// Monei Lending Platform - Complete Functionality Fix
-console.log('Monei Lending Platform initialized');
-console.log('Worker URL: https://monei-api.tmugore.workers.dev');
-
-// Global state
-let currentView = 'home';
+// Application state
 let currentUser = null;
+let loanProducts = [];
 
-// DOM Content Loaded - Safe event listener attachment
+// API Base URL - Using your worker URL
+const API_BASE = 'https://monei-api.tmugore.workers.dev';
+
+// Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM fully loaded, initializing event listeners...');
-    
-    // Initialize all functionality
+    console.log('Monei Lending Platform initialized');
     initializeEventListeners();
+    loadLoanProducts();
     checkAuthStatus();
-    loadProducts();
 });
 
+// Initialize all event listeners
 function initializeEventListeners() {
     // Navigation buttons
     const loginBtn = document.getElementById('login-btn');
@@ -47,271 +26,776 @@ function initializeEventListeners() {
     if (applicationBtn) applicationBtn.addEventListener('click', showApplication);
     if (calculatorBtn) calculatorBtn.addEventListener('click', showCalculator);
     
-    // Form submissions
-    const loginForm = document.getElementById('login-form');
-    if (loginForm) {
-        loginForm.addEventListener('submit', handleLogin);
-    } else {
-        console.warn('Login form not found');
-    }
+    // Modal close handlers
+    const modalOverlay = document.getElementById('modal-overlay');
+    const closeModalBtn = document.querySelector('.close-modal');
     
-    const applicationForm = document.getElementById('application-form');
-    if (applicationForm) {
-        applicationForm.addEventListener('submit', handleApplication);
-    }
-    
-    // Product application buttons
-    const applyButtons = document.querySelectorAll('[id^="apply-"]');
-    applyButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = this.id.replace('apply-', '');
-            applyForProduct(productId);
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === modalOverlay) closeModal();
         });
-    });
+    }
     
-    // Modal close buttons
-    const closeButtons = document.querySelectorAll('.close-modal, .modal .bg-gray-600');
-    closeButtons.forEach(button => {
-        button.addEventListener('click', hideModals);
-    });
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModal);
+    }
 }
 
-// View Management Functions
+// Load loan products
+async function loadLoanProducts() {
+    try {
+        console.log('Loading loan products...');
+        // For now, use mock data since API might not be ready
+        loanProducts = [
+            {
+                id: 1,
+                product_name: 'Micro Loan',
+                product_type: 'microloan',
+                description: 'Small business loans for entrepreneurs',
+                min_amount: 1000,
+                max_amount: 25000,
+                min_interest_rate: 0.08,
+                max_interest_rate: 0.15,
+                min_term_days: 90,
+                max_term_days: 365,
+                origination_fee_rate: 0.02
+            },
+            {
+                id: 2,
+                product_name: 'Purchase Order Financing',
+                product_type: 'purchase_order',
+                description: 'Finance your purchase orders',
+                min_amount: 5000,
+                max_amount: 100000,
+                min_interest_rate: 0.1,
+                max_interest_rate: 0.18,
+                min_term_days: 30,
+                max_term_days: 180,
+                origination_fee_rate: 0.03
+            },
+            {
+                id: 3,
+                product_name: 'Invoice Discounting',
+                product_type: 'invoice_discount',
+                description: 'Get advance on your invoices',
+                min_amount: 1000,
+                max_amount: 50000,
+                min_interest_rate: 0.12,
+                max_interest_rate: 0.2,
+                min_term_days: 30,
+                max_term_days: 90,
+                origination_fee_rate: 0.025
+            }
+        ];
+        console.log('Loan products loaded:', loanProducts.length);
+    } catch (error) {
+        console.error('Failed to load loan products:', error);
+        // Fallback to mock data
+        loadLoanProducts();
+    }
+}
+
+// Check authentication status
+function checkAuthStatus() {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+        try {
+            currentUser = JSON.parse(userData);
+            showDashboard();
+        } catch (e) {
+            console.error('Error parsing user data:', e);
+            localStorage.removeItem('user');
+        }
+    }
+}
+
+// Show login modal
 function showLogin() {
-    console.log('Showing login form');
-    hideModals();
-    document.getElementById('login-modal').classList.remove('hidden');
-    currentView = 'login';
-}
-
-function showApplication() {
-    console.log('Showing application form');
-    hideModals();
-    document.getElementById('application-modal').classList.remove('hidden');
-    currentView = 'application';
-}
-
-function showCalculator() {
-    console.log('Showing calculator');
-    hideModals();
-    document.getElementById('calculator-modal').classList.remove('hidden');
-    currentView = 'calculator';
-    calculateLoan(); // Initial calculation
-}
-
-function hideModals() {
-    const modals = document.querySelectorAll('.modal');
-    modals.forEach(modal => {
-        modal.classList.add('hidden');
-    });
-}
-
-// Product Application Function
-function applyForProduct(productId) {
-    console.log('Applying for product:', productId);
+    console.log('Showing login modal');
+    const loginForm = `
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Sign In to Your Account</h2>
+            <p class="text-gray-600">Access your lending dashboard</p>
+        </div>
+        
+        <form id="loginForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                <input type="email" id="email" required 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       placeholder="Enter your email">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                <input type="password" id="password" required 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       placeholder="Enter your password">
+            </div>
+            
+            <div class="text-sm text-gray-600 bg-yellow-50 p-3 rounded-lg">
+                <p class="font-semibold mb-1">Demo Accounts:</p>
+                <p>Borrower: john.doe@example.com / demo123</p>
+                <p>Admin: admin@lendingplatform.com / admin123</p>
+            </div>
+            
+            <div class="flex gap-3">
+                <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                    Sign In
+                </button>
+                <button type="button" onclick="closeModal()" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                    Cancel
+                </button>
+            </div>
+        </form>
+        
+        <div class="mt-6 text-center">
+            <p class="text-sm text-gray-600">
+                Don't have an account? 
+                <button onclick="showSignup()" class="text-blue-600 hover:text-blue-800 font-medium">Sign up here</button>
+            </p>
+        </div>
+    `;
+    showModal(loginForm);
     
-    // Show appropriate application flow based on auth status
-    if (!currentUser) {
-        showLogin();
-        // Store intended product for after login
-        localStorage.setItem('intendedProduct', productId);
-        return;
-    }
-    
-    // If user is logged in, show application form with product pre-selected
-    showApplication();
-    
-    // Pre-select the product in application form if possible
-    const productSelect = document.getElementById('loan-product');
-    if (productSelect) {
-        productSelect.value = productId;
-    }
+    // Add form submission handler
+    document.getElementById('loginForm').addEventListener('submit', handleLogin);
 }
 
-// Form Handlers
-async function handleLogin(event) {
+// Handle login
+function handleLogin(event) {
     event.preventDefault();
     console.log('Handling login...');
     
-    const formData = new FormData(event.target);
-    const email = formData.get('email');
-    const password = formData.get('password');
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
     
-    try {
-        // Simple client-side validation
-        if (!email || !password) {
-            alert('Please enter both email and password');
-            return;
-        }
-        
-        // Show loading state
-        const submitBtn = event.target.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Logging in...';
-        submitBtn.disabled = true;
-        
-        // Mock login for now - replace with actual API call
-        setTimeout(() => {
-            currentUser = {
-                email: email,
-                name: email.split('@')[0]
-            };
-            
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
-            
-            hideModals();
-            updateUIForAuth();
-            
-            // Check if there was an intended product to apply for
-            const intendedProduct = localStorage.getItem('intendedProduct');
-            if (intendedProduct) {
-                localStorage.removeItem('intendedProduct');
-                applyForProduct(intendedProduct);
-            }
-            
-            alert('Login successful!');
-        }, 1000);
-        
-    } catch (error) {
-        console.error('Login error:', error);
-        alert('Login failed. Please try again.');
-    }
-}
-
-async function handleApplication(event) {
-    event.preventDefault();
-    console.log('Handling application...');
-    
-    if (!currentUser) {
-        alert('Please login first');
-        showLogin();
+    // Mock authentication
+    let userData;
+    if (email === 'john.doe@example.com' && password === 'demo123') {
+        userData = {
+            id: 2,
+            email: 'john.doe@example.com',
+            firstName: 'John',
+            lastName: 'Doe',
+            userType: 'borrower'
+        };
+    } else if (email === 'admin@lendingplatform.com' && password === 'admin123') {
+        userData = {
+            id: 1,
+            email: 'admin@lendingplatform.com',
+            firstName: 'Admin',
+            lastName: 'User',
+            userType: 'admin'
+        };
+    } else {
+        alert('Invalid credentials. Please use the demo accounts provided.');
         return;
     }
     
-    const formData = new FormData(event.target);
-    const applicationData = {
-        product: formData.get('loan-product'),
-        amount: formData.get('loan-amount'),
-        purpose: formData.get('loan-purpose'),
-        term: formData.get('loan-term'),
-        income: formData.get('annual-income')
-    };
+    localStorage.setItem('user', JSON.stringify(userData));
+    currentUser = userData;
+    closeModal();
+    showDashboard();
+}
+
+// Show signup form
+function showSignup() {
+    const signupForm = `
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Create Your Account</h2>
+            <p class="text-gray-600">Join our lending platform</p>
+        </div>
+        
+        <form id="signupForm" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                    <input type="text" id="firstName" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                    <input type="text" id="lastName" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                <input type="email" id="signupEmail" required 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                <input type="password" id="signupPassword" required 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <div class="flex gap-3">
+                <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                    Create Account
+                </button>
+                <button type="button" onclick="closeModal()" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                    Cancel
+                </button>
+            </div>
+        </form>
+        
+        <div class="mt-6 text-center">
+            <p class="text-sm text-gray-600">
+                Already have an account? 
+                <button onclick="showLogin()" class="text-blue-600 hover:text-blue-800 font-medium">Sign in here</button>
+            </p>
+        </div>
+    `;
+    showModal(signupForm);
     
-    try {
-        // Show loading state
-        const submitBtn = event.target.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Submitting...';
-        submitBtn.disabled = true;
-        
-        // Mock submission
-        setTimeout(() => {
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
-            hideModals();
-            alert('Application submitted successfully! We will review your application and get back to you soon.');
-            event.target.reset();
-        }, 1500);
-        
-    } catch (error) {
-        console.error('Application error:', error);
-        alert('Application failed. Please try again.');
+    document.getElementById('signupForm').addEventListener('submit', handleSignup);
+}
+
+// Handle signup
+function handleSignup(event) {
+    event.preventDefault();
+    alert('Signup functionality would be implemented in production. Please use the demo login for now.');
+    showLogin();
+}
+
+// Show dashboard
+function showDashboard() {
+    console.log('Showing dashboard for:', currentUser);
+    
+    // Hide main content and show dashboard
+    const mainContent = document.querySelector('.gradient-bg');
+    const productsSection = document.querySelector('#products');
+    const howItWorksSection = document.querySelector('#how-it-works');
+    const dashboardSection = document.getElementById('dashboard');
+    
+    if (mainContent) mainContent.style.display = 'none';
+    if (productsSection) productsSection.style.display = 'none';
+    if (howItWorksSection) howItWorksSection.style.display = 'none';
+    if (dashboardSection) dashboardSection.classList.remove('hidden');
+    
+    // Update navigation
+    updateNavigation();
+    
+    // Load dashboard data
+    if (currentUser.userType === 'admin') {
+        loadAdminDashboard();
+    } else {
+        loadBorrowerDashboard();
     }
 }
 
-// Calculator Functionality
-function calculateLoan() {
-    const amount = parseFloat(document.getElementById('loan-amount-calc')?.value) || 10000;
-    const term = parseInt(document.getElementById('loan-term-calc')?.value) || 12;
-    const rate = 8.5; // Default interest rate
-    
-    const monthlyRate = rate / 100 / 12;
-    const monthlyPayment = amount * monthlyRate * Math.pow(1 + monthlyRate, term) / (Math.pow(1 + monthlyRate, term) - 1);
-    const totalPayment = monthlyPayment * term;
-    const totalInterest = totalPayment - amount;
-    
-    const resultsElem = document.getElementById('calculator-results');
-    if (resultsElem) {
-        resultsElem.innerHTML = `
-            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
-                <h4 class="font-semibold text-green-800 mb-2">Loan Calculation Results</h4>
-                <div class="space-y-1 text-sm">
-                    <div class="flex justify-between">
-                        <span>Monthly Payment:</span>
-                        <span class="font-semibold">$${monthlyPayment.toFixed(2)}</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Total Payment:</span>
-                        <span class="font-semibold">$${totalPayment.toFixed(2)}</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Total Interest:</span>
-                        <span class="font-semibold">$${totalInterest.toFixed(2)}</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Interest Rate:</span>
-                        <span class="font-semibold">${rate}% APR</span>
-                    </div>
-                </div>
-            </div>
+// Update navigation based on auth status
+function updateNavigation() {
+    const navContainer = document.querySelector('nav .hidden.md\\:flex');
+    if (navContainer && currentUser) {
+        navContainer.innerHTML = `
+            <span class="text-gray-600 mr-4">Welcome, ${currentUser.firstName} ${currentUser.lastName}</span>
+            <button onclick="showApplication()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors mr-2">
+                New Application
+            </button>
+            <button onclick="logout()" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                Logout
+            </button>
         `;
     }
 }
 
-// UI State Management
-function updateUIForAuth() {
-    const loginBtn = document.getElementById('login-btn');
-    const userSection = document.getElementById('user-section');
+// Load borrower dashboard
+function loadBorrowerDashboard() {
+    console.log('Loading borrower dashboard');
+    // Mock data for demonstration
+    document.getElementById('totalApps').textContent = '2';
+    document.getElementById('activeLoans').textContent = '1';
+    document.getElementById('outstandingBalance').textContent = '$5,250.00';
     
-    if (currentUser) {
-        if (loginBtn) loginBtn.classList.add('hidden');
-        if (userSection) {
-            userSection.classList.remove('hidden');
-            const userEmailElem = userSection.querySelector('.user-email');
-            if (userEmailElem) userEmailElem.textContent = currentUser.email;
+    document.getElementById('recentApplications').innerHTML = `
+        <div class="border-b pb-3 mb-3">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h4 class="font-semibold">Micro Loan</h4>
+                    <p class="text-sm text-gray-600">$10,000</p>
+                    <p class="text-sm text-gray-500">${new Date().toLocaleDateString()}</p>
+                </div>
+                <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">approved</span>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('activeLoansContainer').innerHTML = `
+        <div class="border-b pb-3 mb-3">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h4 class="font-semibold">Micro Loan</h4>
+                    <p class="text-sm text-gray-600">Balance: $5,250.00</p>
+                    <p class="text-sm text-gray-500">Due: ${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+                </div>
+                <button onclick="showPaymentSchedule(1)" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                    View Payments
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+// Load admin dashboard
+function loadAdminDashboard() {
+    console.log('Loading admin dashboard');
+    // Mock data for demonstration
+    document.getElementById('totalApps').textContent = '15';
+    document.getElementById('activeLoans').textContent = '8';
+    document.getElementById('outstandingBalance').textContent = '$127,500.00';
+    
+    document.getElementById('recentApplications').innerHTML = `
+        <div class="border-b pb-3 mb-3">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h4 class="font-semibold">Jane Smith</h4>
+                    <p class="text-sm text-gray-600">Micro Loan - $15,000</p>
+                    <p class="text-sm text-gray-500">${new Date().toLocaleDateString()}</p>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800">under_review</span>
+                    <button onclick="reviewApplication(1)" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                        Review
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Get status color class
+function getStatusColor(status) {
+    const colors = {
+        'draft': 'bg-gray-100 text-gray-800',
+        'submitted': 'bg-blue-100 text-blue-800',
+        'under_review': 'bg-yellow-100 text-yellow-800',
+        'approved': 'bg-green-100 text-green-800',
+        'rejected': 'bg-red-100 text-red-800',
+        'funded': 'bg-purple-100 text-purple-800'
+    };
+    return colors[status] || 'bg-gray-100 text-gray-800';
+}
+
+// Show application form
+function showApplication() {
+    console.log('Showing application form');
+    if (!currentUser) {
+        showLogin();
+        return;
+    }
+    
+    const applicationForm = `
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Loan Application</h2>
+            <p class="text-gray-600">Complete your loan application</p>
+        </div>
+        
+        <form id="applicationForm" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Loan Product</label>
+                <select id="productSelect" required 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Select a loan product</option>
+                    ${loanProducts.map(product => 
+                        `<option value="${product.id}">${product.product_name} (${product.product_type})</option>`
+                    ).join('')}
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Requested Amount</label>
+                <div class="relative">
+                    <span class="absolute left-3 top-2 text-gray-500">$</span>
+                    <input type="number" id="requestedAmount" required 
+                           class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                           placeholder="0.00" min="1000" max="100000">
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Purpose of Loan</label>
+                <textarea id="purpose" required rows="3"
+                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          placeholder="Describe how you plan to use the loan funds..."></textarea>
+            </div>
+            
+            <div class="flex gap-3 pt-4">
+                <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                    Submit Application
+                </button>
+                <button type="button" onclick="closeModal()" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    `;
+    showModal(applicationForm);
+    
+    document.getElementById('applicationForm').addEventListener('submit', handleApplication);
+    document.getElementById('productSelect').addEventListener('change', updateProductInfo);
+}
+
+// Update product information display
+function updateProductInfo() {
+    const productSelect = document.getElementById('productSelect');
+    const selectedProductId = productSelect.value;
+    
+    if (!selectedProductId) return;
+    
+    const product = loanProducts.find(p => p.id == selectedProductId);
+    if (!product) return;
+    
+    // Show product information
+    const productInfo = document.getElementById('productInfo') || createProductInfoElement();
+    productInfo.innerHTML = `
+        <h4 class="font-semibold text-gray-800 mb-2">${product.product_name}</h4>
+        <div class="grid grid-cols-2 gap-4 text-sm">
+            <div>
+                <span class="font-medium">Amount Range:</span> 
+                $${parseInt(product.min_amount).toLocaleString()} - $${parseInt(product.max_amount).toLocaleString()}
+            </div>
+            <div>
+                <span class="font-medium">Interest Rate:</span> 
+                ${(product.min_interest_rate * 100).toFixed(1)}% - ${(product.max_interest_rate * 100).toFixed(1)}%
+            </div>
+        </div>
+        <p class="text-sm text-gray-600 mt-2">${product.description}</p>
+    `;
+    productInfo.classList.remove('hidden');
+}
+
+function createProductInfoElement() {
+    const productInfo = document.createElement('div');
+    productInfo.id = 'productInfo';
+    productInfo.className = 'bg-blue-50 p-4 rounded-lg';
+    document.getElementById('productSelect').parentNode.insertBefore(productInfo, document.getElementById('productSelect').nextSibling);
+    return productInfo;
+}
+
+// Handle application submission
+async function handleApplication(event) {
+    event.preventDefault();
+    console.log('Handling application submission');
+    
+    const productId = document.getElementById('productSelect').value;
+    const requestedAmount = document.getElementById('requestedAmount').value;
+    const purpose = document.getElementById('purpose').value;
+    
+    const product = loanProducts.find(p => p.id == productId);
+    if (!product) {
+        alert('Please select a valid loan product');
+        return;
+    }
+    
+    // Show loading state
+    const submitBtn = event.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Submitting...';
+    submitBtn.disabled = true;
+    
+    // Mock submission
+    setTimeout(() => {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+        closeModal();
+        alert('Application submitted successfully! We will review your application and get back to you soon.');
+        
+        // Reset form
+        event.target.reset();
+        const productInfo = document.getElementById('productInfo');
+        if (productInfo) productInfo.classList.add('hidden');
+    }, 2000);
+}
+
+// Apply for specific product (called from product cards)
+function applyForProduct(productType) {
+    console.log('Applying for product:', productType);
+    if (!currentUser) {
+        showLogin();
+        return;
+    }
+    
+    showApplication();
+    
+    // Pre-select the product type after a short delay
+    setTimeout(() => {
+        const productSelect = document.getElementById('productSelect');
+        const product = loanProducts.find(p => p.product_type === productType);
+        if (product && productSelect) {
+            productSelect.value = product.id;
+            updateProductInfo();
         }
-    } else {
-        if (loginBtn) loginBtn.classList.remove('hidden');
-        if (userSection) userSection.classList.add('hidden');
-    }
+    }, 100);
 }
 
-function checkAuthStatus() {
-    // Check if user is logged in (mock for now)
-    const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) {
-        currentUser = JSON.parse(savedUser);
-        updateUIForAuth();
-    }
+// Show payment calculator
+function showCalculator() {
+    console.log('Showing calculator');
+    const calculatorForm = `
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Payment Calculator</h2>
+            <p class="text-gray-600">Estimate your loan payments</p>
+        </div>
+        
+        <div class="space-y-4">
+            <div class="grid grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Loan Amount</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-2 text-gray-500">$</span>
+                        <input type="number" id="calcAmount" value="10000"
+                               class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Interest Rate (%)</label>
+                    <input type="number" id="calcRate" value="15" step="0.1"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Term (days)</label>
+                    <input type="number" id="calcTerm" value="365"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+            
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">Monthly Payment</p>
+                        <p class="text-2xl font-bold text-blue-600" id="monthlyPayment">$0</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">Total Interest</p>
+                        <p class="text-2xl font-bold text-green-600" id="totalInterest">$0</p>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <p class="text-sm text-gray-600">Total Amount to Repay</p>
+                    <p class="text-3xl font-bold text-blue-600" id="totalAmount">$0</p>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button onclick="closeModal()" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    Close
+                </button>
+            </div>
+        </div>
+    `;
+    showModal(calculatorForm);
+    
+    // Add event listeners for calculator
+    document.getElementById('calcAmount').addEventListener('input', calculatePayment);
+    document.getElementById('calcRate').addEventListener('input', calculatePayment);
+    document.getElementById('calcTerm').addEventListener('input', calculatePayment);
+    
+    calculatePayment();
 }
 
+// Calculate loan payment
+function calculatePayment() {
+    const amount = parseFloat(document.getElementById('calcAmount').value) || 0;
+    const rate = parseFloat(document.getElementById('calcRate').value) || 0;
+    const termDays = parseFloat(document.getElementById('calcTerm').value) || 0;
+    
+    if (amount <= 0 || rate <= 0 || termDays <= 0) {
+        document.getElementById('monthlyPayment').textContent = '$0';
+        document.getElementById('totalInterest').textContent = '$0';
+        document.getElementById('totalAmount').textContent = '$0';
+        return;
+    }
+    
+    // Simple interest calculation
+    const totalInterest = (amount * (rate / 100) * (termDays / 365));
+    const totalAmount = amount + totalInterest;
+    const monthlyPayment = totalAmount / (termDays / 30);
+    
+    document.getElementById('monthlyPayment').textContent = `$${monthlyPayment.toFixed(2)}`;
+    document.getElementById('totalInterest').textContent = `$${totalInterest.toFixed(2)}`;
+    document.getElementById('totalAmount').textContent = `$${totalAmount.toFixed(2)}`;
+}
+
+// Show payment schedule for a loan
+function showPaymentSchedule(loanId) {
+    console.log('Showing payment schedule for loan:', loanId);
+    // Mock payment schedule
+    const scheduleHtml = `
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Payment Schedule</h2>
+            <p class="text-gray-600">Loan ID: ${loanId}</p>
+        </div>
+        
+        <div class="space-y-3 max-h-96 overflow-y-auto">
+            <div class="flex justify-between items-center p-3 border border-gray-200 rounded-lg">
+                <div>
+                    <p class="font-semibold">Payment #1</p>
+                    <p class="text-sm text-gray-600">Due: ${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-semibold">$1,750.00</p>
+                    <p class="text-sm text-gray-600">pending</p>
+                </div>
+            </div>
+            <div class="flex justify-between items-center p-3 border border-gray-200 rounded-lg">
+                <div>
+                    <p class="font-semibold">Payment #2</p>
+                    <p class="text-sm text-gray-600">Due: ${new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-semibold">$1,750.00</p>
+                    <p class="text-sm text-gray-600">pending</p>
+                </div>
+            </div>
+            <div class="flex justify-between items-center p-3 border border-gray-200 rounded-lg">
+                <div>
+                    <p class="font-semibold">Payment #3</p>
+                    <p class="text-sm text-gray-600">Due: ${new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-semibold">$1,750.00</p>
+                    <p class="text-sm text-gray-600">pending</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-6">
+            <button onclick="closeModal()" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                Close
+            </button>
+        </div>
+    `;
+    showModal(scheduleHtml);
+}
+
+// Admin: Review application
+function reviewApplication(applicationId) {
+    console.log('Reviewing application:', applicationId);
+    const reviewForm = `
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Review Application</h2>
+            <p class="text-gray-600">Application ID: ${applicationId}</p>
+        </div>
+        
+        <div class="space-y-4 mb-6">
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">Application Details</h4>
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div><span class="font-medium">Amount:</span> $15,000</div>
+                    <div><span class="font-medium">Product:</span> Micro Loan</div>
+                    <div><span class="font-medium">Status:</span> under_review</div>
+                    <div><span class="font-medium">Submitted:</span> ${new Date().toLocaleDateString()}</div>
+                </div>
+                <div class="mt-2">
+                    <span class="font-medium">Purpose:</span> Business expansion and equipment purchase
+                </div>
+            </div>
+        </div>
+        
+        <form id="reviewForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Decision</label>
+                <select id="reviewStatus" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Select decision</option>
+                    <option value="approved">Approve</option>
+                    <option value="rejected">Reject</option>
+                </select>
+            </div>
+            
+            <div class="flex gap-3">
+                <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                    Submit Review
+                </button>
+                <button type="button" onclick="closeModal()" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    `;
+    showModal(reviewForm);
+    
+    document.getElementById('reviewForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const status = document.getElementById('reviewStatus').value;
+        alert(`Application ${status} successfully!`);
+        closeModal();
+    });
+}
+
+// Logout function
 function logout() {
+    console.log('Logging out');
+    localStorage.removeItem('user');
     currentUser = null;
-    localStorage.removeItem('currentUser');
-    updateUIForAuth();
+    
+    // Show main content and hide dashboard
+    const mainContent = document.querySelector('.gradient-bg');
+    const productsSection = document.querySelector('#products');
+    const howItWorksSection = document.querySelector('#how-it-works');
+    const dashboardSection = document.getElementById('dashboard');
+    
+    if (mainContent) mainContent.style.display = 'block';
+    if (productsSection) productsSection.style.display = 'block';
+    if (howItWorksSection) howItWorksSection.style.display = 'block';
+    if (dashboardSection) dashboardSection.classList.add('hidden');
+    
+    // Reset navigation
+    const navContainer = document.querySelector('nav .hidden.md\\:flex');
+    if (navContainer) {
+        navContainer.innerHTML = `
+            <a href="#" class="text-gray-600 hover:text-blue-600 font-medium">Home</a>
+            <a href="#products" class="text-gray-600 hover:text-blue-600 font-medium">Products</a>
+            <a href="#how-it-works" class="text-gray-600 hover:text-blue-600 font-medium">How It Works</a>
+            <a href="#about" class="text-gray-600 hover:text-blue-600 font-medium">About</a>
+            <button onclick="showLogin()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                Sign In
+            </button>
+        `;
+    }
+    
     alert('Logged out successfully');
 }
 
-// Product Loading
-function loadProducts() {
-    // Products are already in HTML, just ensure event listeners work
-    console.log('Products loaded');
+// Modal functions
+function showModal(content) {
+    const modalContent = document.getElementById('modal-content');
+    const modalOverlay = document.getElementById('modal-overlay');
+    
+    if (modalContent && modalOverlay) {
+        modalContent.innerHTML = content;
+        modalOverlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    } else {
+        console.error('Modal elements not found in DOM');
+        // Fallback: use alert for critical functionality
+        alert('Modal system not available. Please refresh the page.');
+    }
 }
 
-// Calculator event listeners (dynamic)
-document.addEventListener('input', function(event) {
-    if (event.target.id === 'loan-amount-calc' || event.target.id === 'loan-term-calc') {
-        calculateLoan();
+function closeModal() {
+    const modalOverlay = document.getElementById('modal-overlay');
+    if (modalOverlay) {
+        modalOverlay.classList.add('hidden');
+        document.body.style.overflow = 'auto';
     }
-});
+}
 
 // Export functions to global scope for HTML onclick handlers
 window.showLogin = showLogin;
+window.showSignup = showSignup;
 window.showApplication = showApplication;
-window.showCalculator = showCalculator;
 window.applyForProduct = applyForProduct;
-window.calculateLoan = calculateLoan;
+window.showCalculator = showCalculator;
+window.calculatePayment = calculatePayment;
+window.showPaymentSchedule = showPaymentSchedule;
+window.reviewApplication = reviewApplication;
 window.logout = logout;
+window.closeModal = closeModal;
 
-console.log('Monei Lending Platform functions initialized');
+console.log('Monei Lending Platform JavaScript loaded successfully');
