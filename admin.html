@@ -686,7 +686,7 @@
         const recentActivityTable = document.getElementById('recentActivityTable');
         const upcomingPaymentsTable = document.getElementById('upcomingPaymentsTable');
         const applicationModal = document.getElementById('applicationModal');
-        const closeModal = document.getElementById('closeModal');
+        const modalCloseBtn = document.getElementById('closeModal'); // CHANGED: renamed to avoid conflict
         const selectAllCheckbox = document.getElementById('selectAll');
         const statusFilter = document.getElementById('statusFilter');
 
@@ -838,8 +838,8 @@
         // Status Filter
         statusFilter.addEventListener('change', loadApplications);
 
-        // Modal functionality
-        closeModal.addEventListener('click', () => {
+        // Modal functionality - CHANGED: using modalCloseBtn instead of closeModal
+        modalCloseBtn.addEventListener('click', () => {
             applicationModal.classList.add('hidden');
         });
 
