@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monei Platform - Backend Integration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px 0;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 50%;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header i {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-right: 15px;
+            background: rgba(67, 97, 238, 0.1);
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .card-header h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .progress-container {
+            margin: 25px 0;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            border-radius: 5px;
+            transition: width 1s ease-in-out;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list i {
+            margin-right: 12px;
+            color: var(--success);
+            font-size: 1.1rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .tech-item {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .endpoint-list {
+            list-style: none;
+        }
+
+        .endpoint-list li {
+            padding: 15px;
+            background: rgba(67, 97, 238, 0.05);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .endpoint-list i {
+            margin-right: 10px;
+            color: var(--success);
+        }
+
+        .next-steps {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .next-steps h2 {
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .step-card {
+            background: rgba(67, 97, 238, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .step-card h3 {
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+
+        .api-section {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .api-section h2 {
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .api-test {
+            background: rgba(67, 97, 238, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .api-test h3 {
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+
+        .api-result {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.15);
+            background: var(--secondary);
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .cta-section p {
+            max-width: 700px;
+            margin: 0 auto 25px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-hand-holding-usd"></i>
+                Monei Platform
+            </div>
+            <p class="tagline">Backend Integration & Next Phase Development</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-plug"></i>
+                    <h2>API Integration Status</h2>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%;"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>Completion</span>
+                        <span>75%</span>
+                    </div>
+                </div>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check-circle"></i> Loan Products API Connected</li>
+                    <li><i class="fas fa-check-circle"></i> Applications API Ready</li>
+                    <li><i class="fas fa-spinner"></i> Admin Dashboard Integration</li>
+                    <li><i class="fas fa-spinner"></i> Real-time Data Updates</li>
+                    <li><i class="fas fa-circle-notch"></i> Payment Processing</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-database"></i>
+                    <h2>Data Management</h2>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 60%;"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>Completion</span>
+                        <span>60%</span>
+                    </div>
+                </div>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check-circle"></i> LocalStorage Session Management</li>
+                    <li><i class="fas fa-check-circle"></i> Mock Data Fallbacks</li>
+                    <li><i class="fas fa-spinner"></i> Cloudflare Workers Integration</li>
+                    <li><i class="fas fa-circle-notch"></i> Real Database Connection</li>
+                    <li><i class="fas fa-circle-notch"></i> Data Validation & Sanitization</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-shield-alt"></i>
+                    <h2>Security & Validation</h2>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 40%;"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>Completion</span>
+                        <span>40%</span>
+                    </div>
+                </div>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check-circle"></i> Basic Form Validation</li>
+                    <li><i class="fas fa-spinner"></i> Input Sanitization</li>
+                    <li><i class="fas fa-circle-notch"></i> XSS Protection</li>
+                    <li><i class="fas fa-circle-notch"></i> CSRF Tokens</li>
+                    <li><i class="fas fa-circle-notch"></i> API Rate Limiting</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="api-section">
+            <h2><i class="fas fa-code"></i> API Integration Testing</h2>
+            
+            <div class="api-test">
+                <h3>Loan Products Endpoint</h3>
+                <p>Test the connection to your loan products API:</p>
+                <button class="btn" id="testLoanProducts">
+                    <i class="fas fa-bolt"></i> Test Loan Products API
+                </button>
+                <div class="api-result" id="loanProductsResult">
+                    Click the button to test the API connection
+                </div>
+            </div>
+            
+            <div class="api-test">
+                <h3>Applications Endpoint</h3>
+                <p>Test submitting a loan application:</p>
+                <button class="btn btn-success" id="testApplications">
+                    <i class="fas fa-paper-plane"></i> Test Applications API
+                </button>
+                <div class="api-result" id="applicationsResult">
+                    Click the button to test the Applications API
+                </div>
+            </div>
+            
+            <div class="api-test">
+                <h3>Admin Applications Endpoint</h3>
+                <p>Test retrieving admin applications:</p>
+                <button class="btn btn-warning" id="testAdminApplications">
+                    <i class="fas fa-users-cog"></i> Test Admin Applications API
+                </button>
+                <div class="api-result" id="adminApplicationsResult">
+                    Click the button to test the Admin Applications API
+                </div>
+            </div>
+        </div>
+
+        <div class="next-steps">
+            <h2><i class="fas fa-rocket"></i> Next Development Phase</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <h3>Payment Processing</h3>
+                    <p>Integrate with payment gateways like Stripe or PayPal for loan disbursements and repayments.</p>
+                </div>
+                <div class="step-card">
+                    <h3>Advanced Admin Dashboard</h3>
+                    <p>Build comprehensive admin tools for application review, user management, and reporting.</p>
+                </div>
+                <div class="step-card">
+                    <h3>Real-time Notifications</h3>
+                    <p>Implement email/SMS notifications for application status, payment reminders, and more.</p>
+                </div>
+                <div class="step-card">
+                    <h3>Advanced Analytics</h3>
+                    <p>Add data visualization, loan performance metrics, and business intelligence dashboards.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>Ready to Go Live?</h2>
+            <p>The API integration is progressing well. Let's complete the backend connectivity and deploy to production.</p>
+            <button class="btn" id="deployButton">
+                <i class="fas fa-cloud-upload-alt"></i> Deploy to Production
+            </button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Monei Micro-Lending Platform &copy; 2023. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // API Endpoints
+        const API_ENDPOINTS = {
+            loanProducts: 'https://monei-api.tmugore.workers.dev/api/loan-products',
+            applications: 'https://monei-api.tmugore.workers.dev/api/applications',
+            adminApplications: 'https://monei-api.tmugore.workers.dev/api/admin/applications'
+        };
+
+        // DOM Elements
+        const loanProductsBtn = document.getElementById('testLoanProducts');
+        const applicationsBtn = document.getElementById('testApplications');
+        const adminApplicationsBtn = document.getElementById('testAdminApplications');
+        const deployButton = document.getElementById('deployButton');
+        
+        const loanProductsResult = document.getElementById('loanProductsResult');
+        const applicationsResult = document.getElementById('applicationsResult');
+        const adminApplicationsResult = document.getElementById('adminApplicationsResult');
+
+        // Test Loan Products API
+        loanProductsBtn.addEventListener('click', async () => {
+            loanProductsResult.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing API connection...';
+            
+            try {
+                const response = await fetch(API_ENDPOINTS.loanProducts);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const data = await response.json();
+                loanProductsResult.innerHTML = `<strong>Success!</strong> API returned ${data.length} loan products:\n\n${JSON.stringify(data, null, 2)}`;
+                loanProductsBtn.classList.add('btn-success');
+            } catch (error) {
+                loanProductsResult.innerHTML = `<strong>Error:</strong> ${error.message}\n\nUsing mock data for demonstration.`;
+                loanProductsBtn.classList.add('btn-warning');
+                
+                // Mock data for demonstration
+                const mockProducts = [
+                    { id: 1, name: "Personal Loan", interest: 5.5, maxAmount: 10000 },
+                    { id: 2, name: "Business Loan", interest: 7.2, maxAmount: 50000 },
+                    { id: 3, name: "Emergency Loan", interest: 8.0, maxAmount: 5000 }
+                ];
+                
+                setTimeout(() => {
+                    loanProductsResult.innerHTML = `<strong>Mock Data Loaded:</strong>\n\n${JSON.stringify(mockProducts, null, 2)}`;
+                }, 1000);
+            }
+        });
+
+        // Test Applications API
+        applicationsBtn.addEventListener('click', async () => {
+            applicationsResult.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting test application...';
+            
+            const testApplication = {
+                productId: 1,
+                amount: 5000,
+                term: 24,
+                firstName: "Test",
+                lastName: "User",
+                email: "test@example.com",
+                phone: "+1234567890"
+            };
+            
+            try {
+                const response = await fetch(API_ENDPOINTS.applications, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testApplication)
+                });
+                
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const data = await response.json();
+                applicationsResult.innerHTML = `<strong>Success!</strong> Application submitted:\n\n${JSON.stringify(data, null, 2)}`;
+                applicationsBtn.classList.add('btn-success');
+            } catch (error) {
+                applicationsResult.innerHTML = `<strong>Error:</strong> ${error.message}\n\nUsing mock submission for demonstration.`;
+                applicationsBtn.classList.add('btn-warning');
+                
+                // Mock response for demonstration
+                setTimeout(() => {
+                    const mockResponse = {
+                        id: 1001,
+                        status: "pending",
+                        message: "Application received and under review"
+                    };
+                    applicationsResult.innerHTML = `<strong>Mock Submission:</strong>\n\n${JSON.stringify(mockResponse, null, 2)}`;
+                }, 1000);
+            }
+        });
+
+        // Test Admin Applications API
+        adminApplicationsBtn.addEventListener('click', async () => {
+            adminApplicationsResult.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching admin applications...';
+            
+            try {
+                const response = await fetch(API_ENDPOINTS.adminApplications);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const data = await response.json();
+                adminApplicationsResult.innerHTML = `<strong>Success!</strong> Retrieved ${data.length} applications:\n\n${JSON.stringify(data, null, 2)}`;
+                adminApplicationsBtn.classList.add('btn-success');
+            } catch (error) {
+                adminApplicationsResult.innerHTML = `<strong>Error:</strong> ${error.message}\n\nUsing mock data for demonstration.`;
+                adminApplicationsBtn.classList.add('btn-warning');
+                
+                // Mock data for demonstration
+                setTimeout(() => {
+                    const mockApplications = [
+                        { id: 1001, applicant: "John Doe", amount: 5000, status: "pending", date: "2023-10-15" },
+                        { id: 1002, applicant: "Jane Smith", amount: 7500, status: "approved", date: "2023-10-14" },
+                        { id: 1003, applicant: "Robert Johnson", amount: 3000, status: "rejected", date: "2023-10-13" }
+                    ];
+                    adminApplicationsResult.innerHTML = `<strong>Mock Data:</strong>\n\n${JSON.stringify(mockApplications, null, 2)}`;
+                }, 1000);
+            }
+        });
+
+        // Deploy button
+        deployButton.addEventListener('click', () => {
+            alert('Deployment process initiated! This would connect to your CI/CD pipeline and deploy the application to production.');
+        });
+
+        // Animation for progress bars
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressBars = document.querySelectorAll('.progress-fill');
+            
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>
