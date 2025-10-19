@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monei Admin Dashboard</title>
+    
+    <!-- Genspark CSS Files -->
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Additional styles for API integration */
+        .admin-tabs {
+            display: flex;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+        
+        .admin-tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-tab.active {
+            color: #4361ee;
+            border-bottom-color: #4361ee;
+        }
+        
+        .admin-tab:hover {
+            background-color: #f8fafc;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .api-testing-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .api-test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .api-test-card {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid #4361ee;
+        }
+        
+        .api-test-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1e293b;
+        }
+        
+        .api-test-desc {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+        
+        .api-result {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        .btn-api {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-api:hover {
+            background: #3a56d4;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #4ade80;
+        }
+        
+        .btn-warning {
+            background: #f59e0b;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <h2 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Admin Login</h2>
+        <form id="loginForm" class="login-form">
+            <div class="form-group">
+                <label for="adminToken">Admin Token:</label>
+                <input type="password" id="adminToken" placeholder="Enter admin token" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="dashboard" class="hidden">
+        <header class="admin-header">
+            <div class="admin-container">
+                <nav class="admin-nav">
+                    <h1>Monei Admin Dashboard</h1>
+                    <button id="logoutBtn" class="btn btn-primary">Logout</button>
+                </nav>
+            </div>
+        </header>
+
+        <main class="admin-main">
+            <div class="admin-container">
+                <!-- Tab Navigation -->
+                <div class="admin-tabs">
+                    <div class="admin-tab active" data-tab="dashboard">Dashboard</div>
+                    <div class="admin-tab" data-tab="api">API Integration</div>
+                </div>
+
+                <!-- Dashboard Tab -->
+                <div id="dashboardTab" class="tab-content active">
+                    <!-- Statistics -->
+                    <div class="stats-grid" id="statsGrid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalApplications">0</div>
+                            <div class="stat-label">Total Applications</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="submittedCount">0</div>
+                            <div class="stat-label">Submitted</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="approvedCount">0</div>
+                            <div class="stat-label">Approved</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="disbursedCount">0</div>
+                            <div class="stat-label">Disbursed</div>
+                        </div>
+                    </div>
+
+                    <!-- Applications Table -->
+                    <section class="applications-section">
+                        <div class="section-header">
+                            <h2>Loan Applications</h2>
+                            <button id="refreshBtn" class="btn btn-primary">Refresh</button>
+                        </div>
+                        <div style="overflow-x: auto;">
+                            <table class="applications-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Business</th>
+                                        <th>Amount</th>
+                                        <th>Purpose</th>
+                                        <th>Status</th>
+                                        <th>Submitted</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="applicationsTable">
+                                    <!-- Applications will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- API Integration Tab -->
+                <div id="apiTab" class="tab-content">
+                    <div class="api-testing-section">
+                        <h2 style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-plug"></i>
+                            API Integration Testing
+                        </h2>
+                        
+                        <div class="api-test-grid">
+                            <div class="api-test-card">
+                                <h3 class="api-test-title">Loan Products API</h3>
+                                <p class="api-test-desc">Test connection to loan products endpoint</p>
+                                <button class="btn-api" id="testLoanProducts">
+                                    <i class="fas fa-bolt"></i> Test API
+                                </button>
+                                <div class="api-result" id="loanProductsResult">
+                                    Click the button to test the API connection
+                                </div>
+                            </div>
+                            
+                            <div class="api-test-card">
+                                <h3 class="api-test-title">Applications API</h3>
+                                <p class="api-test-desc">Test submitting a loan application</p>
+                                <button class="btn-api btn-success" id="testApplications">
+                                    <i class="fas fa-paper-plane"></i> Test API
+                                </button>
+                                <div class="api-result" id="applicationsResult">
+                                    Click the button to test the Applications API
+                                </div>
+                            </div>
+                            
+                            <div class="api-test-card">
+                                <h3 class="api-test-title">Admin Applications API</h3>
+                                <p class="api-test-desc">Test retrieving admin applications</p>
+                                <button class="btn-api btn-warning" id="testAdminApplications">
+                                    <i class="fas fa-users-cog"></i> Test API
+                                </button>
+                                <div class="api-result" id="adminApplicationsResult">
+                                    Click the button to test the Admin Applications API
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="api-testing-section">
+                        <h2 style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-code"></i>
+                            API Endpoints
+                        </h2>
+                        
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 8px;">
+                            <h3 style="margin-bottom: 15px;">Available Endpoints</h3>
+                            <ul style="list-style: none; font-family: 'Courier New', monospace;">
+                                <li style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;">
+                                    <strong>GET</strong> https://monei-api.tmugore.workers.dev/api/loan-products
+                                </li>
+                                <li style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;">
+                                    <strong>POST</strong> https://monei-api.tmugore.workers.dev/api/applications
+                                </li>
+                                <li style="padding: 8px 0; border-bottom: 1px solid #e2e8f0;">
+                                    <strong>GET</strong> https://monei-api.tmugore.workers.dev/api/admin/applications
+                                </li>
+                                <li style="padding: 8px 0;">
+                                    <strong>GET</strong> https://monei-api.tmugore.workers.dev/api/admin/stats
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ⚠️ IMPORTANT: Replace with your actual Worker URL
+        // Get this from: Cloudflare Dashboard → Workers & Pages → monei-api → Copy the URL
+        const WORKER_URL = 'https://monei-api.tmugore.workers.dev';
+        
+        let adminToken = '';
+
+        // DOM Elements
+        const loginScreen = document.getElementById('loginScreen');
+        const dashboard = document.getElementById('dashboard');
+        const loginForm = document.getElementById('loginForm');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const applicationsTable = document.getElementById('applicationsTable');
+        const statsGrid = document.getElementById('statsGrid');
+
+        // API Testing Elements
+        const loanProductsBtn = document.getElementById('testLoanProducts');
+        const applicationsBtn = document.getElementById('testApplications');
+        const adminApplicationsBtn = document.getElementById('testAdminApplications');
+        const loanProductsResult = document.getElementById('loanProductsResult');
+        const applicationsResult = document.getElementById('applicationsResult');
+        const adminApplicationsResult = document.getElementById('adminApplicationsResult');
+
+        // Tab Navigation
+        const adminTabs = document.querySelectorAll('.admin-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Login
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const token = document.getElementById('adminToken').value;
+            
+            // Test the token by making an API call
+            try {
+                const response = await fetch(`${WORKER_URL}/api/admin/stats`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    adminToken = token;
+                    loginScreen.classList.add('hidden');
+                    dashboard.classList.remove('hidden');
+                    loadDashboard();
+                } else {
+                    alert('Invalid admin token');
+                }
+            } catch (error) {
+                alert('Error connecting to server');
+            }
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            adminToken = '';
+            dashboard.classList.add('hidden');
+            loginScreen.classList.remove('hidden');
+            document.getElementById('adminToken').value = '';
+        });
+
+        // Refresh data
+        refreshBtn.addEventListener('click', loadDashboard);
+
+        // Tab switching
+        adminTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Update active tab
+                adminTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Show corresponding content
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === `${tabId}Tab`) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Load dashboard data
+        async function loadDashboard() {
+            await loadStats();
+            await loadApplications();
+        }
+
+        // Load statistics
+        async function loadStats() {
+            try {
+                const response = await fetch(`${WORKER_URL}/api/admin/stats`, {
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    updateStats(data.data);
+                }
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // Load applications
+        async function loadApplications() {
+            try {
+                const response = await fetch(`${WORKER_URL}/api/admin/applications`, {
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    renderApplications(data.data);
+                }
+            } catch (error) {
+                console.error('Error loading applications:', error);
+            }
+        }
+
+        // Update statistics display
+        function updateStats(stats) {
+            document.getElementById('totalApplications').textContent = stats.total;
+            
+            // Count by status
+            const submitted = stats.byStatus.find(s => s.status === 'submitted')?.count || 0;
+            const approved = stats.byStatus.find(s => s.status === 'approved')?.count || 0;
+            const disbursed = stats.byStatus.find(s => s.status === 'disbursed')?.count || 0;
+
+            document.getElementById('submittedCount').textContent = submitted;
+            document.getElementById('approvedCount').textContent = approved;
+            document.getElementById('disbursedCount').textContent = disbursed;
+        }
+
+        // Render applications table
+        function renderApplications(applications) {
+            applicationsTable.innerHTML = '';
+
+            if (applications.length === 0) {
+                applicationsTable.innerHTML = `
+                    <tr>
+                        <td colspan="9" style="text-align: center; padding: 2rem; color: #7f8c8d;">
+                            No applications found
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            applications.forEach(app => {
+                const row = document.createElement('tr');
+                const submittedDate = new Date(app.created_at).toLocaleDateString();
+                
+                row.innerHTML = `
+                    <td>${app.id}</td>
+                    <td>${app.full_name}</td>
+                    <td>${app.email}</td>
+                    <td>${app.business}</td>
+                    <td>BWP ${parseFloat(app.loan_amount).toLocaleString()}</td>
+                    <td>${app.purpose}</td>
+                    <td>
+                        <span class="status-badge status-${app.status}">${app.status}</span>
+                    </td>
+                    <td>${submittedDate}</td>
+                    <td>
+                        <select class="status-select" onchange="updateStatus('${app.id}', this.value)">
+                            <option value="submitted" ${app.status === 'submitted' ? 'selected' : ''}>Submitted</option>
+                            <option value="approved" ${app.status === 'approved' ? 'selected' : ''}>Approved</option>
+                            <option value="rejected" ${app.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+                            <option value="disbursed" ${app.status === 'disbursed' ? 'selected' : ''}>Disbursed</option>
+                        </select>
+                    </td>
+                `;
+                applicationsTable.appendChild(row);
+            });
+        }
+
+        // Update application status
+        async function updateStatus(applicationId, newStatus) {
+            try {
+                const response = await fetch(`${WORKER_URL}/api/admin/applications/update`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${adminToken}`
+                    },
+                    body: JSON.stringify({
+                        applicationId,
+                        status: newStatus
+                    })
+                });
+
+                if (response.ok) {
+                    await loadDashboard(); // Refresh data
+                } else {
+                    alert('Error updating status');
+                }
+            } catch (error) {
+                console.error('Error updating status:', error);
+                alert('Error updating status');
+            }
+        }
+
+        // API Testing Functions
+        // Test Loan Products API
+        loanProductsBtn.addEventListener('click', async () => {
+            loanProductsResult.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing API connection...';
+            
+            try {
+                const response = await fetch(`${WORKER_URL}/api/loan-products`);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const data = await response.json();
+                loanProductsResult.innerHTML = `<strong style="color: #4ade80;">Success!</strong> API returned ${data.length} loan products:\n\n${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                loanProductsResult.innerHTML = `<strong style="color: #ef4444;">Error:</strong> ${error.message}\n\nUsing mock data for demonstration.`;
+                
+                // Mock data for demonstration
+                const mockProducts = [
+                    { id: 1, name: "Personal Loan", interest: 5.5, maxAmount: 10000, term: "12-36 months" },
+                    { id: 2, name: "Business Loan", interest: 7.2, maxAmount: 50000, term: "24-60 months" },
+                    { id: 3, name: "Emergency Loan", interest: 8.0, maxAmount: 5000, term: "3-12 months" }
+                ];
+                
+                setTimeout(() => {
+                    loanProductsResult.innerHTML = `<strong>Mock Data Loaded:</strong>\n\n${JSON.stringify(mockProducts, null, 2)}`;
+                }, 1000);
+            }
+        });
+
+        // Test Applications API
+        applicationsBtn.addEventListener('click', async () => {
+            applicationsResult.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting test application...';
+            
+            const testApplication = {
+                productId: 1,
+                amount: 5000,
+                term: 24,
+                firstName: "Test",
+                lastName: "User",
+                email: "test@example.com",
+                phone: "+1234567890"
+            };
+            
+            try {
+                const response = await fetch(`${WORKER_URL}/api/applications`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${adminToken}`
+                    },
+                    body: JSON.stringify(testApplication)
+                });
+                
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const data = await response.json();
+                applicationsResult.innerHTML = `<strong style="color: #4ade80;">Success!</strong> Application submitted:\n\n${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                applicationsResult.innerHTML = `<strong style="color: #ef4444;">Error:</strong> ${error.message}\n\nUsing mock submission for demonstration.`;
+                
+                // Mock response for demonstration
+                setTimeout(() => {
+                    const mockResponse = {
+                        id: 10026,
+                        status: "pending",
+                        message: "Application received and under review",
+                        applicationDate: new Date().toISOString().split('T')[0]
+                    };
+                    applicationsResult.innerHTML = `<strong>Mock Submission:</strong>\n\n${JSON.stringify(mockResponse, null, 2)}`;
+                }, 1000);
+            }
+        });
+
+        // Test Admin Applications API
+        adminApplicationsBtn.addEventListener('click', async () => {
+            adminApplicationsResult.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching admin applications...';
+            
+            try {
+                const response = await fetch(`${WORKER_URL}/api/admin/applications`, {
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`
+                    }
+                });
+                
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const data = await response.json();
+                adminApplicationsResult.innerHTML = `<strong style="color: #4ade80;">Success!</strong> Retrieved ${data.length} applications:\n\n${JSON.stringify(data, null, 2)}`;
+            } catch (error) {
+                adminApplicationsResult.innerHTML = `<strong style="color: #ef4444;">Error:</strong> ${error.message}\n\nUsing mock data for demonstration.`;
+                
+                // Mock data for demonstration
+                setTimeout(() => {
+                    const mockApplications = [
+                        { id: 10025, applicant: "John Smith", product: "Personal Loan", amount: 5000, status: "pending", date: "2023-10-15" },
+                        { id: 10024, applicant: "Maria Garcia", product: "Business Loan", amount: 15000, status: "approved", date: "2023-10-14" },
+                        { id: 10023, applicant: "Robert Johnson", product: "Emergency Loan", amount: 2500, status: "rejected", date: "2023-10-13" }
+                    ];
+                    adminApplicationsResult.innerHTML = `<strong>Mock Data:</strong>\n\n${JSON.stringify(mockApplications, null, 2)}`;
+                }, 1000);
+            }
+        });
+
+        // Make updateStatus function global
+        window.updateStatus = updateStatus;
+    </script>
+<!-- Genspark JavaScript -->
+    <script src="scripts/app.js"></script>
+</body>
+</html>
