@@ -1,3 +1,24 @@
+// TEMPORARY FIX - Add these function definitions at the top of your existing app.js
+window.showCalculator = function() {
+    console.log('Calculator clicked');
+    alert('Calculator will be implemented soon!');
+};
+
+window.showApplication = function() {
+    console.log('Application clicked');
+    alert('Application form will open soon!');
+};
+
+window.applyForProduct = function(productId) {
+    console.log('Apply for product:', productId);
+    alert(`Applying for ${productId} loan - feature coming soon!`);
+};
+
+window.showLogin = function() {
+    console.log('Login clicked');
+    alert('Login modal will open soon!');
+};
+
 // Monei Lending Platform - Complete Functionality Fix
 console.log('Monei Lending Platform initialized');
 console.log('Worker URL: https://monei-api.tmugore.workers.dev');
