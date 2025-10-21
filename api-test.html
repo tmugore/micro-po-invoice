@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monei API Test</title>
+</head>
+<body>
+    <h2>Testing API: monei-api.tmugore.workers.dev</h2>
+    <div id="result">Testing...</div>
+    
+    <script>
+        async function testAPI() {
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                // Test basic connectivity
+                const response = await fetch('https://monei-api.tmugore.workers.dev/');
+                const data = await response.text();
+                
+                resultDiv.innerHTML = `
+                    <h3 style="color: green;">✅ API is responding!</h3>
+                    <p>Response: ${data}</p>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3 style="color: red;">❌ API Connection Failed</h3>
+                    <p>Error: ${error.message}</p>
+                    <p>This means we need to set up your Cloudflare Workers endpoints.</p>
+                `;
+            }
+        }
+        
+        testAPI();
+    </script>
+</body>
+</html>

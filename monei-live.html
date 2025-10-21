@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monei Platform - Live Enterprise System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .sidebar {
+            background: linear-gradient(180deg, var(--primary) 0%, #1a2530 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            padding-top: 20px;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            margin: 5px 0;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        
+        .navbar-custom {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .stat-card i {
+            font-size: 30px;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+        
+        .stat-card .number {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .api-status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .api-connected {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .api-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .api-loading {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .badge-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        
+        .badge-submitted {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: var(--secondary);
+        }
+        
+        .badge-approved {
+            background-color: rgba(39, 174, 96, 0.2);
+            color: var(--success);
+        }
+        
+        .badge-rejected {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--danger);
+        }
+        
+        .badge-pending {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: var(--warning);
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar d-none d-md-block">
+                <div class="text-center mb-4">
+                    <h3><i class="fas fa-hand-holding-usd"></i> Monei</h3>
+                    <p class="text-muted">Enterprise Platform</p>
+                    <div id="apiStatusSidebar" class="api-status api-connected">
+                        <i class="fas fa-check-circle"></i> API Connected
+                    </div>
+                </div>
+                
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" onclick="showSection('dashboard')">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('loanApplication')">
+                            <i class="fas fa-file-invoice-dollar"></i> Apply for Loan
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('checkStatus')">
+                            <i class="fas fa-search"></i> Check Status
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('adminPanel')">
+                            <i class="fas fa-user-shield"></i> Admin Panel
+                        </a>
+                    </li>
+                    <li class="nav-item mt-4">
+                        <a class="nav-link" href="index.html">
+                            <i class="fas fa-arrow-left"></i> Back to Home
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 main-content">
+                <!-- Navbar -->
+                <nav class="navbar navbar-expand-lg navbar-custom">
+                    <div class="container-fluid">
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#">Monei Enterprise Platform</a>
+                                </li>
+                                <li class="nav-item">
+                                    <span class="nav-link">API: monei-api.tmugore.workers.dev</span>
+                                </li>
+                            </ul>
+                            <div class="d-flex">
+                                <div class="search-box me-3">
+                                    <input type="text" class="form-control" placeholder="Search...">
+                                </div>
+                                <button class="btn btn-outline-primary" onclick="testConnection()">
+                                    <i class="fas fa-plug"></i> Test Connection
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+                
+                <!-- Dashboard Section -->
+                <div id="dashboard" class="section">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2>Enterprise Dashboard</h2>
+                            <p class="text-muted">Real-time micro-lending platform powered by your Cloudflare Workers API</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats Cards -->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card stat-card">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                                <div class="number" id="totalApplications">--</div>
+                                <div class="text-muted">Total Applications</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stat-card">
+                                <i class="fas fa-user-check"></i>
+                                <div class="number" id="approvedApplications">--</div>
+                                <div class="text-muted">Approved</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stat-card">
+                                <i class="fas fa-clock"></i>
+                                <div class="number" id="pendingApplications">--</div>
+                                <div class="text-muted">Pending</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stat-card">
+                                <i class="fas fa-chart-line"></i>
+                                <div class="number" id="successRate">--</div>
+                                <div class="text-muted">Success Rate</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Applications -->
+                    <div class="row mt-4">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5>Recent Loan Applications</h5>
+                                    <button class="btn btn-sm btn-primary" onclick="loadAdminData()">
+                                        <i class="fas fa-sync-alt"></i> Refresh
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div id="recentApplications">
+                                        <div class="text-center py-4">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <p class="mt-2">Loading applications...</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Quick Actions</h5>
+                                </div>
+                                <div class="card-body">
+                                    <button class="btn btn-primary w-100 mb-2" onclick="showSection('loanApplication')">
+                                        <i class="fas fa-plus"></i> New Loan Application
+                                    </button>
+                                    <button class="btn btn-outline-primary w-100 mb-2" onclick="showSection('checkStatus')">
+                                        <i class="fas fa-search"></i> Check Application Status
+                                    </button>
+                                    <button class="btn btn-outline-secondary w-100 mb-2" onclick="testDatabase()">
+                                        <i class="fas fa-database"></i> Test Database
+                                    </button>
+                                    <button class="btn btn-outline-info w-100" onclick="showSection('adminPanel')">
+                                        <i class="fas fa-cog"></i> Admin Panel
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="card mt-4">
+                                <div class="card-header">
+                                    <h5>System Status</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="systemStatus">
+                                        <p><strong>API:</strong> <span id="apiStatus" class="badge bg-success">Connected</span></p>
+                                        <p><strong>Database:</strong> <span id="dbStatus" class="badge bg-warning">Testing...</span></p>
+                                        <p><strong>Last Updated:</strong> <span id="lastUpdated">--</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Loan Application Section -->
+                <div id="loanApplication" class="section" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Apply for a Loan</h4>
+                                </div>
+                                <div class="card-body">
+                                    <form id="loanApplicationForm">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Full Name *</label>
+                                                    <input type="text" class="form-control" id="fullName" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Email Address *</label>
+                                                    <input type="email" class="form-control" id="email" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Phone Number *</label>
+                                                    <input type="tel" class="form-control" id="phone" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Business Name *</label>
+                                                    <input type="text" class="form-control" id="business" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Loan Amount ($) *</label>
+                                                    <input type="number" class="form-control" id="loanAmount" min="100" max="10000" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Loan Purpose *</label>
+                                                    <select class="form-control" id="purpose" required>
+                                                        <option value="">Select purpose</option>
+                                                        <option value="Business Expansion">Business Expansion</option>
+                                                        <option value="Inventory Purchase">Inventory Purchase</option>
+                                                        <option value="Equipment">Equipment</option>
+                                                        <option value="Working Capital">Working Capital</option>
+                                                        <option value="Emergency">Emergency</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Additional Notes</label>
+                                            <textarea class="form-control" id="notes" rows="3"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-paper-plane"></i> Submit Application
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Application Tips</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul>
+                                        <li>Ensure all information is accurate</li>
+                                        <li>Loan amounts range from $100 to $10,000</li>
+                                        <li>Typical approval time: 2-3 business days</li>
+                                        <li>You'll receive an application ID for tracking</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card mt-4">
+                                <div class="card-header">
+                                    <h5>Why Choose Monei?</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><i class="fas fa-check text-success"></i> Competitive interest rates</p>
+                                    <p><i class="fas fa-check text-success"></i> Fast approval process</p>
+                                    <p><i class="fas fa-check text-success"></i> No hidden fees</p>
+                                    <p><i class="fas fa-check text-success"></i> Flexible repayment options</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Check Status Section -->
+                <div id="checkStatus" class="section" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Check Application Status</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Application ID</label>
+                                        <input type="text" class="form-control" id="applicationId" placeholder="Enter your application ID (e.g., MONEI123456789)">
+                                    </div>
+                                    <button class="btn btn-primary" onclick="checkApplicationStatus()">
+                                        <i class="fas fa-search"></i> Check Status
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Status Results</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="statusResults">
+                                        <p class="text-muted">Enter an application ID to check its status</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Admin Panel Section -->
+                <div id="adminPanel" class="section" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Admin Panel</h4>
+                                    <p class="mb-0">Manage loan applications and view analytics</p>
+                                </div>
+                                <div class="card-body">
+                                    <!-- Admin Login -->
+                                    <div id="adminLoginSection">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h5>Admin Authentication</h5>
+                                                <p>Enter your admin token to access the admin panel</p>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Admin Token</label>
+                                                    <input type="password" class="form-control" id="adminToken" placeholder="Enter your admin token">
+                                                </div>
+                                                <button class="btn btn-primary" onclick="adminLogin()">
+                                                    <i class="fas fa-sign-in-alt"></i> Login as Admin
+                                                </button>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="alert alert-info">
+                                                    <h6><i class="fas fa-info-circle"></i> Admin Access Required</h6>
+                                                    <p>To access the admin panel, you need a valid admin token. This token is set in your Cloudflare Workers environment variables as <code>ADMIN_TOKEN</code>.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Admin Dashboard (hidden until login) -->
+                                    <div id="adminDashboard" style="display: none;">
+                                        <div class="d-flex justify-content-between align-items-center mb-4">
+                                            <h5>Loan Applications Management</h5>
+                                            <div>
+                                                <button class="btn btn-success" onclick="loadAdminData()">
+                                                    <i class="fas fa-sync-alt"></i> Refresh Data
+                                                </button>
+                                                <button class="btn btn-outline-secondary" onclick="adminLogout()">
+                                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Admin Stats -->
+                                        <div class="row mb-4">
+                                            <div class="col-md-12">
+                                                <div id="adminStats">
+                                                    <div class="text-center py-3">
+                                                        <div class="spinner-border" role="status">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
+                                                        <p>Loading admin statistics...</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Applications Table -->
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div id="adminApplications">
+                                                    <div class="text-center py-4">
+                                                        <div class="spinner-border" role="status">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
+                                                        <p>Loading applications...</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast for notifications -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="fas fa-bell text-primary me-2"></i>
+                <strong class="me-auto">Monei Platform</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">
+                Hello, world! This is a toast message.
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'https://monei-api.tmugore.workers.dev';
+        let adminToken = localStorage.getItem('monei_admin_token') || '';
+        
+        // Toast notification function
+        function showToast(message, type = 'info') {
+            const toast = new bootstrap.Toast(document.getElementById('liveToast'));
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            document.getElementById('liveToast').className = `toast ${type}`;
+            toast.show();
+        }
+        
+        // Test API connection
+        async function testConnection() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/health`);
+                const data = await response.text();
+                
+                showToast('✅ API is connected and working!', 'success');
+                updateLastUpdated();
+                return true;
+            } catch (error) {
+                showToast('❌ API connection failed: ' + error.message, 'danger');
+                return false;
+            }
+        }
+        
+        // Test database connection
+        async function testDatabase() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/test-db`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('dbStatus').className = 'badge bg-success';
+                    document.getElementById('dbStatus').textContent = 'Connected';
+                    showToast('✅ Database connection successful!', 'success');
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('dbStatus').className = 'badge bg-danger';
+                document.getElementById('dbStatus').textContent = 'Error';
+                showToast('❌ Database test failed: ' + error.message, 'danger');
+            }
+        }
+        
+        // Update last updated timestamp
+        function updateLastUpdated() {
+            const now = new Date();
+            document.getElementById('lastUpdated').textContent = now.toLocaleString();
+        }
+        
+        // Show specific section
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).style.display = 'block';
+            
+            // Load data if needed
+            if (sectionName === 'dashboard') {
+                loadDashboardData();
+            } else if (sectionName === 'adminPanel' && adminToken) {
+                document.getElementById('adminLoginSection').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
+                loadAdminData();
+            }
+        }
+        
+        // Load dashboard data
+        async function loadDashboardData() {
+            // For now, we'll use sample data since we need admin access for stats
+            // In a real implementation, we'd have public endpoints for these stats
+            document.getElementById('totalApplications').textContent = '24';
+            document.getElementById('approvedApplications').textContent = '15';
+            document.getElementById('pendingApplications').textContent = '7';
+            document.getElementById('successRate').textContent = '62%';
+            
+            // Load recent applications (sample data)
+            const recentAppsHtml = `
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Business</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>MONEI123456789</td>
+                                <td>John Smith</td>
+                                <td>Smith Enterprises</td>
+                                <td>$5,000</td>
+                                <td><span class="badge badge-status badge-approved">Approved</span></td>
+                            </tr>
+                            <tr>
+                                <td>MONEI123456788</td>
+                                <td>Maria Garcia</td>
+                                <td>Garcia Boutique</td>
+                                <td>$2,500</td>
+                                <td><span class="badge badge-status badge-pending">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>MONEI123456787</td>
+                                <td>Robert Johnson</td>
+                                <td>Johnson Auto</td>
+                                <td>$7,500</td>
+                                <td><span class="badge badge-status badge-submitted">Submitted</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            document.getElementById('recentApplications').innerHTML = recentAppsHtml;
+            updateLastUpdated();
+        }
+        
+        // Handle loan application form submission
+        document.getElementById('loanApplicationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                business: document.getElementById('business').value,
+                loanAmount: document.getElementById('loanAmount').value,
+                purpose: document.getElementById('purpose').value
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/apply`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showToast(`✅ Application submitted successfully! Your ID: ${data.applicationId}`, 'success');
+                    document.getElementById('loanApplicationForm').reset();
+                    
+                    // Show the application ID to the user
+                    document.getElementById('statusResults').innerHTML = `
+                        <div class="alert alert-success">
+                            <h6>Application Submitted Successfully!</h6>
+                            <p><strong>Application ID:</strong> ${data.applicationId}</p>
+                            <p><strong>Status:</strong> <span class="badge badge-status badge-submitted">Submitted</span></p>
+                            <p class="mb-0">Keep your application ID safe to check your status later.</p>
+                        </div>
+                    `;
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                showToast('❌ Failed to submit application: ' + error.message, 'danger');
+            }
+        });
+        
+        // Check application status
+        async function checkApplicationStatus() {
+            const applicationId = document.getElementById('applicationId').value.trim();
+            
+            if (!applicationId) {
+                showToast('Please enter an application ID', 'warning');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${adminToken}`
+                    },
+                    body: JSON.stringify({ applicationId })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    let statusBadge = '';
+                    if (data.status === 'approved') {
+                        statusBadge = '<span class="badge badge-status badge-approved">Approved</span>';
+                    } else if (data.status === 'rejected') {
+                        statusBadge = '<span class="badge badge-status badge-rejected">Rejected</span>';
+                    } else {
+                        statusBadge = '<span class="badge badge-status badge-submitted">Submitted</span>';
+                    }
+                    
+                    document.getElementById('statusResults').innerHTML = `
+                        <div class="alert alert-info">
+                            <h6>Application Status</h6>
+                            <p><strong>Application ID:</strong> ${data.applicationId}</p>
+                            <p><strong>Status:</strong> ${statusBadge}</p>
+                            <p><strong>Name:</strong> ${data.details.fullName}</p>
+                            <p><strong>Business:</strong> ${data.details.business}</p>
+                            <p><strong>Loan Amount:</strong> $${data.details.loanAmount}</p>
+                            <p><strong>Purpose:</strong> ${data.details.purpose}</p>
+                            <p><strong>Submitted:</strong> ${new Date(data.details.submitted).toLocaleDateString()}</p>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('statusResults').innerHTML = `
+                        <div class="alert alert-warning">
+                            <h6>Application Not Found</h6>
+                            <p class="mb-0">No application found with ID: ${applicationId}. Please check your application ID and try again.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                showToast('❌ Failed to check application status: ' + error.message, 'danger');
+            }
+        }
+        
+        // Admin login
+        function adminLogin() {
+            const token = document.getElementById('adminToken').value.trim();
+            
+            if (!token) {
+                showToast('Please enter an admin token', 'warning');
+                return;
+            }
+            
+            adminToken = token;
+            localStorage.setItem('monei_admin_token', token);
+            
+            document.getElementById('adminLoginSection').style.display = 'none';
+            document.getElementById('adminDashboard').style.display = 'block';
+            
+            showToast('✅ Admin login successful!', 'success');
+            loadAdminData();
+        }
+        
+        // Admin logout
+        function adminLogout() {
+            adminToken = '';
+            localStorage.removeItem('monei_admin_token');
+            
+            document.getElementById('adminLoginSection').style.display = 'block';
+            document.getElementById('adminDashboard').style.display = 'none';
+            document.getElementById('adminToken').value = '';
+            
+            showToast('Logged out successfully', 'info');
+        }
+        
+        // Load admin data
+        async function loadAdminData() {
+            if (!adminToken) {
+                showToast('Admin token required', 'warning');
+                return;
+            }
+            
+            try {
+                // Load admin stats
+                const statsResponse = await fetch(`${API_BASE_URL}/api/admin/stats`, {
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`
+                    }
+                });
+                
+                if (statsResponse.ok) {
+                    const statsData = await statsResponse.json();
+                    
+                    if (statsData.success) {
+                        // Display stats
+                        const statsHtml = `
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="card stat-card">
+                                        <i class="fas fa-file-invoice-dollar"></i>
+                                        <div class="number">${statsData.data.total}</div>
+                                        <div class="text-muted">Total Applications</div>
+                                    </div>
+                                </div>
+                                ${statsData.data.byStatus.map(status => `
+                                    <div class="col-md-3">
+                                        <div class="card stat-card">
+                                            <i class="fas fa-${getStatusIcon(status.status)}"></i>
+                                            <div class="number">${status.count}</div>
+                                            <div class="text-muted">${formatStatus(status.status)}</div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                        
+                        document.getElementById('adminStats').innerHTML = statsHtml;
+                    }
+                }
+                
+                // Load applications
+                const appsResponse = await fetch(`${API_BASE_URL}/api/admin/applications`, {
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`
+                    }
+                });
+                
+                if (appsResponse.ok) {
+                    const appsData = await appsResponse.json();
+                    
+                    if (appsData.success) {
+                        const appsHtml = `
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Business</th>
+                                            <th>Amount</th>
+                                            <th>Purpose</th>
+                                            <th>Status</th>
+                                            <th>Submitted</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${appsData.data.map(app => `
+                                            <tr>
+                                                <td>${app.id}</td>
+                                                <td>${app.full_name}</td>
+                                                <td>${app.email}</td>
+                                                <td>${app.business}</td>
+                                                <td>$${app.loan_amount}</td>
+                                                <td>${app.purpose}</td>
+                                                <td>
+                                                    <span class="badge badge-status badge-${app.status}">
+                                                        ${formatStatus(app.status)}
+                                                    </span>
+                                                </td>
+                                                <td>${new Date(app.created_at).toLocaleDateString()}</td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <button class="btn btn-outline-success" onclick="updateApplicationStatus('${app.id}', 'approved')">
+                                                            <i class="fas fa-check"></i>
+                                                        </button>
+                                                        <button class="btn btn-outline-danger" onclick="updateApplicationStatus('${app.id}', 'rejected')">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        `;
+                        
+                        document.getElementById('adminApplications').innerHTML = appsHtml;
+                    }
+                }
+                
+                updateLastUpdated();
+            } catch (error) {
+                showToast('❌ Failed to load admin data: ' + error.message, 'danger');
+            }
+        }
+        
+        // Update application status
+        async function updateApplicationStatus(applicationId, status) {
+            if (!adminToken) {
+                showToast('Admin token required', 'warning');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/admin/applications/update`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${adminToken}`
+                    },
+                    body: JSON.stringify({
+                        applicationId,
+                        status
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showToast(`✅ Application ${applicationId} ${status} successfully`, 'success');
+                    loadAdminData(); // Refresh the data
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                showToast('❌ Failed to update application: ' + error.message, 'danger');
+            }
+        }
+        
+        // Helper functions
+        function getStatusIcon(status) {
+            switch(status) {
+                case 'approved': return 'check-circle';
+                case 'rejected': return 'times-circle';
+                case 'submitted': return 'clock';
+                default: return 'file';
+            }
+        }
+        
+        function formatStatus(status) {
+            return status.charAt(0).toUpperCase() + status.slice(1);
+        }
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Test connection on load
+            testConnection();
+            testDatabase();
+            loadDashboardData();
+            
+            // Check if admin is already logged in
+            if (adminToken) {
+                document.getElementById('adminLoginSection').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
