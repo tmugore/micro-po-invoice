@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Management System | Monei Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .sidebar {
+            background: linear-gradient(180deg, var(--primary) 0%, #1a2530 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            padding-top: 20px;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            margin: 5px 0;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        
+        .navbar-custom {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .stat-card i {
+            font-size: 30px;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+        
+        .stat-card .number {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .client-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .badge-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        
+        .badge-active {
+            background-color: rgba(39, 174, 96, 0.2);
+            color: var(--success);
+        }
+        
+        .badge-pending {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: var(--warning);
+        }
+        
+        .badge-inactive {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--danger);
+        }
+        
+        .client-profile-header {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid white;
+            object-fit: cover;
+        }
+        
+        .tab-content {
+            padding: 20px 0;
+        }
+        
+        .document-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .document-item:last-child {
+            border-bottom: none;
+        }
+        
+        .document-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            color: var(--secondary);
+        }
+        
+        .progress-bar-custom {
+            background-color: var(--secondary);
+        }
+        
+        .btn-primary-custom {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+        }
+        
+        .btn-primary-custom:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+        
+        .search-box {
+            position: relative;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 12px;
+            color: #6c757d;
+        }
+        
+        .search-box input {
+            padding-left: 40px;
+        }
+        
+        .kyc-progress {
+            height: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar d-none d-md-block">
+                <div class="text-center mb-4">
+                    <h3><i class="fas fa-hand-holding-usd"></i> Monei</h3>
+                    <p class="text-muted">Enterprise Platform</p>
+                </div>
+                
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="enterprise.html">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="fas fa-users"></i> Client Management
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-file-invoice-dollar"></i> Loan Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-chart-bar"></i> Reporting
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-credit-card"></i> Payments
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-code-branch"></i> Multi-branch
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-mobile-alt"></i> Mobile App
+                        </a>
+                    </li>
+                    <li class="nav-item mt-4">
+                        <a class="nav-link" href="index.html">
+                            <i class="fas fa-arrow-left"></i> Back to Home
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 main-content">
+                <!-- Navbar -->
+                <nav class="navbar navbar-expand-lg navbar-custom">
+                    <div class="container-fluid">
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#">Client Management</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">KYC Verification</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Documents</a>
+                                </li>
+                            </ul>
+                            <div class="d-flex">
+                                <div class="search-box me-3">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" class="form-control" placeholder="Search clients...">
+                                </div>
+                                <button class="btn btn-primary-custom">
+                                    <i class="fas fa-plus"></i> New Client
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+                
+                <!-- Stats Cards -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card stat-card">
+                            <i class="fas fa-users"></i>
+                            <div class="number">1,247</div>
+                            <div class="text-muted">Total Clients</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card">
+                            <i class="fas fa-user-check"></i>
+                            <div class="number">984</div>
+                            <div class="text-muted">Active Clients</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card">
+                            <i class="fas fa-file-signature"></i>
+                            <div class="number">217</div>
+                            <div class="text-muted">Pending KYC</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card">
+                            <i class="fas fa-chart-line"></i>
+                            <div class="number">87%</div>
+                            <div class="text-muted">KYC Completion</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Client Profile Header -->
+                <div class="client-profile-header">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <div class="d-flex align-items-center">
+                                <img src="https://ui-avatars.com/api/?name=Maria+Sanchez&background=0D8ABC&color=fff" class="profile-avatar me-4" alt="Client Avatar">
+                                <div>
+                                    <h2>Maria Sanchez</h2>
+                                    <p class="mb-1">Client ID: CL-2023-00472</p>
+                                    <p class="mb-0">Joined: March 15, 2023</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <span class="badge badge-status badge-active">Active Client</span>
+                            <div class="mt-3">
+                                <button class="btn btn-light me-2"><i class="fas fa-edit"></i> Edit</button>
+                                <button class="btn btn-light"><i class="fas fa-envelope"></i> Message</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Client Details Tabs -->
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs" id="clientTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button">Profile</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="kyc-tab" data-bs-toggle="tab" data-bs-target="#kyc" type="button">KYC Status</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="documents-tab" data-bs-toggle="tab" data-bs-target="#documents" type="button">Documents</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="loans-tab" data-bs-toggle="tab" data-bs-target="#loans" type="button">Loan History</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="activity-tab" data-bs-toggle="tab" data-bs-target="#activity" type="button">Activity</button>
+                            </li>
+                        </ul>
+                        
+                        <div class="tab-content" id="clientTabsContent">
+                            <!-- Profile Tab -->
+                            <div class="tab-pane fade show active" id="profile" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5>Personal Information</h5>
+                                        <table class="table table-borderless">
+                                            <tr>
+                                                <td width="30%"><strong>Full Name</strong></td>
+                                                <td>Maria Sanchez</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Date of Birth</strong></td>
+                                                <td>June 12, 1985</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Gender</strong></td>
+                                                <td>Female</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Nationality</strong></td>
+                                                <td>Mexican</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>ID Number</strong></td>
+                                                <td>MX-85472963</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Contact Information</h5>
+                                        <table class="table table-borderless">
+                                            <tr>
+                                                <td width="30%"><strong>Phone</strong></td>
+                                                <td>+52 55 1234 5678</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Email</strong></td>
+                                                <td>maria.sanchez@example.com</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Address</strong></td>
+                                                <td>Av. Reforma 123, CDMX, Mexico</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Occupation</strong></td>
+                                                <td>Small Business Owner</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Monthly Income</strong></td>
+                                                <td>$1,200 USD</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- KYC Tab -->
+                            <div class="tab-pane fade" id="kyc" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h5>KYC Verification Progress</h5>
+                                        <div class="progress mb-3 kyc-progress">
+                                            <div class="progress-bar progress-bar-custom" role="progressbar" style="width: 85%"></div>
+                                        </div>
+                                        <p>85% complete - 3 of 4 documents verified</p>
+                                        
+                                        <div class="mt-4">
+                                            <h5>Verification Steps</h5>
+                                            <div class="list-group">
+                                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Identity Verification
+                                                    <span class="badge bg-success rounded-pill"><i class="fas fa-check"></i></span>
+                                                </div>
+                                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Address Verification
+                                                    <span class="badge bg-success rounded-pill"><i class="fas fa-check"></i></span>
+                                                </div>
+                                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Income Verification
+                                                    <span class="badge bg-success rounded-pill"><i class="fas fa-check"></i></span>
+                                                </div>
+                                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Credit History Check
+                                                    <span class="badge bg-warning rounded-pill">Pending</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h6>Risk Assessment</h6>
+                                                <div class="text-center my-4">
+                                                    <div class="display-4 text-success">Low</div>
+                                                    <p class="text-muted">Risk Score: 24/100</p>
+                                                </div>
+                                                <button class="btn btn-primary-custom w-100">Run New Assessment</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Documents Tab -->
+                            <div class="tab-pane fade" id="documents" role="tabpanel">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h5>Client Documents</h5>
+                                    <button class="btn btn-primary-custom">
+                                        <i class="fas fa-upload"></i> Upload Document
+                                    </button>
+                                </div>
+                                
+                                <div class="document-item">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-id-card document-icon"></i>
+                                        <div>
+                                            <h6>National ID Card</h6>
+                                            <p class="mb-0 text-muted">Uploaded: March 16, 2023</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="badge bg-success me-2">Verified</span>
+                                        <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i> View</button>
+                                        <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-download"></i> Download</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="document-item">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-file-invoice document-icon"></i>
+                                        <div>
+                                            <h6>Utility Bill</h6>
+                                            <p class="mb-0 text-muted">Uploaded: March 17, 2023</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="badge bg-success me-2">Verified</span>
+                                        <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i> View</button>
+                                        <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-download"></i> Download</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="document-item">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-receipt document-icon"></i>
+                                        <div>
+                                            <h6>Bank Statement</h6>
+                                            <p class="mb-0 text-muted">Uploaded: March 18, 2023</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="badge bg-success me-2">Verified</span>
+                                        <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i> View</button>
+                                        <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-download"></i> Download</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="document-item">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-chart-line document-icon"></i>
+                                        <div>
+                                            <h6>Credit Report</h6>
+                                            <p class="mb-0 text-muted">Uploaded: March 20, 2023</p>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="badge bg-warning me-2">Pending Review</span>
+                                        <button class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i> View</button>
+                                        <button class="btn btn-sm btn-outline-secondary"><i class="fas fa-download"></i> Download</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Loans Tab -->
+                            <div class="tab-pane fade" id="loans" role="tabpanel">
+                                <h5>Loan History</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Loan ID</th>
+                                                <th>Product</th>
+                                                <th>Amount</th>
+                                                <th>Disbursed</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>LN-2023-01842</td>
+                                                <td>Small Business Loan</td>
+                                                <td>$5,000</td>
+                                                <td>March 25, 2023</td>
+                                                <td><span class="badge bg-success">Active</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary">View</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>LN-2022-09531</td>
+                                                <td>Personal Loan</td>
+                                                <td>$1,200</td>
+                                                <td>October 12, 2022</td>
+                                                <td><span class="badge bg-secondary">Closed</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary">View</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>LN-2022-06427</td>
+                                                <td>Emergency Loan</td>
+                                                <td>$800</td>
+                                                <td>June 5, 2022</td>
+                                                <td><span class="badge bg-secondary">Closed</span></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary">View</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button class="btn btn-primary-custom mt-3">
+                                    <i class="fas fa-plus"></i> New Loan Application
+                                </button>
+                            </div>
+                            
+                            <!-- Activity Tab -->
+                            <div class="tab-pane fade" id="activity" role="tabpanel">
+                                <h5>Recent Activity</h5>
+                                <div class="timeline">
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker bg-success"></div>
+                                        <div class="timeline-content">
+                                            <h6>Loan Application Submitted</h6>
+                                            <p class="text-muted">March 25, 2023 - 10:24 AM</p>
+                                            <p>Applied for Small Business Loan - $5,000</p>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker bg-primary"></div>
+                                        <div class="timeline-content">
+                                            <h6>Document Uploaded</h6>
+                                            <p class="text-muted">March 20, 2023 - 2:15 PM</p>
+                                            <p>Credit report document uploaded for verification</p>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker bg-info"></div>
+                                        <div class="timeline-content">
+                                            <h6>Profile Updated</h6>
+                                            <p class="text-muted">March 18, 2023 - 9:45 AM</p>
+                                            <p>Updated contact information and occupation details</p>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker bg-success"></div>
+                                        <div class="timeline-content">
+                                            <h6>KYC Documents Verified</h6>
+                                            <p class="text-muted">March 17, 2023 - 4:30 PM</p>
+                                            <p>Identity and address documents approved by agent</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sample data for demonstration
+        document.addEventListener('DOMContentLoaded', function() {
+            // This is where you would typically fetch data from your API
+            console.log('Client Management System loaded');
+            
+            // Simulate API call for client data
+            setTimeout(() => {
+                // In a real implementation, you would update the DOM with fetched data
+                console.log('Client data fetched successfully');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
