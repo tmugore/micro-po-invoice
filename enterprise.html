@@ -3,261 +3,463 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monei Platform | Enterprise Dashboard</title>
+    <title>Monei - Enterprise Micro-Lending Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: #2c3e50;
             --secondary: #3498db;
-            --success: #2ecc71;
-            --warning: #f39c12;
+            --success: #27ae60;
+            --warning: #e67e22;
             --danger: #e74c3c;
+            --info: #17a2b8;
             --light: #ecf0f1;
-            --dark: #34495e;
-            --sidebar-width: 250px;
-            --header-height: 60px;
+            --dark: #2c3e50;
+            --sidebar-width: 280px;
+            --header-height: 70px;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
-            background-color: #f5f7fa;
+            background-color: #f8f9fa;
             color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Layout */
+        .app-container {
             display: flex;
             min-height: 100vh;
         }
-        
-        /* Sidebar Styles */
+
+        /* Sidebar */
         .sidebar {
             width: var(--sidebar-width);
-            background: var(--primary);
+            background: linear-gradient(180deg, var(--primary), #1a2530);
             color: white;
-            height: 100vh;
             position: fixed;
+            height: 100vh;
+            overflow-y: auto;
             transition: all 0.3s;
             z-index: 1000;
         }
-        
+
         .sidebar-header {
             padding: 20px;
-            background: var(--dark);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            height: var(--header-height);
+        }
+
+        .logo {
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
-        .sidebar-header h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
+
+        .logo i {
+            font-size: 24px;
+            color: var(--secondary);
         }
-        
+
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
         .sidebar-menu {
-            padding: 15px 0;
+            padding: 20px 0;
         }
-        
-        .sidebar-menu ul {
+
+        .menu-section {
+            margin-bottom: 20px;
+        }
+
+        .menu-title {
+            padding: 0 20px 10px;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 1px;
+        }
+
+        .menu-items {
             list-style: none;
         }
-        
-        .sidebar-menu li {
+
+        .menu-item {
             padding: 12px 20px;
-            transition: all 0.3s;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             cursor: pointer;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
         }
-        
-        .sidebar-menu li:hover {
-            background: rgba(255, 255, 255, 0.1);
+
+        .menu-item:hover {
+            background: rgba(255,255,255,0.05);
         }
-        
-        .sidebar-menu li.active {
+
+        .menu-item.active {
+            background: rgba(52, 152, 219, 0.2);
+            border-left-color: var(--secondary);
+            color: var(--secondary);
+        }
+
+        .menu-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .menu-badge {
+            margin-left: auto;
             background: var(--secondary);
-            border-left: 4px solid white;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
         }
-        
-        /* Main Content Styles */
+
+        /* Main Content */
         .main-content {
             flex: 1;
             margin-left: var(--sidebar-width);
             transition: all 0.3s;
         }
-        
-        /* Header Styles */
+
+        /* Header */
         .header {
             height: var(--header-height);
             background: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 20px;
+            padding: 0 30px;
             position: sticky;
             top: 0;
             z-index: 100;
         }
-        
-        .header-left h1 {
-            font-size: 1.5rem;
-            color: var(--primary);
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
-        
+
+        .toggle-sidebar {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--dark);
+            cursor: pointer;
+            display: none;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 10px 15px 10px 40px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 300px;
+            font-size: 14px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
         .header-right {
             display: flex;
             align-items: center;
             gap: 20px;
         }
-        
+
+        .header-action {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .user-profile {
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
+
         .user-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
             background: var(--secondary);
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
             font-weight: bold;
         }
-        
-        /* Dashboard Content Styles */
-        .dashboard-content {
-            padding: 20px;
+
+        /* Content Area */
+        .content {
+            padding: 30px;
         }
-        
-        .stats-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 30px;
         }
-        
-        .stat-card {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
+
+        .page-title h2 {
+            font-size: 24px;
+            color: var(--dark);
+            margin-bottom: 5px;
         }
-        
-        .stat-card:hover {
-            transform: translateY(-5px);
+
+        .breadcrumb {
+            display: flex;
+            gap: 10px;
+            color: #666;
+            font-size: 14px;
         }
-        
-        .stat-card .card-header {
+
+        .breadcrumb a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--secondary);
+        }
+
+        .page-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
             display: flex;
             align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--secondary);
+        }
+
+        .stat-card.warning {
+            border-left-color: var(--warning);
+        }
+
+        .stat-card.success {
+            border-left-color: var(--success);
+        }
+
+        .stat-card.danger {
+            border-left-color: var(--danger);
+        }
+
+        .stat-header {
+            display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
         }
-        
-        .stat-card .card-icon {
-            width: 50px;
-            height: 50px;
+
+        .stat-title {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
             border-radius: 8px;
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--secondary);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 1.5rem;
         }
-        
-        .stat-card .card-value {
-            font-size: 1.8rem;
+
+        .stat-value {
+            font-size: 28px;
             font-weight: 700;
             margin-bottom: 5px;
         }
-        
-        .stat-card .card-label {
-            color: #7f8c8d;
-            font-size: 0.9rem;
+
+        .stat-change {
+            font-size: 14px;
+            color: #666;
         }
-        
-        .chart-container {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+
+        .stat-change.positive {
+            color: var(--success);
+        }
+
+        .stat-change.negative {
+            color: var(--danger);
+        }
+
+        /* Charts */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
             margin-bottom: 30px;
         }
-        
+
+        .chart-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
         .chart-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
-        
+
         .chart-title {
-            font-size: 1.2rem;
+            font-size: 18px;
             font-weight: 600;
-            color: var(--primary);
         }
-        
-        .recent-activities {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .activity-list {
-            margin-top: 15px;
-        }
-        
-        .activity-item {
+
+        .chart-actions {
             display: flex;
-            padding: 15px 0;
-            border-bottom: 1px solid #eee;
+            gap: 10px;
         }
-        
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        /* Recent Activity */
+        .activity-list {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .activity-item {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
         .activity-item:last-child {
             border-bottom: none;
         }
-        
+
         .activity-icon {
             width: 40px;
             height: 40px;
             border-radius: 50%;
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--secondary);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 15px;
-            color: white;
         }
-        
-        .activity-details {
+
+        .activity-content {
             flex: 1;
         }
-        
+
         .activity-title {
             font-weight: 600;
             margin-bottom: 5px;
         }
-        
-        .activity-time {
-            color: #7f8c8d;
-            font-size: 0.8rem;
+
+        .activity-desc {
+            color: #666;
+            font-size: 14px;
         }
-        
+
+        .activity-time {
+            color: #999;
+            font-size: 12px;
+        }
+
         .loading {
-            opacity: 0.6;
+            opacity: 0.7;
             pointer-events: none;
         }
-        
+
         /* Status Indicators */
         .status-badge {
             display: inline-block;
@@ -281,177 +483,303 @@
             background: rgba(52, 152, 219, 0.2);
             color: var(--secondary);
         }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
+
+        /* Responsive */
+        @media (max-width: 992px) {
             .sidebar {
-                width: 70px;
-                overflow: hidden;
+                transform: translateX(-100%);
             }
-            
-            .sidebar-header h2, .sidebar-menu span {
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .toggle-sidebar {
+                display: block;
+            }
+
+            .search-box input {
+                width: 200px;
+            }
+
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box {
                 display: none;
             }
-            
-            .main-content {
-                margin-left: 70px;
-            }
-            
-            .stats-cards {
-                grid-template-columns: 1fr;
+
+            .header {
+                padding: 0 15px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Sidebar Navigation -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <i class="fas fa-chart-line"></i>
-            <h2>Monei Enterprise</h2>
-        </div>
-        <div class="sidebar-menu">
-            <ul>
-                <li class="active">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </li>
-                <li>
-                    <i class="fas fa-users"></i>
-                    <span>Client Management</span>
-                </li>
-                <li>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
                     <i class="fas fa-hand-holding-usd"></i>
-                    <span>Loan Products</span>
-                </li>
-                <li>
-                    <i class="fas fa-file-invoice-dollar"></i>
-                    <span>Financial Operations</span>
-                </li>
-                <li>
-                    <i class="fas fa-chart-bar"></i>
-                    <span>Reports & Analytics</span>
-                </li>
-                <li>
-                    <i class="fas fa-cog"></i>
-                    <span>System Settings</span>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-left">
-                <h1>Enterprise Dashboard</h1>
-            </div>
-            <div class="header-right">
-                <div class="user-profile">
-                    <div class="user-avatar">AD</div>
-                    <div class="user-info">
-                        <div class="user-name">Admin User</div>
-                        <div class="user-role">System Administrator</div>
-                    </div>
+                    <h1>Monei Enterprise</h1>
                 </div>
             </div>
-        </div>
 
-        <!-- Dashboard Content -->
-        <div class="dashboard-content">
-            <!-- Stats Cards -->
-            <div class="stats-cards">
-                <div class="stat-card" id="portfolio-card">
-                    <div class="card-header">
-                        <div>
-                            <div class="card-value">Loading...</div>
-                            <div class="card-label">Total Portfolio</div>
-                        </div>
-                        <div class="card-icon" style="background-color: var(--secondary);">
-                            <i class="fas fa-wallet"></i>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <span class="status-badge status-active">Updating...</span>
-                    </div>
+            <div class="sidebar-menu">
+                <div class="menu-section">
+                    <div class="menu-title">Main</div>
+                    <ul class="menu-items">
+                        <li class="menu-item active">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </li>
+                        <li class="menu-item">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Analytics</span>
+                        </li>
+                    </ul>
                 </div>
-                
-                <div class="stat-card" id="clients-card">
-                    <div class="card-header">
-                        <div>
-                            <div class="card-value">Loading...</div>
-                            <div class="card-label">Active Clients</div>
-                        </div>
-                        <div class="card-icon" style="background-color: var(--success);">
+
+                <div class="menu-section">
+                    <div class="menu-title">Clients & Loans</div>
+                    <ul class="menu-items">
+                        <li class="menu-item">
                             <i class="fas fa-users"></i>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <span class="status-badge status-active">Updating...</span>
-                    </div>
-                </div>
-                
-                <div class="stat-card" id="disbursement-card">
-                    <div class="card-header">
-                        <div>
-                            <div class="card-value">Loading...</div>
-                            <div class="card-label">Monthly Disbursement</div>
-                        </div>
-                        <div class="card-icon" style="background-color: var(--warning);">
+                            <span>Client Management</span>
+                            <span class="menu-badge">24</span>
+                        </li>
+                        <li class="menu-item">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <span>Loan Products</span>
+                        </li>
+                        <li class="menu-item">
+                            <i class="fas fa-clipboard-list"></i>
+                            <span>Loan Applications</span>
+                            <span class="menu-badge">12</span>
+                        </li>
+                        <li class="menu-item">
                             <i class="fas fa-hand-holding-usd"></i>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <span class="status-badge status-pending">Updating...</span>
-                    </div>
+                            <span>Active Loans</span>
+                        </li>
+                        <li class="menu-item">
+                            <i class="fas fa-history"></i>
+                            <span>Loan History</span>
+                        </li>
+                    </ul>
                 </div>
-                
-                <div class="stat-card" id="repayment-card">
-                    <div class="card-header">
-                        <div>
-                            <div class="card-value">Loading...</div>
-                            <div class="card-label">Repayment Rate</div>
-                        </div>
-                        <div class="card-icon" style="background-color: var(--danger);">
+
+                <div class="menu-section">
+                    <div class="menu-title">Financial Operations</div>
+                    <ul class="menu-items">
+                        <li class="menu-item">
+                            <i class="fas fa-money-check"></i>
+                            <span>Payments</span>
+                        </li>
+                        <li class="menu-item">
+                            <i class="fas fa-cash-register"></i>
+                            <span>Disbursements</span>
+                        </li>
+                        <li class="menu-item">
+                            <i class="fas fa-file-invoice"></i>
+                            <span>Accounting</span>
+                        </li>
+                        <li class="menu-item">
                             <i class="fas fa-chart-line"></i>
+                            <span>Financial Reports</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="menu-section">
+                    <div class="menu-title">System</div>
+                    <ul class="menu-items">
+                        <li class="menu-item">
+                            <i class="fas fa-user-shield"></i>
+                            <span>User Management</span>
+                        </li>
+                        <li class="menu-item">
+                            <i class="fas fa-cogs"></i>
+                            <span>System Settings</span>
+                        </li>
+                        <li class="menu-item">
+                            <i class="fas fa-plug"></i>
+                            <span>API Integration</span>
+                        </li>
+                        <li class="menu-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Security</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <button class="toggle-sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search clients, loans, transactions...">
+                    </div>
+                </div>
+
+                <div class="header-right">
+                <a href="index.html" class="text-gray-600 hover:text-blue-600 mr-4">
+        <i class="fas fa-globe"></i> Public Site</a>
+    	<div class="header-action">
+        	<i class="fas fa-bell"></i>
+        	<span class="notification-badge">5</span>
+    </div>    
+		
+
+		<div class="header-action">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">5</span>
+                    </div>
+                    <div class="header-action">
+                        <i class="fas fa-envelope"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <div class="user-avatar">AJ</div>
+                        <div>
+                            <div style="font-weight: 600;">Admin User</div>
+                            <div style="font-size: 12px; color: #666;">Administrator</div>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <span class="status-badge status-completed">Updating...</span>
-                    </div>
                 </div>
             </div>
 
-            <!-- Charts Section -->
-            <div class="chart-container">
-                <div class="chart-header">
-                    <div class="chart-title">Portfolio Performance</div>
-                    <div class="chart-actions">
-                        <select id="timeRange">
-                            <option value="30">Last 30 Days</option>
-                            <option value="90">Last 90 Days</option>
-                            <option value="365">Year to Date</option>
-                        </select>
+            <!-- Content -->
+            <div class="content">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h2>Enterprise Dashboard</h2>
+                        <div class="breadcrumb">
+                            <a href="#">Home</a> / <span>Dashboard</span>
+                        </div>
+                    </div>
+                    <div class="page-actions">
+                        <button class="btn btn-outline">
+                            <i class="fas fa-download"></i> Export Report
+                        </button>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus"></i> New Loan
+                        </button>
                     </div>
                 </div>
-                <div class="chart-wrapper">
-                    <canvas id="performanceChart" height="300"></canvas>
-                </div>
-            </div>
 
-            <!-- Recent Activities -->
-            <div class="recent-activities">
-                <div class="chart-header">
-                    <div class="chart-title">Recent Activities</div>
-                    <div class="chart-actions">
-                        <button id="refreshActivities">Refresh</button>
+                <!-- Stats Grid -->
+                <div class="dashboard-grid">
+                    <div class="stat-card" id="portfolio-card">
+                        <div class="stat-header">
+                            <div class="stat-title">Total Loan Portfolio</div>
+                            <div class="stat-icon">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">Loading...</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> <span class="change-text">Updating...</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card success" id="clients-card">
+                        <div class="stat-header">
+                            <div class="stat-title">Active Clients</div>
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">Loading...</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i> <span class="change-text">Updating...</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card warning" id="applications-card">
+                        <div class="stat-header">
+                            <div class="stat-title">Pending Applications</div>
+                            <div class="stat-icon">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">Loading...</div>
+                        <div class="stat-change negative">
+                            <i class="fas fa-arrow-down"></i> <span class="change-text">Updating...</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card danger" id="delinquent-card">
+                        <div class="stat-header">
+                            <div class="stat-title">Delinquent Loans</div>
+                            <div class="stat-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value">Loading...</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-down"></i> <span class="change-text">Updating...</span>
+                        </div>
                     </div>
                 </div>
-                <div class="activity-list" id="activityList">
-                    <div class="activity-item">
-                        <div class="activity-details">
-                            <div class="activity-title">Loading activities...</div>
+
+                <!-- Charts -->
+                <div class="chart-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">Loan Portfolio Performance</div>
+                            <div class="chart-actions">
+                                <select class="btn btn-outline" style="padding: 5px 10px;" id="timeRange">
+                                    <option value="30">Last 30 days</option>
+                                    <option value="90">Last 90 days</option>
+                                    <option value="365">This Year</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">Loan Status Distribution</div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">Recent Activity</div>
+                        <a href="#" style="color: var(--secondary); text-decoration: none;" id="refreshActivities">Refresh</a>
+                    </div>
+                    <div class="activity-list" id="activityList">
+                        <div class="activity-item">
+                            <div class="activity-content">
+                                <div class="activity-title">Loading activities...</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -460,9 +788,9 @@
     </div>
 
     <script>
-        // API Configuration - UPDATE THESE ENDPOINTS
+        // API Configuration
         const API_CONFIG = {
-            baseUrl: 'https://monei-app.tmugore.workers.dev', // Your Cloudflare Worker URL
+            baseUrl: 'https://monei-app.tmugore.workers.dev',
             endpoints: {
                 dashboard: '/api/dashboard',
                 portfolio: '/api/portfolio',
@@ -472,28 +800,22 @@
             }
         };
 
-        // Authentication (if needed)
+        // Authentication
         const API_HEADERS = {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + (localStorage.getItem('authToken') || 'UlLzfLjkCE2Ozixy_eBc8ky_e9wTYqKbiSh6mjWn')
         };
 
-        // DOM Elements
-        const elements = {
-            portfolioCard: document.getElementById('portfolio-card'),
-            clientsCard: document.getElementById('clients-card'),
-            disbursementCard: document.getElementById('disbursement-card'),
-            repaymentCard: document.getElementById('repayment-card'),
-            activityList: document.getElementById('activity-list'),
-            timeRange: document.getElementById('timeRange'),
-            refreshActivities: document.getElementById('refreshActivities')
-        };
+        // Chart instances
+        let performanceChart, statusChart;
 
         // API Service
         const apiService = {
             async fetchData(endpoint) {
                 try {
                     const url = `${API_CONFIG.baseUrl}${endpoint}`;
+                    console.log('Fetching:', url);
+                    
                     const response = await fetch(url, {
                         headers: API_HEADERS
                     });
@@ -511,68 +833,201 @@
 
             async getDashboardStats() {
                 try {
-                    // Try to fetch all dashboard data at once
                     return await this.fetchData(API_CONFIG.endpoints.dashboard);
                 } catch (error) {
-                    console.warn('Dashboard endpoint failed, trying individual endpoints');
-                    // Fallback to individual endpoints
-                    const [portfolio, clients, disbursement, repayment] = await Promise.all([
-                        this.fetchData(API_CONFIG.endpoints.portfolio).catch(() => null),
-                        this.fetchData(API_CONFIG.endpoints.clients).catch(() => null),
-                        this.fetchData('/api/disbursement').catch(() => null),
-                        this.fetchData('/api/repayment').catch(() => null)
-                    ]);
-                    
-                    return {
-                        portfolio,
-                        clients,
-                        disbursement,
-                        repayment
-                    };
+                    console.warn('Dashboard endpoint failed, using demo data');
+                    return this.getDemoData();
                 }
             },
 
             async getPerformanceData(days = 30) {
-                return await this.fetchData(`${API_CONFIG.endpoints.performance}?days=${days}`);
+                try {
+                    return await this.fetchData(`${API_CONFIG.endpoints.performance}?days=${days}`);
+                } catch (error) {
+                    console.warn('Performance endpoint failed, using demo data');
+                    return this.getDemoPerformanceData();
+                }
             },
 
             async getRecentActivities() {
-                return await this.fetchData(API_CONFIG.endpoints.activities);
+                try {
+                    return await this.fetchData(API_CONFIG.endpoints.activities);
+                } catch (error) {
+                    console.warn('Activities endpoint failed, using demo data');
+                    return this.getDemoActivities();
+                }
+            },
+
+            getDemoData() {
+                return {
+                    portfolio: { value: 2845000, change: 12.5 },
+                    clients: { active: 1247, change: 8.3 },
+                    applications: { pending: 87, change: -5.2 },
+                    delinquent: { count: 23, change: -15.2 }
+                };
+            },
+
+            getDemoPerformanceData() {
+                return {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    data: [2200000, 2350000, 2450000, 2600000, 2720000, 2845000]
+                };
+            },
+
+            getDemoActivities() {
+                return [
+                    {
+                        type: 'client',
+                        title: 'New Client Registered',
+                        description: 'John Smith registered for a new loan account',
+                        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+                        status: 'completed'
+                    },
+                    {
+                        type: 'loan',
+                        title: 'Loan Disbursed',
+                        description: 'Loan #LN-00432 for BWP 5,000 was disbursed to Sarah Johnson',
+                        timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+                        status: 'completed'
+                    },
+                    {
+                        type: 'payment',
+                        title: 'Payment Received',
+                        description: 'Michael Brown made a payment of BWP 1,250 for loan #LN-00321',
+                        timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+                        status: 'completed'
+                    },
+                    {
+                        type: 'alert',
+                        title: 'Delinquent Loan Alert',
+                        description: 'Loan #LN-00214 is 15 days overdue',
+                        timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+                        status: 'pending'
+                    }
+                ];
             }
         };
 
-        // Data Formatters
-        const formatters = {
-            currency(value) {
-                return new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0
-                }).format(value);
+        // UI Manager
+        const uiManager = {
+            updateStatCard(cardId, value, change, formatter = 'number') {
+                const card = document.getElementById(cardId);
+                const valueElement = card.querySelector('.stat-value');
+                const changeElement = card.querySelector('.change-text');
+                const changeContainer = card.querySelector('.stat-change');
+                
+                // Format value
+                if (formatter === 'currency') {
+                    valueElement.textContent = `BWP ${(value / 1000000).toFixed(2)}M`;
+                } else {
+                    valueElement.textContent = this.formatNumber(value);
+                }
+                
+                // Update change indicator
+                const isPositive = change >= 0;
+                changeElement.textContent = `${Math.abs(change).toFixed(1)}% from last month`;
+                
+                // Update classes based on change direction
+                if (isPositive) {
+                    changeContainer.classList.add('positive');
+                    changeContainer.classList.remove('negative');
+                    changeContainer.querySelector('i').className = 'fas fa-arrow-up';
+                } else {
+                    changeContainer.classList.add('negative');
+                    changeContainer.classList.remove('positive');
+                    changeContainer.querySelector('i').className = 'fas fa-arrow-down';
+                }
             },
 
-            number(value) {
-                return new Intl.NumberFormat('en-US').format(value);
+            formatNumber(num) {
+                return new Intl.NumberFormat('en-US').format(num);
             },
 
-            percentage(value) {
-                return `${value.toFixed(1)}%`;
+            updateActivities(activities) {
+                const container = document.getElementById('activityList');
+                
+                if (!activities || activities.length === 0) {
+                    container.innerHTML = '<div class="activity-item"><div class="activity-details"><div class="activity-title">No recent activities</div></div></div>';
+                    return;
+                }
+
+                container.innerHTML = activities.map(activity => `
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background-color: ${this.getActivityColor(activity.type)};">
+                            <i class="fas ${this.getActivityIcon(activity.type)}"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">${activity.title}</div>
+                            <div class="activity-desc">${activity.description}</div>
+                        </div>
+                        <div class="activity-time">${this.formatTime(activity.timestamp)}</div>
+                    </div>
+                `).join('');
+            },
+
+            getActivityColor(type) {
+                const colors = {
+                    client: 'rgba(46, 204, 113, 0.1)',
+                    loan: 'rgba(52, 152, 219, 0.1)',
+                    payment: 'rgba(243, 156, 18, 0.1)',
+                    alert: 'rgba(231, 76, 60, 0.1)',
+                    system: 'rgba(155, 89, 182, 0.1)'
+                };
+                return colors[type] || 'rgba(52, 152, 219, 0.1)';
+            },
+
+            getActivityIcon(type) {
+                const icons = {
+                    client: 'fa-user-plus',
+                    loan: 'fa-money-bill-wave',
+                    payment: 'fa-check-circle',
+                    alert: 'fa-exclamation-triangle',
+                    system: 'fa-cog'
+                };
+                return icons[type] || 'fa-info-circle';
+            },
+
+            formatTime(timestamp) {
+                const date = new Date(timestamp);
+                const now = new Date();
+                const diffMs = now - date;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMs / 3600000);
+                const diffDays = Math.floor(diffMs / 86400000);
+
+                if (diffMins < 60) {
+                    return `${diffMins} min ago`;
+                } else if (diffHours < 24) {
+                    return `${diffHours} hours ago`;
+                } else {
+                    return `${diffDays} days ago`;
+                }
+            },
+
+            showLoading() {
+                document.body.classList.add('loading');
+            },
+
+            hideLoading() {
+                document.body.classList.remove('loading');
             }
         };
 
         // Chart Manager
         const chartManager = {
-            chart: null,
-
             init() {
+                this.initPerformanceChart();
+                this.initStatusChart();
+            },
+
+            initPerformanceChart() {
                 const ctx = document.getElementById('performanceChart').getContext('2d');
-                this.chart = new Chart(ctx, {
+                performanceChart = new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: [],
                         datasets: [{
-                            label: 'Portfolio Value',
+                            label: 'Portfolio Value (BWP)',
                             data: [],
                             borderColor: '#3498db',
                             backgroundColor: 'rgba(52, 152, 219, 0.1)',
@@ -593,7 +1048,7 @@
                                 beginAtZero: false,
                                 ticks: {
                                     callback: function(value) {
-                                        return formatters.currency(value);
+                                        return 'BWP ' + (value / 1000000).toFixed(1) + 'M';
                                     }
                                 }
                             }
@@ -602,93 +1057,40 @@
                 });
             },
 
-            updateChart(labels, data) {
-                if (this.chart) {
-                    this.chart.data.labels = labels;
-                    this.chart.data.datasets[0].data = data;
-                    this.chart.update();
-                }
-            }
-        };
-
-        // UI Manager
-        const uiManager = {
-            updateStatCard(cardElement, value, label, formatter = 'number') {
-                const valueElement = cardElement.querySelector('.card-value');
-                const badgeElement = cardElement.querySelector('.status-badge');
-                
-                valueElement.textContent = formatters[formatter](value);
-                badgeElement.textContent = 'Live Data';
-            },
-
-            showLoading() {
-                document.body.classList.add('loading');
-            },
-
-            hideLoading() {
-                document.body.classList.remove('loading');
-            },
-
-            showError(message) {
-                console.error('UI Error:', message);
-                // You could implement a toast notification system here
-                alert(`Error: ${message}`);
-            },
-
-            updateActivities(activities) {
-                const container = document.getElementById('activityList');
-                
-                if (!activities || activities.length === 0) {
-                    container.innerHTML = '<div class="activity-item"><div class="activity-details"><div class="activity-title">No recent activities</div></div></div>';
-                    return;
-                }
-
-                container.innerHTML = activities.map(activity => `
-                    <div class="activity-item">
-                        <div class="activity-icon" style="background-color: ${this.getActivityColor(activity.type)};">
-                            <i class="fas ${this.getActivityIcon(activity.type)}"></i>
-                        </div>
-                        <div class="activity-details">
-                            <div class="activity-title">${activity.title}</div>
-                            <div class="activity-description">${activity.description}</div>
-                            <div class="activity-time">${this.formatTime(activity.timestamp)}</div>
-                        </div>
-                        <div class="activity-status">
-                            <span class="status-badge status-${activity.status}">${activity.status}</span>
-                        </div>
-                    </div>
-                `).join('');
-            },
-
-            getActivityColor(type) {
-                const colors = {
-                    client: '#2ecc71',
-                    loan: '#3498db',
-                    payment: '#f39c12',
-                    alert: '#e74c3c',
-                    system: '#9b59b6'
-                };
-                return colors[type] || '#3498db';
-            },
-
-            getActivityIcon(type) {
-                const icons = {
-                    client: 'fa-user-check',
-                    loan: 'fa-file-contract',
-                    payment: 'fa-money-check-alt',
-                    alert: 'fa-exclamation-triangle',
-                    system: 'fa-cog'
-                };
-                return icons[type] || 'fa-info-circle';
-            },
-
-            formatTime(timestamp) {
-                return new Date(timestamp).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
+            initStatusChart() {
+                const ctx = document.getElementById('statusChart').getContext('2d');
+                statusChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Active', 'Pending', 'Delinquent', 'Paid Off'],
+                        datasets: [{
+                            data: [65, 15, 5, 15],
+                            backgroundColor: [
+                                '#27ae60',
+                                '#e67e22',
+                                '#e74c3c',
+                                '#3498db'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
                 });
+            },
+
+            updatePerformanceChart(labels, data) {
+                if (performanceChart) {
+                    performanceChart.data.labels = labels;
+                    performanceChart.data.datasets[0].data = data;
+                    performanceChart.update();
+                }
             }
         };
 
@@ -697,7 +1099,7 @@
             async init() {
                 console.log('Initializing Monei Enterprise Dashboard...');
                 
-                // Initialize chart
+                // Initialize charts
                 chartManager.init();
                 
                 // Load initial data
@@ -725,7 +1127,6 @@
                     
                 } catch (error) {
                     console.error('Failed to load dashboard data:', error);
-                    uiManager.showError('Failed to load dashboard data. Using demo data.');
                     this.loadDemoData();
                 } finally {
                     uiManager.hideLoading();
@@ -735,21 +1136,21 @@
             updateDashboard(stats, performance, activities) {
                 // Update stat cards
                 if (stats.portfolio) {
-                    uiManager.updateStatCard(elements.portfolioCard, stats.portfolio.value, 'Total Portfolio', 'currency');
+                    uiManager.updateStatCard('portfolio-card', stats.portfolio.value, stats.portfolio.change, 'currency');
                 }
                 if (stats.clients) {
-                    uiManager.updateStatCard(elements.clientsCard, stats.clients.active, 'Active Clients', 'number');
+                    uiManager.updateStatCard('clients-card', stats.clients.active, stats.clients.change);
                 }
-                if (stats.disbursement) {
-                    uiManager.updateStatCard(elements.disbursementCard, stats.disbursement.monthly, 'Monthly Disbursement', 'currency');
+                if (stats.applications) {
+                    uiManager.updateStatCard('applications-card', stats.applications.pending, stats.applications.change);
                 }
-                if (stats.repayment) {
-                    uiManager.updateStatCard(elements.repaymentCard, stats.repayment.rate, 'Repayment Rate', 'percentage');
+                if (stats.delinquent) {
+                    uiManager.updateStatCard('delinquent-card', stats.delinquent.count, stats.delinquent.change);
                 }
                 
-                // Update chart
+                // Update performance chart
                 if (performance && performance.labels && performance.data) {
-                    chartManager.updateChart(performance.labels, performance.data);
+                    chartManager.updatePerformanceChart(performance.labels, performance.data);
                 }
                 
                 // Update activities
@@ -759,48 +1160,35 @@
             },
 
             loadDemoData() {
-                // Fallback demo data for testing
-                const demoStats = {
-                    portfolio: { value: 2840000 },
-                    clients: { active: 1247 },
-                    disbursement: { monthly: 184500 },
-                    repayment: { rate: 98.2 }
-                };
-                
-                const demoPerformance = {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    data: [2200000, 2350000, 2450000, 2600000, 2720000, 2840000]
-                };
-                
-                const demoActivities = [
-                    {
-                        type: 'client',
-                        title: 'New Client Onboarded',
-                        description: 'Maria Gonzalez completed KYC verification',
-                        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-                        status: 'completed'
-                    },
-                    {
-                        type: 'loan',
-                        title: 'Loan Application Submitted',
-                        description: 'Small Business Loan application from TechSolutions Inc.',
-                        timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
-                        status: 'pending'
-                    }
-                ];
+                const demoStats = apiService.getDemoData();
+                const demoPerformance = apiService.getDemoPerformanceData();
+                const demoActivities = apiService.getDemoActivities();
                 
                 this.updateDashboard(demoStats, demoPerformance, demoActivities);
             },
 
             setupEventListeners() {
                 // Time range selector
-                elements.timeRange.addEventListener('change', (e) => {
+                document.getElementById('timeRange').addEventListener('change', (e) => {
                     this.loadPerformanceData(parseInt(e.target.value));
                 });
                 
                 // Refresh activities button
-                elements.refreshActivities.addEventListener('click', () => {
+                document.getElementById('refreshActivities').addEventListener('click', () => {
                     this.loadActivities();
+                });
+
+                // Toggle sidebar on mobile
+                document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+                    document.querySelector('.sidebar').classList.toggle('active');
+                });
+
+                // Menu item activation
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                        this.classList.add('active');
+                    });
                 });
             },
 
@@ -808,7 +1196,7 @@
                 try {
                     const performance = await apiService.getPerformanceData(days);
                     if (performance && performance.labels && performance.data) {
-                        chartManager.updateChart(performance.labels, performance.data);
+                        chartManager.updatePerformanceChart(performance.labels, performance.data);
                     }
                 } catch (error) {
                     console.error('Failed to load performance data:', error);
@@ -835,15 +1223,6 @@
         // Initialize the application when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
             app.init();
-            
-            // Sidebar menu interactions
-            const menuItems = document.querySelectorAll('.sidebar-menu li');
-            menuItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    menuItems.forEach(i => i.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
         });
 
         // Export for debugging
