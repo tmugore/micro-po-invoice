@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monei Platform | Enterprise Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: #2c3e50;
@@ -252,6 +253,11 @@
             font-size: 0.8rem;
         }
         
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
         /* Status Indicators */
         .status-badge {
             display: inline-block;
@@ -356,10 +362,10 @@
         <div class="dashboard-content">
             <!-- Stats Cards -->
             <div class="stats-cards">
-                <div class="stat-card">
+                <div class="stat-card" id="portfolio-card">
                     <div class="card-header">
                         <div>
-                            <div class="card-value">$2.84M</div>
+                            <div class="card-value">Loading...</div>
                             <div class="card-label">Total Portfolio</div>
                         </div>
                         <div class="card-icon" style="background-color: var(--secondary);">
@@ -367,14 +373,14 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <span class="status-badge status-active">+12.5% growth</span>
+                        <span class="status-badge status-active">Updating...</span>
                     </div>
                 </div>
                 
-                <div class="stat-card">
+                <div class="stat-card" id="clients-card">
                     <div class="card-header">
                         <div>
-                            <div class="card-value">1,247</div>
+                            <div class="card-value">Loading...</div>
                             <div class="card-label">Active Clients</div>
                         </div>
                         <div class="card-icon" style="background-color: var(--success);">
@@ -382,14 +388,14 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <span class="status-badge status-active">+8.2% growth</span>
+                        <span class="status-badge status-active">Updating...</span>
                     </div>
                 </div>
                 
-                <div class="stat-card">
+                <div class="stat-card" id="disbursement-card">
                     <div class="card-header">
                         <div>
-                            <div class="card-value">$184.5K</div>
+                            <div class="card-value">Loading...</div>
                             <div class="card-label">Monthly Disbursement</div>
                         </div>
                         <div class="card-icon" style="background-color: var(--warning);">
@@ -397,14 +403,14 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <span class="status-badge status-pending">+5.3% growth</span>
+                        <span class="status-badge status-pending">Updating...</span>
                     </div>
                 </div>
                 
-                <div class="stat-card">
+                <div class="stat-card" id="repayment-card">
                     <div class="card-header">
                         <div>
-                            <div class="card-value">98.2%</div>
+                            <div class="card-value">Loading...</div>
                             <div class="card-label">Repayment Rate</div>
                         </div>
                         <div class="card-icon" style="background-color: var(--danger);">
@@ -412,7 +418,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <span class="status-badge status-completed">+2.1% improvement</span>
+                        <span class="status-badge status-completed">Updating...</span>
                     </div>
                 </div>
             </div>
@@ -422,19 +428,15 @@
                 <div class="chart-header">
                     <div class="chart-title">Portfolio Performance</div>
                     <div class="chart-actions">
-                        <select>
-                            <option>Last 30 Days</option>
-                            <option>Last 90 Days</option>
-                            <option>Year to Date</option>
+                        <select id="timeRange">
+                            <option value="30">Last 30 Days</option>
+                            <option value="90">Last 90 Days</option>
+                            <option value="365">Year to Date</option>
                         </select>
                     </div>
                 </div>
-                <div class="chart-placeholder" style="height: 300px; background: #f8f9fa; display: flex; align-items: center; justify-content: center; color: #7f8c8d;">
-                    <div style="text-align: center;">
-                        <i class="fas fa-chart-bar" style="font-size: 3rem; margin-bottom: 10px;"></i>
-                        <p>Portfolio Performance Chart</p>
-                        <p style="font-size: 0.8rem;">(Integrated with real-time data from Cloudflare Workers API)</p>
-                    </div>
+                <div class="chart-wrapper">
+                    <canvas id="performanceChart" height="300"></canvas>
                 </div>
             </div>
 
@@ -443,63 +445,13 @@
                 <div class="chart-header">
                     <div class="chart-title">Recent Activities</div>
                     <div class="chart-actions">
-                        <button>View All</button>
+                        <button id="refreshActivities">Refresh</button>
                     </div>
                 </div>
-                <div class="activity-list">
+                <div class="activity-list" id="activityList">
                     <div class="activity-item">
-                        <div class="activity-icon" style="background-color: var(--success);">
-                            <i class="fas fa-user-check"></i>
-                        </div>
                         <div class="activity-details">
-                            <div class="activity-title">New Client Onboarded</div>
-                            <div class="activity-description">Maria Gonzalez completed KYC verification</div>
-                            <div class="activity-time">2 hours ago</div>
-                        </div>
-                        <div class="activity-status">
-                            <span class="status-badge status-completed">Completed</span>
-                        </div>
-                    </div>
-                    
-                    <div class="activity-item">
-                        <div class="activity-icon" style="background-color: var(--secondary);">
-                            <i class="fas fa-file-contract"></i>
-                        </div>
-                        <div class="activity-details">
-                            <div class="activity-title">Loan Application Submitted</div>
-                            <div class="activity-description">Small Business Loan application from TechSolutions Inc.</div>
-                            <div class="activity-time">5 hours ago</div>
-                        </div>
-                        <div class="activity-status">
-                            <span class="status-badge status-pending">Pending Review</span>
-                        </div>
-                    </div>
-                    
-                    <div class="activity-item">
-                        <div class="activity-icon" style="background-color: var(--warning);">
-                            <i class="fas fa-money-check-alt"></i>
-                        </div>
-                        <div class="activity-details">
-                            <div class="activity-title">Payment Processed</div>
-                            <div class="activity-description">Automated payment of $1,250 from client #A-3829</div>
-                            <div class="activity-time">1 day ago</div>
-                        </div>
-                        <div class="activity-status">
-                            <span class="status-badge status-completed">Completed</span>
-                        </div>
-                    </div>
-                    
-                    <div class="activity-item">
-                        <div class="activity-icon" style="background-color: var(--danger);">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="activity-details">
-                            <div class="activity-title">Overdue Payment Alert</div>
-                            <div class="activity-description">Payment overdue for 15 days from client #B-2291</div>
-                            <div class="activity-time">2 days ago</div>
-                        </div>
-                        <div class="activity-status">
-                            <span class="status-badge status-pending">Action Required</span>
+                            <div class="activity-title">Loading activities...</div>
                         </div>
                     </div>
                 </div>
@@ -508,27 +460,394 @@
     </div>
 
     <script>
-        // Simple script to handle sidebar menu interactions
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuItems = document.querySelectorAll('.sidebar-menu li');
+        // API Configuration - UPDATE THESE ENDPOINTS
+        const API_CONFIG = {
+            baseUrl: 'https://your-worker.your-subdomain.workers.dev', // Your Cloudflare Worker URL
+            endpoints: {
+                dashboard: '/api/dashboard',
+                portfolio: '/api/portfolio',
+                clients: '/api/clients',
+                activities: '/api/activities',
+                performance: '/api/performance'
+            }
+        };
+
+        // Authentication (if needed)
+        const API_HEADERS = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + (localStorage.getItem('authToken') || 'your-api-key-here')
+        };
+
+        // DOM Elements
+        const elements = {
+            portfolioCard: document.getElementById('portfolio-card'),
+            clientsCard: document.getElementById('clients-card'),
+            disbursementCard: document.getElementById('disbursement-card'),
+            repaymentCard: document.getElementById('repayment-card'),
+            activityList: document.getElementById('activity-list'),
+            timeRange: document.getElementById('timeRange'),
+            refreshActivities: document.getElementById('refreshActivities')
+        };
+
+        // API Service
+        const apiService = {
+            async fetchData(endpoint) {
+                try {
+                    const url = `${API_CONFIG.baseUrl}${endpoint}`;
+                    const response = await fetch(url, {
+                        headers: API_HEADERS
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`API error: ${response.status}`);
+                    }
+                    
+                    return await response.json();
+                } catch (error) {
+                    console.error('API fetch error:', error);
+                    throw error;
+                }
+            },
+
+            async getDashboardStats() {
+                try {
+                    // Try to fetch all dashboard data at once
+                    return await this.fetchData(API_CONFIG.endpoints.dashboard);
+                } catch (error) {
+                    console.warn('Dashboard endpoint failed, trying individual endpoints');
+                    // Fallback to individual endpoints
+                    const [portfolio, clients, disbursement, repayment] = await Promise.all([
+                        this.fetchData(API_CONFIG.endpoints.portfolio).catch(() => null),
+                        this.fetchData(API_CONFIG.endpoints.clients).catch(() => null),
+                        this.fetchData('/api/disbursement').catch(() => null),
+                        this.fetchData('/api/repayment').catch(() => null)
+                    ]);
+                    
+                    return {
+                        portfolio,
+                        clients,
+                        disbursement,
+                        repayment
+                    };
+                }
+            },
+
+            async getPerformanceData(days = 30) {
+                return await this.fetchData(`${API_CONFIG.endpoints.performance}?days=${days}`);
+            },
+
+            async getRecentActivities() {
+                return await this.fetchData(API_CONFIG.endpoints.activities);
+            }
+        };
+
+        // Data Formatters
+        const formatters = {
+            currency(value) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(value);
+            },
+
+            number(value) {
+                return new Intl.NumberFormat('en-US').format(value);
+            },
+
+            percentage(value) {
+                return `${value.toFixed(1)}%`;
+            }
+        };
+
+        // Chart Manager
+        const chartManager = {
+            chart: null,
+
+            init() {
+                const ctx = document.getElementById('performanceChart').getContext('2d');
+                this.chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'Portfolio Value',
+                            data: [],
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                ticks: {
+                                    callback: function(value) {
+                                        return formatters.currency(value);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            },
+
+            updateChart(labels, data) {
+                if (this.chart) {
+                    this.chart.data.labels = labels;
+                    this.chart.data.datasets[0].data = data;
+                    this.chart.update();
+                }
+            }
+        };
+
+        // UI Manager
+        const uiManager = {
+            updateStatCard(cardElement, value, label, formatter = 'number') {
+                const valueElement = cardElement.querySelector('.card-value');
+                const badgeElement = cardElement.querySelector('.status-badge');
+                
+                valueElement.textContent = formatters[formatter](value);
+                badgeElement.textContent = 'Live Data';
+            },
+
+            showLoading() {
+                document.body.classList.add('loading');
+            },
+
+            hideLoading() {
+                document.body.classList.remove('loading');
+            },
+
+            showError(message) {
+                console.error('UI Error:', message);
+                // You could implement a toast notification system here
+                alert(`Error: ${message}`);
+            },
+
+            updateActivities(activities) {
+                const container = document.getElementById('activityList');
+                
+                if (!activities || activities.length === 0) {
+                    container.innerHTML = '<div class="activity-item"><div class="activity-details"><div class="activity-title">No recent activities</div></div></div>';
+                    return;
+                }
+
+                container.innerHTML = activities.map(activity => `
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background-color: ${this.getActivityColor(activity.type)};">
+                            <i class="fas ${this.getActivityIcon(activity.type)}"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-title">${activity.title}</div>
+                            <div class="activity-description">${activity.description}</div>
+                            <div class="activity-time">${this.formatTime(activity.timestamp)}</div>
+                        </div>
+                        <div class="activity-status">
+                            <span class="status-badge status-${activity.status}">${activity.status}</span>
+                        </div>
+                    </div>
+                `).join('');
+            },
+
+            getActivityColor(type) {
+                const colors = {
+                    client: '#2ecc71',
+                    loan: '#3498db',
+                    payment: '#f39c12',
+                    alert: '#e74c3c',
+                    system: '#9b59b6'
+                };
+                return colors[type] || '#3498db';
+            },
+
+            getActivityIcon(type) {
+                const icons = {
+                    client: 'fa-user-check',
+                    loan: 'fa-file-contract',
+                    payment: 'fa-money-check-alt',
+                    alert: 'fa-exclamation-triangle',
+                    system: 'fa-cog'
+                };
+                return icons[type] || 'fa-info-circle';
+            },
+
+            formatTime(timestamp) {
+                return new Date(timestamp).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+        };
+
+        // Main Application
+        const app = {
+            async init() {
+                console.log('Initializing Monei Enterprise Dashboard...');
+                
+                // Initialize chart
+                chartManager.init();
+                
+                // Load initial data
+                await this.loadDashboardData();
+                
+                // Set up event listeners
+                this.setupEventListeners();
+                
+                // Set up auto-refresh
+                this.setupAutoRefresh();
+            },
+
+            async loadDashboardData() {
+                try {
+                    uiManager.showLoading();
+                    
+                    // Load all dashboard data
+                    const [stats, performance, activities] = await Promise.all([
+                        apiService.getDashboardStats(),
+                        apiService.getPerformanceData(30),
+                        apiService.getRecentActivities()
+                    ]);
+                    
+                    this.updateDashboard(stats, performance, activities);
+                    
+                } catch (error) {
+                    console.error('Failed to load dashboard data:', error);
+                    uiManager.showError('Failed to load dashboard data. Using demo data.');
+                    this.loadDemoData();
+                } finally {
+                    uiManager.hideLoading();
+                }
+            },
+
+            updateDashboard(stats, performance, activities) {
+                // Update stat cards
+                if (stats.portfolio) {
+                    uiManager.updateStatCard(elements.portfolioCard, stats.portfolio.value, 'Total Portfolio', 'currency');
+                }
+                if (stats.clients) {
+                    uiManager.updateStatCard(elements.clientsCard, stats.clients.active, 'Active Clients', 'number');
+                }
+                if (stats.disbursement) {
+                    uiManager.updateStatCard(elements.disbursementCard, stats.disbursement.monthly, 'Monthly Disbursement', 'currency');
+                }
+                if (stats.repayment) {
+                    uiManager.updateStatCard(elements.repaymentCard, stats.repayment.rate, 'Repayment Rate', 'percentage');
+                }
+                
+                // Update chart
+                if (performance && performance.labels && performance.data) {
+                    chartManager.updateChart(performance.labels, performance.data);
+                }
+                
+                // Update activities
+                if (activities) {
+                    uiManager.updateActivities(activities);
+                }
+            },
+
+            loadDemoData() {
+                // Fallback demo data for testing
+                const demoStats = {
+                    portfolio: { value: 2840000 },
+                    clients: { active: 1247 },
+                    disbursement: { monthly: 184500 },
+                    repayment: { rate: 98.2 }
+                };
+                
+                const demoPerformance = {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    data: [2200000, 2350000, 2450000, 2600000, 2720000, 2840000]
+                };
+                
+                const demoActivities = [
+                    {
+                        type: 'client',
+                        title: 'New Client Onboarded',
+                        description: 'Maria Gonzalez completed KYC verification',
+                        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+                        status: 'completed'
+                    },
+                    {
+                        type: 'loan',
+                        title: 'Loan Application Submitted',
+                        description: 'Small Business Loan application from TechSolutions Inc.',
+                        timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+                        status: 'pending'
+                    }
+                ];
+                
+                this.updateDashboard(demoStats, demoPerformance, demoActivities);
+            },
+
+            setupEventListeners() {
+                // Time range selector
+                elements.timeRange.addEventListener('change', (e) => {
+                    this.loadPerformanceData(parseInt(e.target.value));
+                });
+                
+                // Refresh activities button
+                elements.refreshActivities.addEventListener('click', () => {
+                    this.loadActivities();
+                });
+            },
+
+            async loadPerformanceData(days) {
+                try {
+                    const performance = await apiService.getPerformanceData(days);
+                    if (performance && performance.labels && performance.data) {
+                        chartManager.updateChart(performance.labels, performance.data);
+                    }
+                } catch (error) {
+                    console.error('Failed to load performance data:', error);
+                }
+            },
+
+            async loadActivities() {
+                try {
+                    const activities = await apiService.getRecentActivities();
+                    uiManager.updateActivities(activities);
+                } catch (error) {
+                    console.error('Failed to load activities:', error);
+                }
+            },
+
+            setupAutoRefresh() {
+                // Refresh data every 5 minutes
+                setInterval(() => {
+                    this.loadDashboardData();
+                }, 5 * 60 * 1000);
+            }
+        };
+
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
             
+            // Sidebar menu interactions
+            const menuItems = document.querySelectorAll('.sidebar-menu li');
             menuItems.forEach(item => {
                 item.addEventListener('click', function() {
-                    // Remove active class from all items
                     menuItems.forEach(i => i.classList.remove('active'));
-                    // Add active class to clicked item
                     this.classList.add('active');
                 });
             });
-            
-            // Simulate real-time data updates
-            setInterval(() => {
-                const portfolioValue = document.querySelector('.stat-card:nth-child(1) .card-value');
-                const currentValue = parseFloat(portfolioValue.textContent.replace(/[$,]/g, ''));
-                const newValue = currentValue * (1 + (Math.random() * 0.01));
-                portfolioValue.textContent = '$' + (newValue / 1000).toFixed(2) + 'M';
-            }, 10000);
         });
+
+        // Export for debugging
+        window.MoneiDashboard = app;
     </script>
 </body>
 </html>
