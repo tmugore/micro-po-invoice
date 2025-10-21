@@ -3,238 +3,425 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monei - Micro-Lending</title>
-    
-    <!-- Genspark CSS Files -->
-    <link rel="stylesheet" href="styles/styles.css">
-    <link rel="stylesheet" href="styles/style.css">
-    
-    <!-- Tailwind CSS for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
-    
+    <title>Monei - Enterprise Micro-lending Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .card { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
-        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .feature-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin: 20px 0;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .platform-section {
+            background: #f8f9fa;
+            padding: 80px 0;
+        }
+        
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: white;
+        }
     </style>
 </head>
-<body class="bg-gray-50">
+<body>
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center space-x-2">
-                    <i class="fas fa-coins text-2xl text-purple-600"></i>
-                    <span class="text-2xl font-bold text-gray-800">Monei</span>
-                </div>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#" class="text-gray-600 hover:text-purple-600 font-medium">Home</a>
-                    <a href="#products" class="text-gray-600 hover:text-purple-600 font-medium">Products</a>
-                    <a href="#how-it-works" class="text-gray-600 hover:text-purple-600 font-medium">How It Works</a>
-		 <a href="enterprise.html" class="text-gray-600 hover:text-purple-600 font-medium">Admin Dashboard</a>
-                    <button onclick="showLogin()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                        Sign In
-                    </button>
-                </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-hand-holding-usd"></i> Monei
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#platform">Platform</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-outline-light ms-2" onclick="showPlatform()">Enter Platform</button>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="gradient-bg text-white py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-5xl font-bold mb-6">Fast & Flexible Business Financing</h1>
-            <p class="text-xl mb-8 max-w-3xl mx-auto">Get the capital you need with our comprehensive lending solutions: microloans, purchase order financing, and invoice discounting.</p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button onclick="showApplication()" class="bg-white text-purple-600 px-8 py-3 rounded-lg font-bold text-lg hover:bg-gray-100 transition-colors">
-                    Apply Now
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="display-4 fw-bold">Monei Enterprise Platform</h1>
+            <p class="lead">Professional micro-lending solutions for modern financial institutions</p>
+            <div class="mt-4">
+                <button class="btn btn-light btn-lg me-3" onclick="showPlatform()">
+                    <i class="fas fa-rocket"></i> Launch Platform
                 </button>
-                <button onclick="showCalculator()" class="border-2 border-white text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-white hover:text-purple-600 transition-colors">
-                    Payment Calculator
-                </button>
+                <a href="#features" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-info-circle"></i> Learn More
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Products Section -->
-    <section id="products" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-800 mb-4">Our Lending Products</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Choose from our range of flexible financing solutions designed to meet your business needs.</p>
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-lg-12">
+                    <h2 class="display-5">Enterprise-Grade Features</h2>
+                    <p class="lead">Everything you need to manage your micro-lending operations</p>
+                </div>
             </div>
-            
-            <div class="grid md:grid-cols-3 gap-8">
-                <!-- Microloan Card -->
-                <div class="card bg-white p-8 rounded-xl border hover:shadow-xl transition-shadow">
-                    <div class="text-center mb-6">
-                        <i class="fas fa-piggy-bank text-4xl text-green-500 mb-4"></i>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Microloans</h3>
-                        <p class="text-gray-600">Quick access to small business capital</p>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                        <h4>Client Management</h4>
+                        <p>Complete KYC, client profiles, and document management system</p>
                     </div>
-                    <ul class="space-y-3 mb-8">
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> $1K - $75K loan amounts</li>
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> 8% - 25% interest rates</li>
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> 1 month to 2 years terms</li>
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Fast approval process</li>
-                    </ul>
-                    <button onclick="applyForProduct('microloan')" class="btn-primary text-white w-full py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity">
-                        Apply for Microloan
-                    </button>
                 </div>
-
-                <!-- Purchase Order Financing Card -->
-                <div class="card bg-white p-8 rounded-xl border hover:shadow-xl transition-shadow">
-                    <div class="text-center mb-6">
-                        <i class="fas fa-file-invoice-dollar text-4xl text-blue-500 mb-4"></i>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-2">PO Financing</h3>
-                        <p class="text-gray-600">Finance confirmed purchase orders</p>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="fas fa-file-invoice-dollar fa-3x text-success mb-3"></i>
+                        <h4>Loan Processing</h4>
+                        <p>Streamlined loan applications, approval workflows, and disbursement</p>
                     </div>
-                    <ul class="space-y-3 mb-8">
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> $5K - $500K financing</li>
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> 12% - 30% rates</li>
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> 1 to 6 months terms</li>
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Based on PO value</li>
-                    </ul>
-                    <button onclick="applyForProduct('purchase_order')" class="btn-primary text-white w-full py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity">
-                        Apply for PO Financing
-                    </button>
                 </div>
-
-                <!-- Invoice Discounting Card -->
-                <div class="card bg-white p-8 rounded-xl border hover:shadow-xl transition-shadow">
-                    <div class="text-center mb-6">
-                        <i class="fas fa-receipt text-4xl text-purple-500 mb-4"></i>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Invoice Factoring</h3>
-                        <p class="text-gray-600">Get cash for outstanding invoices</p>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="fas fa-chart-bar fa-3x text-warning mb-3"></i>
+                        <h4>Advanced Analytics</h4>
+                        <p>Real-time reporting, performance metrics, and business intelligence</p>
                     </div>
-                    <ul class="space-y-3 mb-8">
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> $1K - $100K per invoice</li>
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> 15% - 35% discount rates</li>
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> 1 week to 3 months</li>
-                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i> Immediate cash flow</li>
-                    </ul>
-                    <button onclick="applyForProduct('invoice_discount')" class="btn-primary text-white w-full py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity">
-                        Apply for Invoice Factoring
-                    </button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-800 mb-4">How It Works</h2>
-                <p class="text-xl text-gray-600">Simple steps to get your business funded</p>
-            </div>
-            
-            <div class="grid md:grid-cols-4 gap-8">
-                <div class="text-center">
-                    <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <span class="text-2xl font-bold text-purple-600">1</span>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Apply Online</h3>
-                    <p class="text-gray-600">Complete our simple application form with your business details</p>
+    <!-- Platform Access Section -->
+    <section id="platform" class="platform-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h2>Ready to Get Started?</h2>
+                    <p class="lead">Access the complete Monei Enterprise Platform with your credentials.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i> Full client management system</li>
+                        <li><i class="fas fa-check text-success me-2"></i> Loan application processing</li>
+                        <li><i class="fas fa-check text-success me-2"></i> Real-time analytics dashboard</li>
+                        <li><i class="fas fa-check text-success me-2"></i> Admin management panel</li>
+                    </ul>
                 </div>
-                
-                <div class="text-center">
-                    <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <span class="text-2xl font-bold text-purple-600">2</span>
+                <div class="col-lg-6">
+                    <div class="login-container">
+                        <h4 class="text-center mb-4">Access Platform</h4>
+                        
+                        <!-- Demo Credentials -->
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-info-circle"></i> Demo Access</h6>
+                            <small>Use any email and password to create an account, or use admin panel with your ADMIN_TOKEN</small>
+                        </div>
+                        
+                        <div id="loginForm">
+                            <div class="mb-3">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="loginEmail" placeholder="Enter your email">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password">
+                            </div>
+                            <button class="btn btn-primary w-100 mb-3" onclick="login()">
+                                <i class="fas fa-sign-in-alt"></i> Sign In
+                            </button>
+                            <div class="text-center">
+                                <a href="#" onclick="showRegisterForm()">Don't have an account? Register</a>
+                            </div>
+                        </div>
+                        
+                        <div id="registerForm" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="registerName" placeholder="Enter your full name">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="registerEmail" placeholder="Enter your email">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-control" id="registerPassword" placeholder="Create a password">
+                            </div>
+                            <button class="btn btn-success w-100 mb-3" onclick="register()">
+                                <i class="fas fa-user-plus"></i> Create Account
+                            </button>
+                            <div class="text-center">
+                                <a href="#" onclick="showLoginForm()">Already have an account? Sign In</a>
+                            </div>
+                        </div>
+
+                        <!-- Admin Access -->
+                        <hr>
+                        <div class="text-center">
+                            <small class="text-muted">Admin Access</small><br>
+                            <button class="btn btn-outline-secondary btn-sm mt-2" onclick="showAdminLogin()">
+                                <i class="fas fa-user-shield"></i> Admin Panel
+                            </button>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Quick Review</h3>
-                    <p class="text-gray-600">Our team reviews your application within 24 hours</p>
-                </div>
-                
-                <div class="text-center">
-                    <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <span class="text-2xl font-bold text-purple-600">3</span>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Get Approved</h3>
-                    <p class="text-gray-600">Receive your loan decision and terms</p>
-                </div>
-                
-                <div class="text-center">
-                    <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <span class="text-2xl font-bold text-purple-600">4</span>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Receive Funds</h3>
-                    <p class="text-gray-600">Get funded within 48 hours of approval</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Dashboard Section (Hidden by default) -->
-    <div id="dashboard" class="hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="mb-8 flex justify-between items-center">
-                <h2 class="text-3xl font-bold text-gray-800">Dashboard</h2>
-                <button onclick="logout()" class="text-purple-600 hover:text-purple-800">
-                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                </button>
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p>&copy; 2024 Monei Platform. All rights reserved.</p>
+            <p class="text-muted">Connected to: monei-api.tmugore.workers.dev</p>
+        </div>
+    </footer>
+
+    <!-- Admin Login Modal -->
+    <div class="modal fade" id="adminLoginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Admin Access</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Enter your admin token to access the admin panel.</p>
+                    <div class="mb-3">
+                        <label class="form-label">Admin Token</label>
+                        <input type="password" class="form-control" id="adminToken" placeholder="Enter ADMIN_TOKEN">
+                    </div>
+                    <div class="alert alert-info">
+                        <small>This token is set in your Cloudflare Workers environment variables</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="adminLogin()">Access Admin Panel</button>
+                </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Toast for notifications -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="fas fa-bell text-primary me-2"></i>
+                <strong class="me-auto">Monei Platform</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage"></div>
+        </div>
+    </div>
+
+    <!-- Hidden Platform Container -->
+    <div id="platformContainer" style="display: none;">
+        <!-- THE COMPLETE MONEI PLATFORM CODE GOES HERE -->
+        <!-- Copy the entire monei-complete.html body content here -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE_URL = 'https://monei-api.tmugore.workers.dev';
+        let currentUser = null;
+        let adminToken = localStorage.getItem('monei_admin_token') || '';
+
+        // Toast notification function
+        function showToast(message, type = 'info') {
+            const toast = new bootstrap.Toast(document.getElementById('liveToast'));
+            const toastMessage = document.getElementById('toastMessage');
             
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div class="card bg-white p-6 rounded-lg">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Total Applications</h3>
-                    <p class="text-3xl font-bold text-purple-600" id="totalApps">0</p>
-                </div>
-                <div class="card bg-white p-6 rounded-lg">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Active Loans</h3>
-                    <p class="text-3xl font-bold text-green-600" id="activeLoans">0</p>
-                </div>
-                <div class="card bg-white p-6 rounded-lg">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Outstanding Balance</h3>
-                    <p class="text-3xl font-bold text-blue-600" id="outstandingBalance">$0</p>
-                </div>
-                <div class="card bg-white p-6 rounded-lg">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Next Payment</h3>
-                    <p class="text-3xl font-bold text-orange-600" id="nextPayment">$0</p>
-                </div>
-            </div>
+            toastMessage.textContent = message;
+            document.getElementById('liveToast').className = `toast ${type}`;
+            toast.show();
+        }
 
-            <div class="grid lg:grid-cols-2 gap-8">
-                <div class="card bg-white p-6 rounded-lg">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">Recent Applications</h3>
-                    <div id="recentApplications">
-                        <!-- Applications will be loaded here -->
-                    </div>
-                </div>
+        // Show platform function
+        function showPlatform() {
+            document.getElementById('platform').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Show login form
+        function showLoginForm() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('registerForm').style.display = 'none';
+        }
+
+        // Show register form
+        function showRegisterForm() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        }
+
+        // Show admin login modal
+        function showAdminLogin() {
+            const modal = new bootstrap.Modal(document.getElementById('adminLoginModal'));
+            modal.show();
+        }
+
+        // Login function
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showToast('Please enter both email and password', 'warning');
+                return;
+            }
+            
+            // For demo purposes - simulate login
+            try {
+                currentUser = {
+                    id: 'user-' + Date.now(),
+                    name: email.split('@')[0],
+                    email: email,
+                    created_at: new Date().toISOString()
+                };
                 
-                <div class="card bg-white p-6 rounded-lg">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">Active Loans</h3>
-                    <div id="activeLoansContainer">
-                        <!-- Loans will be loaded here -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                localStorage.setItem('monei_current_user', JSON.stringify(currentUser));
+                
+                showToast('✅ Login successful! Loading platform...', 'success');
+                
+                // Load the complete platform
+                loadCompletePlatform();
+                
+            } catch (error) {
+                showToast('❌ Login failed: ' + error.message, 'danger');
+            }
+        }
 
-    <!-- Modals and Forms -->
-    <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
-        <div class="bg-white rounded-xl p-8 max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
-            <div id="modal-content">
-                <!-- Modal content will be inserted here -->
-            </div>
-        </div>
-    </div>
+        // Register function
+        async function register() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            
+            if (!name || !email || !password) {
+                showToast('Please fill all fields', 'warning');
+                return;
+            }
+            
+            try {
+                currentUser = {
+                    id: 'user-' + Date.now(),
+                    name: name,
+                    email: email,
+                    created_at: new Date().toISOString()
+                };
+                
+                localStorage.setItem('monei_current_user', JSON.stringify(currentUser));
+                
+                showToast('✅ Account created successfully! Loading platform...', 'success');
+                
+                // Load the complete platform
+                loadCompletePlatform();
+                
+            } catch (error) {
+                showToast('❌ Registration failed: ' + error.message, 'danger');
+            }
+        }
 
-    <!-- JavaScript Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
-    <script src="scripts/app.js"></script>
-<!-- Modal Structure -->
-<div id="modal-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <div class="p-6">
-            <div id="modal-content">
-                <!-- Modal content will be inserted here -->
-            </div>
-        </div>
-    </div>
-</div>
+        // Admin login
+        function adminLogin() {
+            const token = document.getElementById('adminToken').value.trim();
+            
+            if (!token) {
+                showToast('Please enter an admin token', 'warning');
+                return;
+            }
+            
+            adminToken = token;
+            localStorage.setItem('monei_admin_token', token);
+            
+            const modal = bootstrap.Modal.getInstance(document.getElementById('adminLoginModal'));
+            modal.hide();
+            
+            showToast('✅ Admin access granted! Loading platform...', 'success');
+            
+            // Load the complete platform
+            loadCompletePlatform();
+        }
+
+        // Load complete platform
+        function loadCompletePlatform() {
+            // Hide landing page
+            document.querySelector('body').style.overflow = 'hidden';
+            document.querySelector('nav').style.display = 'none';
+            document.querySelector('.hero-section').style.display = 'none';
+            document.querySelector('#features').style.display = 'none';
+            document.querySelector('#platform').style.display = 'none';
+            document.querySelector('footer').style.display = 'none';
+            
+            // Show platform container
+            document.getElementById('platformContainer').style.display = 'block';
+            
+            // Load platform content dynamically
+            loadPlatformContent();
+        }
+
+        // Load platform content
+        async function loadPlatformContent() {
+            // In a real implementation, this would load the complete platform
+            // For now, we'll redirect to the full platform page
+            window.location.href = 'monei-complete.html';
+        }
+
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedUser = localStorage.getItem('monei_current_user');
+            if (savedUser) {
+                // User is logged in, show platform directly
+                loadCompletePlatform();
+            }
+            
+            // Test API connection
+            testAPIConnection();
+        });
+
+        // Test API connection
+        async function testAPIConnection() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/health`);
+                if (response.ok) {
+                    console.log('✅ API is connected and working!');
+                }
+            } catch (error) {
+                console.log('❌ API connection failed');
+            }
+        }
+    </script>
 </body>
 </html>
