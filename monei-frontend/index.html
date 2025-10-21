@@ -3,52 +3,655 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monei - Enterprise Micro-lending Platform</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Monei - Professional Micro-Lending Platform</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary: #2c3e50; --secondary: #3498db; --success: #27ae60; }
-        .hero-section { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: white; padding: 100px 0; text-align: center; }
-        .platform-section { background: #f8f9fa; padding: 80px 0; }
-        .login-container { max-width: 400px; margin: 50px auto; padding: 30px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); background: white; }
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #475569;
+            --accent: #f59e0b;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --success: #10b981;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .logo i {
+            margin-right: 8px;
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--secondary);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 10rem 0 5rem;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, rgba(37, 99, 235, 0) 70%);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+
+        .hero-text h1 span {
+            color: var(--primary);
+        }
+
+        .hero-text p {
+            font-size: 1.25rem;
+            color: var(--secondary);
+            margin-bottom: 2rem;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .hero-image {
+            position: relative;
+            text-align: center;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 0;
+            background-color: white;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            font-size: 1.125rem;
+            color: var(--secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background-color: #dbeafe;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: var(--primary);
+            font-size: 1.75rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .feature-card p {
+            color: var(--secondary);
+        }
+
+        /* Process Section */
+        .process {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        .process-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-top: 3rem;
+        }
+
+        .process-steps::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #cbd5e1;
+            z-index: 1;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            padding: 0 1rem;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: var(--shadow);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .step h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .step p {
+            color: var(--secondary);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 6rem 0;
+            background-color: white;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--primary);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .author-info h4 {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .author-info p {
+            color: var(--secondary);
+            font-size: 0.875rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.9;
+        }
+
+        .cta .btn {
+            background-color: white;
+            color: var(--primary);
+            font-size: 1.125rem;
+            padding: 1rem 2rem;
+        }
+
+        .cta .btn:hover {
+            background-color: #f1f5f9;
+            transform: translateY(-3px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #374151;
+            padding-top: 2rem;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 2.25rem;
+            }
+
+            .hero-btns {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .process-steps {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .process-steps::before {
+                display: none;
+            }
+
+            .step {
+                padding: 0;
+            }
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <!-- Header -->
+    <header>
         <div class="container">
-            <a class="navbar-brand" href="#"><i class="fas fa-hand-holding-usd"></i> Monei</a>
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <span>Monei</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#process">How It Works</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="monei-platform.html" class="btn btn-outline">Login</a></li>
+                    <li><a href="monei-platform.html" class="btn">Apply Now</a></li>
+                </ul>
+                <div class="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
         </div>
-    </nav>
+    </header>
 
-    <section class="hero-section">
+    <!-- Hero Section -->
+    <section class="hero">
         <div class="container">
-            <h1 class="display-4 fw-bold">Monei Enterprise Platform</h1>
-            <p class="lead">Professional micro-lending solutions</p>
-            <button class="btn btn-light btn-lg" onclick="showPlatform()">Launch Platform</button>
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Smart <span>Micro-Lending</span> for Modern Businesses</h1>
+                    <p>Access fast, flexible funding with our streamlined platform. Get the capital you need to grow your business with competitive rates and transparent terms.</p>
+                    <div class="hero-btns">
+                        <a href="monei-platform.html" class="btn">Apply in Minutes</a>
+                        <a href="monei-platform.html" class="btn btn-outline">Learn More</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Monei Dashboard Preview">
+                </div>
+            </div>
         </div>
     </section>
 
-    <section id="platform" class="platform-section">
+    <!-- Features Section -->
+    <section class="features" id="features">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <h2>Access Platform</h2>
-                    <p>Login to access the complete Monei Enterprise Platform</p>
+            <div class="section-title">
+                <h2>Why Choose Monei?</h2>
+                <p>Our platform is designed to make business financing simple, fast, and accessible.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Fast Approval</h3>
+                    <p>Get funding decisions in hours, not weeks. Our automated process ensures quick responses.</p>
                 </div>
-                <div class="col-lg-6">
-                    <div class="login-container">
-                        <h4 class="text-center mb-4">Platform Login</h4>
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Secure & Compliant</h3>
+                    <p>Bank-level security and full regulatory compliance protect your data and transactions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Competitive Rates</h3>
+                    <p>Access funding with transparent terms and competitive interest rates tailored to your needs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process" id="process">
+        <div class="container">
+            <div class="section-title">
+                <h2>How It Works</h2>
+                <p>Our simple 3-step process gets you the funding you need quickly and efficiently.</p>
+            </div>
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Apply Online</h3>
+                    <p>Complete our simple application form in minutes with basic business information.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Get Approved</h3>
+                    <p>Receive a funding decision quickly with our automated verification process.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Receive Funds</h3>
+                    <p>Access your funds within 24 hours of approval to start growing your business.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Success Stories</h2>
+                <p>See how Monei has helped businesses like yours achieve their goals.</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "Monei provided the capital we needed to expand our retail business. The application process was straightforward, and we had funds within 48 hours."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">TK</div>
+                        <div class="author-info">
+                            <h4>Tshepo K.</h4>
+                            <p>Retail Business Owner</p>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "As a small tech startup, cash flow was our biggest challenge. Monei's flexible repayment terms helped us bridge the gap between projects."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">AM</div>
+                        <div class="author-info">
+                            <h4>Amanda M.</h4>
+                            <p>Tech Startup Founder</p>
                         </div>
-                        <button class="btn btn-primary w-100" onclick="login()">Login</button>
-                        <div class="text-center mt-3">
-                            <button class="btn btn-outline-secondary btn-sm" onclick="showAdminLogin()">Admin Access</button>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "The dashboard makes managing our loan so simple. We can track payments, see statements, and even apply for additional funding when needed."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">BM</div>
+                        <div class="author-info">
+                            <h4>Bongani M.</h4>
+                            <p>Construction Company</p>
                         </div>
                     </div>
                 </div>
@@ -56,59 +659,90 @@
         </div>
     </section>
 
-    <!-- Admin Login Modal -->
-    <div class="modal fade" id="adminLoginModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Admin Access</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to Grow Your Business?</h2>
+            <p>Join thousands that have eased their financial worries with Monei's micro-lending solutions.</p>
+            <a href="monei-platform.html" class="btn">Start Your Application</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Monei</h3>
+                    <p>Professional micro-lending platform designed to help you access funding quickly and securely.</p>
                 </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Admin Token</label>
-                        <input type="password" class="form-control" id="adminToken" placeholder="Enter ADMIN_TOKEN">
-                    </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#process">How It Works</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="adminLogin()">Access Admin</button>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Compliance</a></li>
+                        <li><a href="#">Security</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:support@monei.co.bw">support@monei.co.bw</a></li>
+                        <li><a href="tel:+26712345678">+267 123 456 78</a></li>
+                        <li><a href="#">Gaborone, Botswana</a></li>
+                    </ul>
                 </div>
             </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Monei. All rights reserved. Monei is a registered financial services provider.</p>
+            </div>
         </div>
-    </div>
+    </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const API_BASE_URL = 'https://monei-api.tmugore.workers.dev';
-        
-        function showPlatform() {
-            document.getElementById('platform').scrollIntoView({ behavior: 'smooth' });
-        }
+        // Simple animation on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const navLinks = document.querySelector('.nav-links');
+            
+            mobileMenu.addEventListener('click', function() {
+                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            });
 
-        function showAdminLogin() {
-            new bootstrap.Modal(document.getElementById('adminLoginModal')).show();
-        }
+            // Animate elements on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
 
-        function login() {
-            const email = document.getElementById('email').value;
-            if (!email) {
-                alert('Please enter email');
-                return;
-            }
-            // For demo - just proceed
-            window.location.href = `monei-platform.html?email=${encodeURIComponent(email)}`;
-        }
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
 
-        function adminLogin() {
-            const token = document.getElementById('adminToken').value;
-            if (!token) {
-                alert('Please enter admin token');
-                return;
-            }
-            localStorage.setItem('monei_admin_token', token);
-            window.location.href = `monei-platform.html?admin=true`;
-        }
+            // Observe feature cards and testimonials
+            document.querySelectorAll('.feature-card, .testimonial-card, .step').forEach(el => {
+                el.style.opacity = 0;
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(el);
+            });
+        });
     </script>
 </body>
 </html>
