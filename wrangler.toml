@@ -1,21 +1,13 @@
 # wrangler.toml
+
 name = "monei-api"
 compatibility_date = "2023-10-30"
-
-# Environment variables for production
-[vars]
-CONTACT_EMAIL = "info@monei.co.bw"
-APP_ENVIRONMENT = "production"
-ADMIN_TOKEN = "Kutapira@3902809"
+main = "worker.js"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "monei-database"
+database_name = "monei-db"
 database_id = "28504df2-c888-4b8d-a419-97ad6a351968"
 
-# For different environments
-[env.development]
-vars = { APP_ENVIRONMENT = "development" }
-
-[env.production] 
-vars = { APP_ENVIRONMENT = "production" }
+[env.production]
+vars = { ADMIN_TOKEN = "Kutapira@3902809" }
