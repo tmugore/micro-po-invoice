@@ -8,6 +8,7 @@ main = "worker.js"
 binding = "DB"
 database_name = "monei-db"
 database_id = "28504df2-c888-4b8d-a419-97ad6a351968"
+migrations_dir = "migrations"
 
 [env.production]
 vars = { ADMIN_TOKEN = "Kutapira@3902809" }
