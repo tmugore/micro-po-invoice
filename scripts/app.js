@@ -1,36 +1,76 @@
-// Microlending Platform Frontend JavaScript - BOTSWANA PULA VERSION
-
-// Currency Configuration - Botswana Pula as default
-const CURRENCY_CONFIG = {
-  code: 'BWP',
-  symbol: 'P',
-  locale: 'en-BW',
-  decimalDigits: 2
-};
-
-// Currency formatting function
-function formatCurrency(amount, currency = CURRENCY_CONFIG) {
-  return new Intl.NumberFormat(currency.locale, {
-    style: 'currency',
-    currency: currency.code,
-    minimumFractionDigits: currency.decimalDigits,
-    maximumFractionDigits: currency.decimalDigits,
-  }).format(amount);
-}
+// Microlending Platform Frontend JavaScript - CMS ENABLED VERSION
 
 // Application state
 let currentUser = null;
 let loanProducts = [];
+let cmsConfig = {};
 
-// API Base URL - Using your worker URL
-const API_BASE = 'https://monei-api.tmugore.workers.dev';
+// CMS Configuration
+const CMS_CONFIG_URL = 'cms/cms-config.json';
 
-// Initialize the application
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Monei Lending Platform initialized - BWP Default Currency');
+// Load CMS Configuration
+async function loadCMSConfig() {
+    try {
+        const response = await fetch(CMS_CONFIG_URL);
+        cmsConfig = await response.json();
+        console.log('CMS Configuration loaded:', cmsConfig);
+    } catch (error) {
+        console.error('Failed to load CMS config:', error);
+        // Fallback to default configuration
+        cmsConfig = {
+            currency: { 
+                default: 'BWP', 
+                symbol: 'P', 
+                name: 'Botswana Pula',
+                decimalDigits: 2 
+            },
+            loanProducts: [],
+            websiteContent: {
+                hero: {
+                    title: 'Smart Micro-Lending for Botswana Businesses',
+                    subtitle: 'Access fast, flexible funding in Botswana Pula (BWP)',
+                    buttonText: 'Apply in Minutes'
+                }
+            },
+            settings: {
+                apiBaseUrl: 'https://monei-api.tmugore.workers.dev'
+            }
+        };
+    }
+}
+
+// Currency formatting function using CMS config
+function formatCurrency(amount) {
+    if (!cmsConfig.currency) {
+        return `P ${parseFloat(amount).toFixed(2)}`;
+    }
+    
+    return new Intl.NumberFormat('en-BW', {
+        style: 'currency',
+        currency: cmsConfig.currency.default,
+        minimumFractionDigits: cmsConfig.currency.decimalDigits,
+        maximumFractionDigits: cmsConfig.currency.decimalDigits,
+    }).format(amount);
+}
+
+// API Base URL from CMS config
+function getApiBase() {
+    return cmsConfig.settings?.apiBaseUrl || 'https://monei-api.tmugore.workers.dev';
+}
+
+// Initialize the application with CMS
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('Monei Lending Platform initializing with CMS...');
+    
+    // Load CMS configuration first
+    await loadCMSConfig();
+    
+    // Then initialize the rest of the application
     initializeEventListeners();
-    loadLoanProducts();
+    await loadLoanProducts();
     checkAuthStatus();
+    
+    console.log('Monei Lending Platform initialized with CMS support');
 });
 
 // Initialize all event listeners
@@ -59,57 +99,65 @@ function initializeEventListeners() {
     }
 }
 
-// Load loan products with BWP amounts
+// Load loan products from CMS configuration
 async function loadLoanProducts() {
     try {
-        console.log('Loading loan products in BWP...');
-        // Loan products with Botswana Pula amounts
-        loanProducts = [
-            {
-                id: 1,
-                product_name: 'Micro Loan',
-                product_type: 'microloan',
-                description: 'Small business loans for entrepreneurs',
-                min_amount: 5000,
-                max_amount: 100000,
-                min_interest_rate: 0.08,
-                max_interest_rate: 0.15,
-                min_term_days: 90,
-                max_term_days: 365,
-                origination_fee_rate: 0.02
-            },
-            {
-                id: 2,
-                product_name: 'Purchase Order Financing',
-                product_type: 'purchase_order',
-                description: 'Finance your purchase orders',
-                min_amount: 10000,
-                max_amount: 250000,
-                min_interest_rate: 0.1,
-                max_interest_rate: 0.18,
-                min_term_days: 30,
-                max_term_days: 180,
-                origination_fee_rate: 0.03
-            },
-            {
-                id: 3,
-                product_name: 'Invoice Discounting',
-                product_type: 'invoice_discount',
-                description: 'Get advance on your invoices',
-                min_amount: 5000,
-                max_amount: 150000,
-                min_interest_rate: 0.12,
-                max_interest_rate: 0.2,
-                min_term_days: 30,
-                max_term_days: 90,
-                origination_fee_rate: 0.025
-            }
-        ];
-        console.log('Loan products loaded:', loanProducts.length);
+        console.log('Loading loan products from CMS...');
+        
+        if (cmsConfig.loanProducts && cmsConfig.loanProducts.length > 0) {
+            // Use active products from CMS
+            loanProducts = cmsConfig.loanProducts.filter(product => product.active !== false);
+            console.log('Loan products loaded from CMS:', loanProducts.length);
+        } else {
+            // Fallback to default products
+            loanProducts = [
+                {
+                    id: 1,
+                    product_name: 'Micro Loan',
+                    product_type: 'microloan',
+                    description: 'Small business loans for entrepreneurs',
+                    min_amount: 5000,
+                    max_amount: 100000,
+                    min_interest_rate: 0.08,
+                    max_interest_rate: 0.15,
+                    min_term_days: 90,
+                    max_term_days: 365,
+                    origination_fee_rate: 0.02,
+                    active: true
+                },
+                {
+                    id: 2,
+                    product_name: 'Purchase Order Financing',
+                    product_type: 'purchase_order',
+                    description: 'Finance your purchase orders',
+                    min_amount: 10000,
+                    max_amount: 250000,
+                    min_interest_rate: 0.1,
+                    max_interest_rate: 0.18,
+                    min_term_days: 30,
+                    max_term_days: 180,
+                    origination_fee_rate: 0.03,
+                    active: true
+                },
+                {
+                    id: 3,
+                    product_name: 'Invoice Discounting',
+                    product_type: 'invoice_discount',
+                    description: 'Get advance on your invoices',
+                    min_amount: 5000,
+                    max_amount: 150000,
+                    min_interest_rate: 0.12,
+                    max_interest_rate: 0.2,
+                    min_term_days: 30,
+                    max_term_days: 90,
+                    origination_fee_rate: 0.025,
+                    active: true
+                }
+            ];
+            console.log('Using default loan products');
+        }
     } catch (error) {
         console.error('Failed to load loan products:', error);
-        // Fallback to mock data
-        loadLoanProducts();
     }
 }
 
@@ -322,7 +370,7 @@ function updateNavigation() {
     }
 }
 
-// Load borrower dashboard with BWP amounts
+// Load borrower dashboard with CMS currency
 function loadBorrowerDashboard() {
     console.log('Loading borrower dashboard');
     // Mock data for demonstration
@@ -359,7 +407,7 @@ function loadBorrowerDashboard() {
     `;
 }
 
-// Load admin dashboard with BWP amounts
+// Load admin dashboard with CMS currency
 function loadAdminDashboard() {
     console.log('Loading admin dashboard');
     // Mock data for demonstration
@@ -399,7 +447,7 @@ function getStatusColor(status) {
     return colors[status] || 'bg-gray-100 text-gray-800';
 }
 
-// Show application form with BWP
+// Show application form with CMS currency
 function showApplication() {
     console.log('Showing application form');
     if (!currentUser) {
@@ -407,10 +455,13 @@ function showApplication() {
         return;
     }
     
+    const currencySymbol = cmsConfig.currency?.symbol || 'P';
+    const currencyCode = cmsConfig.currency?.default || 'BWP';
+    
     const applicationForm = `
         <div class="text-center mb-6">
             <h2 class="text-2xl font-bold text-gray-800 mb-2">Loan Application</h2>
-            <p class="text-gray-600">Complete your loan application in ${CURRENCY_CONFIG.code}</p>
+            <p class="text-gray-600">Complete your loan application in ${currencyCode}</p>
         </div>
         
         <form id="applicationForm" class="space-y-6">
@@ -426,9 +477,9 @@ function showApplication() {
             </div>
             
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Requested Amount (${CURRENCY_CONFIG.code})</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Requested Amount (${currencyCode})</label>
                 <div class="relative">
-                    <span class="absolute left-3 top-2 text-gray-500">${CURRENCY_CONFIG.symbol}</span>
+                    <span class="absolute left-3 top-2 text-gray-500">${currencySymbol}</span>
                     <input type="number" id="requestedAmount" required 
                            class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                            placeholder="0.00" min="5000" max="250000">
@@ -458,7 +509,7 @@ function showApplication() {
     document.getElementById('productSelect').addEventListener('change', updateProductInfo);
 }
 
-// Update product information display with BWP formatting
+// Update product information display with CMS formatting
 function updateProductInfo() {
     const productSelect = document.getElementById('productSelect');
     const selectedProductId = productSelect.value;
@@ -551,21 +602,24 @@ function applyForProduct(productType) {
     }, 100);
 }
 
-// Show payment calculator with BWP
+// Show payment calculator with CMS currency
 function showCalculator() {
     console.log('Showing calculator');
+    const currencySymbol = cmsConfig.currency?.symbol || 'P';
+    const currencyCode = cmsConfig.currency?.default || 'BWP';
+    
     const calculatorForm = `
         <div class="text-center mb-6">
             <h2 class="text-2xl font-bold text-gray-800 mb-2">Payment Calculator</h2>
-            <p class="text-gray-600">Estimate your loan payments in ${CURRENCY_CONFIG.code}</p>
+            <p class="text-gray-600">Estimate your loan payments in ${currencyCode}</p>
         </div>
         
         <div class="space-y-4">
             <div class="grid grid-cols-3 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Loan Amount (${CURRENCY_CONFIG.code})</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Loan Amount (${currencyCode})</label>
                     <div class="relative">
-                        <span class="absolute left-3 top-2 text-gray-500">${CURRENCY_CONFIG.symbol}</span>
+                        <span class="absolute left-3 top-2 text-gray-500">${currencySymbol}</span>
                         <input type="number" id="calcAmount" value="25000"
                                class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
@@ -616,7 +670,7 @@ function showCalculator() {
     calculatePayment();
 }
 
-// Calculate loan payment with BWP formatting
+// Calculate loan payment with CMS formatting
 function calculatePayment() {
     const amount = parseFloat(document.getElementById('calcAmount').value) || 0;
     const rate = parseFloat(document.getElementById('calcRate').value) || 0;
@@ -639,7 +693,7 @@ function calculatePayment() {
     document.getElementById('totalAmount').textContent = formatCurrency(totalAmount);
 }
 
-// Show payment schedule for a loan with BWP
+// Show payment schedule for a loan with CMS currency
 function showPaymentSchedule(loanId) {
     console.log('Showing payment schedule for loan:', loanId);
     // Mock payment schedule
@@ -691,7 +745,7 @@ function showPaymentSchedule(loanId) {
     showModal(scheduleHtml);
 }
 
-// Admin: Review application with BWP amounts
+// Admin: Review application with CMS currency
 function reviewApplication(applicationId) {
     console.log('Reviewing application:', applicationId);
     const reviewForm = `
@@ -817,4 +871,4 @@ window.logout = logout;
 window.closeModal = closeModal;
 window.formatCurrency = formatCurrency; // Export for use in HTML
 
-console.log('Monei Lending Platform JavaScript loaded successfully - BWP Default Currency');
+console.log('Monei Lending Platform JavaScript loaded successfully - CMS Enabled');

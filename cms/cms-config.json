@@ -1,0 +1,68 @@
+{
+  "currency": {
+    "default": "BWP",
+    "symbol": "P",
+    "name": "Botswana Pula",
+    "decimalDigits": 2
+  },
+  "loanProducts": [
+    {
+      "id": 1,
+      "product_name": "Micro Loan",
+      "product_type": "microloan",
+      "description": "Small business loans for entrepreneurs",
+      "min_amount": 5000,
+      "max_amount": 100000,
+      "min_interest_rate": 0.08,
+      "max_interest_rate": 0.15,
+      "min_term_days": 90,
+      "max_term_days": 365,
+      "origination_fee_rate": 0.02,
+      "active": true
+    },
+    {
+      "id": 2,
+      "product_name": "Purchase Order Financing",
+      "product_type": "purchase_order",
+      "description": "Finance your purchase orders",
+      "min_amount": 10000,
+      "max_amount": 250000,
+      "min_interest_rate": 0.1,
+      "max_interest_rate": 0.18,
+      "min_term_days": 30,
+      "max_term_days": 180,
+      "origination_fee_rate": 0.03,
+      "active": true
+    },
+    {
+      "id": 3,
+      "product_name": "Invoice Discounting",
+      "product_type": "invoice_discount",
+      "description": "Get advance on your invoices",
+      "min_amount": 5000,
+      "max_amount": 150000,
+      "min_interest_rate": 0.12,
+      "max_interest_rate": 0.2,
+      "min_term_days": 30,
+      "max_term_days": 90,
+      "origination_fee_rate": 0.025,
+      "active": true
+    }
+  ],
+  "websiteContent": {
+    "hero": {
+      "title": "Smart Micro-Lending for Botswana Businesses",
+      "subtitle": "Access fast, flexible funding in Botswana Pula (BWP). Get the capital you need to grow your business with competitive rates and transparent terms.",
+      "buttonText": "Apply in Minutes"
+    },
+    "features": {
+      "title": "Why Choose Monei?",
+      "subtitle": "Our platform is designed to make business financing simple, fast, and accessible."
+    }
+  },
+  "settings": {
+    "apiBaseUrl": "https://monei-api.tmugore.workers.dev",
+    "adminEmail": "admin@monei.co.bw",
+    "autoRefresh": true
+  }
+}

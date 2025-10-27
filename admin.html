@@ -524,6 +524,17 @@
                 padding: 0 15px;
             }
         }
+        
+        .cms-link {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4) !important;
+            color: white !important;
+            border: none !important;
+        }
+        
+        .cms-link:hover {
+            background: linear-gradient(45deg, #FF5252, #26A69A) !important;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -614,6 +625,17 @@
                             <span>System Settings</span>
                         </li>
                         <li class="menu-item">
+                            <i class="fas fa-cms"></i>
+                            <span>CMS System</span>
+                        </li>
+                        <li class="menu-item">
+                            <a href="cms/cms-admin.html" target="_blank" style="color: inherit; text-decoration: none;">
+                                <i class="fas fa-cogs"></i>
+                                <span>Content Management</span>
+                                <span class="menu-badge cms-link" style="background: linear-gradient(45deg, #FF6B6B, #4ECDC4) !important;">NEW</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
                             <i class="fas fa-plug"></i>
                             <span>API Integration</span>
                         </li>
@@ -641,12 +663,11 @@
                 </div>
 
                 <div class="header-right">
-			<a href="index.html" class="text-gray-600 hover:text-blue-600 mr-4"><i class="fas fa-globe"></i> Public Site</a>
-    		<div class="header-action">
-        <i class="fas fa-bell"></i>
-        <span class="notification-badge">5</span>
-    </div>                    
-<div class="header-action">
+                    <a href="index.html" class="text-gray-600 hover:text-blue-600 mr-4"><i class="fas fa-globe"></i> Public Site</a>
+                    <a href="cms-admin.html" target="_blank" class="btn cms-link me-2">
+                        <i class="fas fa-cogs"></i> CMS System
+                    </a>
+                    <div class="header-action">
                         <i class="fas fa-bell"></i>
                         <span class="notification-badge">5</span>
                     </div>
@@ -785,6 +806,41 @@
     </div>
 
     <script>
+        // CMS Configuration
+        let cmsConfig = {};
+        
+        // Load CMS Configuration
+        async function loadCMSConfig() {
+            try {
+                const response = await fetch('cms-config.json');
+                cmsConfig = await response.json();
+                console.log('CMS Configuration loaded in admin:', cmsConfig);
+            } catch (error) {
+                console.error('Failed to load CMS config:', error);
+                cmsConfig = {
+                    currency: { 
+                        default: 'BWP', 
+                        symbol: 'P', 
+                        decimalDigits: 2 
+                    }
+                };
+            }
+        }
+
+        // Currency formatting function using CMS config
+        function formatCurrency(amount) {
+            if (!cmsConfig.currency) {
+                return `P ${parseFloat(amount).toFixed(2)}`;
+            }
+            
+            return new Intl.NumberFormat('en-BW', {
+                style: 'currency',
+                currency: cmsConfig.currency.default,
+                minimumFractionDigits: cmsConfig.currency.decimalDigits,
+                maximumFractionDigits: cmsConfig.currency.decimalDigits,
+            }).format(amount);
+        }
+
         // API Configuration
         const API_CONFIG = {
             baseUrl: 'https://monei-app.tmugore.workers.dev',
@@ -883,14 +939,14 @@
                     {
                         type: 'loan',
                         title: 'Loan Disbursed',
-                        description: 'Loan #LN-00432 for BWP 5,000 was disbursed to Sarah Johnson',
+                        description: `Loan #LN-00432 for ${formatCurrency(5000)} was disbursed to Sarah Johnson`,
                         timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
                         status: 'completed'
                     },
                     {
                         type: 'payment',
                         title: 'Payment Received',
-                        description: 'Michael Brown made a payment of BWP 1,250 for loan #LN-00321',
+                        description: `Michael Brown made a payment of ${formatCurrency(1250)} for loan #LN-00321`,
                         timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
                         status: 'completed'
                     },
@@ -915,7 +971,7 @@
                 
                 // Format value
                 if (formatter === 'currency') {
-                    valueElement.textContent = `BWP ${(value / 1000000).toFixed(2)}M`;
+                    valueElement.textContent = formatCurrency(value);
                 } else {
                     valueElement.textContent = this.formatNumber(value);
                 }
@@ -1024,7 +1080,7 @@
                     data: {
                         labels: [],
                         datasets: [{
-                            label: 'Portfolio Value (BWP)',
+                            label: 'Portfolio Value',
                             data: [],
                             borderColor: '#3498db',
                             backgroundColor: 'rgba(52, 152, 219, 0.1)',
@@ -1045,7 +1101,7 @@
                                 beginAtZero: false,
                                 ticks: {
                                     callback: function(value) {
-                                        return 'BWP ' + (value / 1000000).toFixed(1) + 'M';
+                                        return formatCurrency(value);
                                     }
                                 }
                             }
@@ -1094,7 +1150,10 @@
         // Main Application
         const app = {
             async init() {
-                console.log('Initializing Monei Enterprise Dashboard...');
+                console.log('Initializing Monei Enterprise Dashboard with CMS...');
+                
+                // Load CMS config first
+                await loadCMSConfig();
                 
                 // Initialize charts
                 chartManager.init();
