@@ -10,5 +10,12 @@ database_name = "monei-db"
 database_id = "28504df2-c888-4b8d-a419-97ad6a351968"
 migrations_dir = "migrations"
 
+[routes]
+pattern = "api/cms/*"
+custom_domain = "monei.co.bw"
+
 [env.production]
 vars = { ADMIN_TOKEN = "Kutapira@3902809" }
+
+[site]
+bucket = "./cms"

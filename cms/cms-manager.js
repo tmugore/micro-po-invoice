@@ -1,8 +1,8 @@
-// CMS Manager - Handles all configuration management
+// CMS Manager - Fixed version with proper API integration
 class CMSManager {
     constructor() {
         this.config = null;
-        this.CONFIG_PATH = 'cms-config.json';
+        this.API_BASE = '/api/cms'; // Relative API path
         this.init();
     }
 
@@ -15,15 +15,55 @@ class CMSManager {
 
     async loadConfig() {
         try {
-            const response = await fetch(this.CONFIG_PATH);
+            const response = await fetch(`${this.API_BASE}/config`);
+            if (!response.ok) throw new Error('Failed to fetch config');
             this.config = await response.json();
             this.populateForms();
             console.log('CMS Configuration loaded:', this.config);
         } catch (error) {
             console.error('Failed to load config:', error);
-            this.showToast('Error loading configuration', 'error');
-            // Load default config as fallback
+            this.showToast('Error loading configuration from API, using fallback', 'error');
             this.loadDefaultConfig();
+        }
+    }
+
+    async saveConfig() {
+        try {
+            // Update config from form values
+            this.config.currency.default = document.getElementById('currency-code').value;
+            this.config.currency.symbol = document.getElementById('currency-symbol').value;
+            this.config.currency.name = document.getElementById('currency-name').value;
+            this.config.currency.decimalDigits = parseInt(document.getElementById('currency-decimals').value);
+
+            this.config.websiteContent.hero.title = document.getElementById('hero-title').value;
+            this.config.websiteContent.hero.subtitle = document.getElementById('hero-subtitle').value;
+            this.config.websiteContent.hero.buttonText = document.getElementById('hero-button').value;
+
+            this.config.settings.apiBaseUrl = document.getElementById('api-url').value;
+            this.config.settings.adminEmail = document.getElementById('admin-email').value;
+            this.config.settings.autoRefresh = document.getElementById('auto-refresh').checked;
+
+            // Save to backend API
+            const response = await fetch(`${this.API_BASE}/config`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(this.config)
+            });
+
+            if (!response.ok) throw new Error('Failed to save config');
+
+            this.showToast('Configuration saved successfully to database!', 'success');
+            this.updateMainApplication();
+            
+        } catch (error) {
+            console.error('Failed to save config:', error);
+            this.showToast('Error saving configuration to database', 'error');
+            
+            // Fallback to localStorage
+            localStorage.setItem('monei-cms-config', JSON.stringify(this.config));
+            this.showToast('Configuration saved to browser storage as fallback', 'warning');
         }
     }
 

@@ -11,34 +11,54 @@ const CMS_CONFIG_URL = 'cms/cms-config.json';
 // Load CMS Configuration
 async function loadCMSConfig() {
     try {
-        const response = await fetch(CMS_CONFIG_URL);
-        cmsConfig = await response.json();
-        console.log('CMS Configuration loaded:', cmsConfig);
+        // Try to load from API first
+        const response = await fetch('/api/cms/config');
+        if (response.ok) {
+            cmsConfig = await response.json();
+            console.log('CMS Configuration loaded from API:', cmsConfig);
+        } else {
+            throw new Error('API not available');
+        }
     } catch (error) {
-        console.error('Failed to load CMS config:', error);
-        // Fallback to default configuration
-        cmsConfig = {
-            currency: { 
-                default: 'BWP', 
-                symbol: 'P', 
-                name: 'Botswana Pula',
-                decimalDigits: 2 
-            },
-            loanProducts: [],
-            websiteContent: {
-                hero: {
-                    title: 'Smart Micro-Lending for Botswana Businesses',
-                    subtitle: 'Access fast, flexible funding in Botswana Pula (BWP)',
-                    buttonText: 'Apply in Minutes'
-                }
-            },
-            settings: {
-                apiBaseUrl: 'https://monei-api.tmugore.workers.dev'
+        console.error('Failed to load CMS config from API:', error);
+        
+        // Fallback 1: Try local storage
+        const savedConfig = localStorage.getItem('monei-cms-config');
+        if (savedConfig) {
+            cmsConfig = JSON.parse(savedConfig);
+            console.log('CMS Configuration loaded from localStorage:', cmsConfig);
+        } else {
+            // Fallback 2: Try static file
+            try {
+                const staticResponse = await fetch('cms/cms-config.json');
+                cmsConfig = await staticResponse.json();
+                console.log('CMS Configuration loaded from static file:', cmsConfig);
+            } catch (staticError) {
+                console.error('Failed to load CMS config from static file:', staticError);
+                // Final fallback: Default configuration
+                cmsConfig = {
+                    currency: { 
+                        default: 'BWP', 
+                        symbol: 'P', 
+                        name: 'Botswana Pula',
+                        decimalDigits: 2 
+                    },
+                    loanProducts: [],
+                    websiteContent: {
+                        hero: {
+                            title: 'Smart Micro-Lending for Botswana Businesses',
+                            subtitle: 'Access fast, flexible funding in Botswana Pula (BWP)',
+                            buttonText: 'Apply in Minutes'
+                        }
+                    },
+                    settings: {
+                        apiBaseUrl: 'https://monei-api.tmugore.workers.dev'
+                    }
+                };
             }
-        };
+        }
     }
 }
-
 // Currency formatting function using CMS config
 function formatCurrency(amount) {
     if (!cmsConfig.currency) {
