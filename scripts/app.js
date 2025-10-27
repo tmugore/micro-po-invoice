@@ -1,4 +1,22 @@
-// Microlending Platform Frontend JavaScript - FIXED VERSION
+// Microlending Platform Frontend JavaScript - BOTSWANA PULA VERSION
+
+// Currency Configuration - Botswana Pula as default
+const CURRENCY_CONFIG = {
+  code: 'BWP',
+  symbol: 'P',
+  locale: 'en-BW',
+  decimalDigits: 2
+};
+
+// Currency formatting function
+function formatCurrency(amount, currency = CURRENCY_CONFIG) {
+  return new Intl.NumberFormat(currency.locale, {
+    style: 'currency',
+    currency: currency.code,
+    minimumFractionDigits: currency.decimalDigits,
+    maximumFractionDigits: currency.decimalDigits,
+  }).format(amount);
+}
 
 // Application state
 let currentUser = null;
@@ -9,7 +27,7 @@ const API_BASE = 'https://monei-api.tmugore.workers.dev';
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Monei Lending Platform initialized');
+    console.log('Monei Lending Platform initialized - BWP Default Currency');
     initializeEventListeners();
     loadLoanProducts();
     checkAuthStatus();
@@ -41,19 +59,19 @@ function initializeEventListeners() {
     }
 }
 
-// Load loan products
+// Load loan products with BWP amounts
 async function loadLoanProducts() {
     try {
-        console.log('Loading loan products...');
-        // For now, use mock data since API might not be ready
+        console.log('Loading loan products in BWP...');
+        // Loan products with Botswana Pula amounts
         loanProducts = [
             {
                 id: 1,
                 product_name: 'Micro Loan',
                 product_type: 'microloan',
                 description: 'Small business loans for entrepreneurs',
-                min_amount: 1000,
-                max_amount: 25000,
+                min_amount: 5000,
+                max_amount: 100000,
                 min_interest_rate: 0.08,
                 max_interest_rate: 0.15,
                 min_term_days: 90,
@@ -65,8 +83,8 @@ async function loadLoanProducts() {
                 product_name: 'Purchase Order Financing',
                 product_type: 'purchase_order',
                 description: 'Finance your purchase orders',
-                min_amount: 5000,
-                max_amount: 100000,
+                min_amount: 10000,
+                max_amount: 250000,
                 min_interest_rate: 0.1,
                 max_interest_rate: 0.18,
                 min_term_days: 30,
@@ -78,8 +96,8 @@ async function loadLoanProducts() {
                 product_name: 'Invoice Discounting',
                 product_type: 'invoice_discount',
                 description: 'Get advance on your invoices',
-                min_amount: 1000,
-                max_amount: 50000,
+                min_amount: 5000,
+                max_amount: 150000,
                 min_interest_rate: 0.12,
                 max_interest_rate: 0.2,
                 min_term_days: 30,
@@ -304,20 +322,20 @@ function updateNavigation() {
     }
 }
 
-// Load borrower dashboard
+// Load borrower dashboard with BWP amounts
 function loadBorrowerDashboard() {
     console.log('Loading borrower dashboard');
     // Mock data for demonstration
     document.getElementById('totalApps').textContent = '2';
     document.getElementById('activeLoans').textContent = '1';
-    document.getElementById('outstandingBalance').textContent = '$5,250.00';
+    document.getElementById('outstandingBalance').textContent = formatCurrency(5250);
     
     document.getElementById('recentApplications').innerHTML = `
         <div class="border-b pb-3 mb-3">
             <div class="flex justify-between items-start">
                 <div>
                     <h4 class="font-semibold">Micro Loan</h4>
-                    <p class="text-sm text-gray-600">$10,000</p>
+                    <p class="text-sm text-gray-600">${formatCurrency(10000)}</p>
                     <p class="text-sm text-gray-500">${new Date().toLocaleDateString()}</p>
                 </div>
                 <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">approved</span>
@@ -330,7 +348,7 @@ function loadBorrowerDashboard() {
             <div class="flex justify-between items-start">
                 <div>
                     <h4 class="font-semibold">Micro Loan</h4>
-                    <p class="text-sm text-gray-600">Balance: $5,250.00</p>
+                    <p class="text-sm text-gray-600">Balance: ${formatCurrency(5250)}</p>
                     <p class="text-sm text-gray-500">Due: ${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
                 </div>
                 <button onclick="showPaymentSchedule(1)" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
@@ -341,20 +359,20 @@ function loadBorrowerDashboard() {
     `;
 }
 
-// Load admin dashboard
+// Load admin dashboard with BWP amounts
 function loadAdminDashboard() {
     console.log('Loading admin dashboard');
     // Mock data for demonstration
     document.getElementById('totalApps').textContent = '15';
     document.getElementById('activeLoans').textContent = '8';
-    document.getElementById('outstandingBalance').textContent = '$127,500.00';
+    document.getElementById('outstandingBalance').textContent = formatCurrency(127500);
     
     document.getElementById('recentApplications').innerHTML = `
         <div class="border-b pb-3 mb-3">
             <div class="flex justify-between items-start">
                 <div>
                     <h4 class="font-semibold">Jane Smith</h4>
-                    <p class="text-sm text-gray-600">Micro Loan - $15,000</p>
+                    <p class="text-sm text-gray-600">Micro Loan - ${formatCurrency(15000)}</p>
                     <p class="text-sm text-gray-500">${new Date().toLocaleDateString()}</p>
                 </div>
                 <div class="flex flex-col gap-1">
@@ -381,7 +399,7 @@ function getStatusColor(status) {
     return colors[status] || 'bg-gray-100 text-gray-800';
 }
 
-// Show application form
+// Show application form with BWP
 function showApplication() {
     console.log('Showing application form');
     if (!currentUser) {
@@ -392,7 +410,7 @@ function showApplication() {
     const applicationForm = `
         <div class="text-center mb-6">
             <h2 class="text-2xl font-bold text-gray-800 mb-2">Loan Application</h2>
-            <p class="text-gray-600">Complete your loan application</p>
+            <p class="text-gray-600">Complete your loan application in ${CURRENCY_CONFIG.code}</p>
         </div>
         
         <form id="applicationForm" class="space-y-6">
@@ -408,12 +426,12 @@ function showApplication() {
             </div>
             
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Requested Amount</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Requested Amount (${CURRENCY_CONFIG.code})</label>
                 <div class="relative">
-                    <span class="absolute left-3 top-2 text-gray-500">$</span>
+                    <span class="absolute left-3 top-2 text-gray-500">${CURRENCY_CONFIG.symbol}</span>
                     <input type="number" id="requestedAmount" required 
                            class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                           placeholder="0.00" min="1000" max="100000">
+                           placeholder="0.00" min="5000" max="250000">
                 </div>
             </div>
             
@@ -440,7 +458,7 @@ function showApplication() {
     document.getElementById('productSelect').addEventListener('change', updateProductInfo);
 }
 
-// Update product information display
+// Update product information display with BWP formatting
 function updateProductInfo() {
     const productSelect = document.getElementById('productSelect');
     const selectedProductId = productSelect.value;
@@ -457,7 +475,7 @@ function updateProductInfo() {
         <div class="grid grid-cols-2 gap-4 text-sm">
             <div>
                 <span class="font-medium">Amount Range:</span> 
-                $${parseInt(product.min_amount).toLocaleString()} - $${parseInt(product.max_amount).toLocaleString()}
+                ${formatCurrency(product.min_amount)} - ${formatCurrency(product.max_amount)}
             </div>
             <div>
                 <span class="font-medium">Interest Rate:</span> 
@@ -503,7 +521,7 @@ async function handleApplication(event) {
         submitBtn.textContent = originalText;
         submitBtn.disabled = false;
         closeModal();
-        alert('Application submitted successfully! We will review your application and get back to you soon.');
+        alert(`Application submitted successfully for ${formatCurrency(requestedAmount)}! We will review your application and get back to you soon.`);
         
         // Reset form
         event.target.reset();
@@ -533,22 +551,22 @@ function applyForProduct(productType) {
     }, 100);
 }
 
-// Show payment calculator
+// Show payment calculator with BWP
 function showCalculator() {
     console.log('Showing calculator');
     const calculatorForm = `
         <div class="text-center mb-6">
             <h2 class="text-2xl font-bold text-gray-800 mb-2">Payment Calculator</h2>
-            <p class="text-gray-600">Estimate your loan payments</p>
+            <p class="text-gray-600">Estimate your loan payments in ${CURRENCY_CONFIG.code}</p>
         </div>
         
         <div class="space-y-4">
             <div class="grid grid-cols-3 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Loan Amount</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Loan Amount (${CURRENCY_CONFIG.code})</label>
                     <div class="relative">
-                        <span class="absolute left-3 top-2 text-gray-500">$</span>
-                        <input type="number" id="calcAmount" value="10000"
+                        <span class="absolute left-3 top-2 text-gray-500">${CURRENCY_CONFIG.symbol}</span>
+                        <input type="number" id="calcAmount" value="25000"
                                class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                 </div>
@@ -568,16 +586,16 @@ function showCalculator() {
                 <div class="grid grid-cols-2 gap-4">
                     <div class="text-center">
                         <p class="text-sm text-gray-600">Monthly Payment</p>
-                        <p class="text-2xl font-bold text-blue-600" id="monthlyPayment">$0</p>
+                        <p class="text-2xl font-bold text-blue-600" id="monthlyPayment">${formatCurrency(0)}</p>
                     </div>
                     <div class="text-center">
                         <p class="text-sm text-gray-600">Total Interest</p>
-                        <p class="text-2xl font-bold text-green-600" id="totalInterest">$0</p>
+                        <p class="text-2xl font-bold text-green-600" id="totalInterest">${formatCurrency(0)}</p>
                     </div>
                 </div>
                 <div class="text-center mt-4">
                     <p class="text-sm text-gray-600">Total Amount to Repay</p>
-                    <p class="text-3xl font-bold text-blue-600" id="totalAmount">$0</p>
+                    <p class="text-3xl font-bold text-blue-600" id="totalAmount">${formatCurrency(0)}</p>
                 </div>
             </div>
             
@@ -598,16 +616,16 @@ function showCalculator() {
     calculatePayment();
 }
 
-// Calculate loan payment
+// Calculate loan payment with BWP formatting
 function calculatePayment() {
     const amount = parseFloat(document.getElementById('calcAmount').value) || 0;
     const rate = parseFloat(document.getElementById('calcRate').value) || 0;
     const termDays = parseFloat(document.getElementById('calcTerm').value) || 0;
     
     if (amount <= 0 || rate <= 0 || termDays <= 0) {
-        document.getElementById('monthlyPayment').textContent = '$0';
-        document.getElementById('totalInterest').textContent = '$0';
-        document.getElementById('totalAmount').textContent = '$0';
+        document.getElementById('monthlyPayment').textContent = formatCurrency(0);
+        document.getElementById('totalInterest').textContent = formatCurrency(0);
+        document.getElementById('totalAmount').textContent = formatCurrency(0);
         return;
     }
     
@@ -616,12 +634,12 @@ function calculatePayment() {
     const totalAmount = amount + totalInterest;
     const monthlyPayment = totalAmount / (termDays / 30);
     
-    document.getElementById('monthlyPayment').textContent = `$${monthlyPayment.toFixed(2)}`;
-    document.getElementById('totalInterest').textContent = `$${totalInterest.toFixed(2)}`;
-    document.getElementById('totalAmount').textContent = `$${totalAmount.toFixed(2)}`;
+    document.getElementById('monthlyPayment').textContent = formatCurrency(monthlyPayment);
+    document.getElementById('totalInterest').textContent = formatCurrency(totalInterest);
+    document.getElementById('totalAmount').textContent = formatCurrency(totalAmount);
 }
 
-// Show payment schedule for a loan
+// Show payment schedule for a loan with BWP
 function showPaymentSchedule(loanId) {
     console.log('Showing payment schedule for loan:', loanId);
     // Mock payment schedule
@@ -638,7 +656,7 @@ function showPaymentSchedule(loanId) {
                     <p class="text-sm text-gray-600">Due: ${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
                 </div>
                 <div class="text-right">
-                    <p class="font-semibold">$1,750.00</p>
+                    <p class="font-semibold">${formatCurrency(1750)}</p>
                     <p class="text-sm text-gray-600">pending</p>
                 </div>
             </div>
@@ -648,7 +666,7 @@ function showPaymentSchedule(loanId) {
                     <p class="text-sm text-gray-600">Due: ${new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
                 </div>
                 <div class="text-right">
-                    <p class="font-semibold">$1,750.00</p>
+                    <p class="font-semibold">${formatCurrency(1750)}</p>
                     <p class="text-sm text-gray-600">pending</p>
                 </div>
             </div>
@@ -658,7 +676,7 @@ function showPaymentSchedule(loanId) {
                     <p class="text-sm text-gray-600">Due: ${new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toLocaleDateString()}</p>
                 </div>
                 <div class="text-right">
-                    <p class="font-semibold">$1,750.00</p>
+                    <p class="font-semibold">${formatCurrency(1750)}</p>
                     <p class="text-sm text-gray-600">pending</p>
                 </div>
             </div>
@@ -673,7 +691,7 @@ function showPaymentSchedule(loanId) {
     showModal(scheduleHtml);
 }
 
-// Admin: Review application
+// Admin: Review application with BWP amounts
 function reviewApplication(applicationId) {
     console.log('Reviewing application:', applicationId);
     const reviewForm = `
@@ -686,7 +704,7 @@ function reviewApplication(applicationId) {
             <div class="bg-gray-50 p-4 rounded-lg">
                 <h4 class="font-semibold mb-2">Application Details</h4>
                 <div class="grid grid-cols-2 gap-4 text-sm">
-                    <div><span class="font-medium">Amount:</span> $15,000</div>
+                    <div><span class="font-medium">Amount:</span> ${formatCurrency(15000)}</div>
                     <div><span class="font-medium">Product:</span> Micro Loan</div>
                     <div><span class="font-medium">Status:</span> under_review</div>
                     <div><span class="font-medium">Submitted:</span> ${new Date().toLocaleDateString()}</div>
@@ -797,5 +815,6 @@ window.showPaymentSchedule = showPaymentSchedule;
 window.reviewApplication = reviewApplication;
 window.logout = logout;
 window.closeModal = closeModal;
+window.formatCurrency = formatCurrency; // Export for use in HTML
 
-console.log('Monei Lending Platform JavaScript loaded successfully');
+console.log('Monei Lending Platform JavaScript loaded successfully - BWP Default Currency');

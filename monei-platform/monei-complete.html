@@ -671,8 +671,24 @@
     <script>
         // API Configuration - UPDATED: Using new API subdomain
         const API_BASE_URL = 'https://api.monei.co.bw';
-        let currentUser = null;
+        const CURRENCY_CONFIG = {
+    code: 'BWP',
+    symbol: 'P',
+    locale: 'en-BW',
+    decimalDigits: 2
+};
+
+function formatCurrency(amount) {
+    return new Intl.NumberFormat(CURRENCY_CONFIG.locale, {
+        style: 'currency',
+        currency: CURRENCY_CONFIG.code,
+        minimumFractionDigits: CURRENCY_CONFIG.decimalDigits,
+        maximumFractionDigits: CURRENCY_CONFIG.decimalDigits,
+    }).format(amount);
+}
+let currentUser = null;
         let adminToken = localStorage.getItem('monei_admin_token') || '';
+
         
         // Toast notification function
         function showToast(message, type = 'info') {
