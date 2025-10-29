@@ -484,6 +484,112 @@
             color: var(--secondary);
         }
 
+        /* Content Sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .data-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
         /* Responsive */
         @media (max-width: 992px) {
             .sidebar {
@@ -523,6 +629,17 @@
             .header {
                 padding: 0 15px;
             }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .page-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
         }
         
         .cms-link {
@@ -534,6 +651,53 @@
         .cms-link:hover {
             background: linear-gradient(45deg, #FF5252, #26A69A) !important;
             transform: translateY(-2px);
+        }
+
+        /* Toast Styles */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+        }
+
+        .toast {
+            background: white;
+            border-radius: 8px;
+            padding: 15px 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .toast.warning {
+            border-left: 4px solid var(--warning);
+        }
+
+        .toast.info {
+            border-left: 4px solid var(--secondary);
         }
     </style>
 </head>
@@ -552,11 +716,11 @@
                 <div class="menu-section">
                     <div class="menu-title">Main</div>
                     <ul class="menu-items">
-                        <li class="menu-item active">
+                        <li class="menu-item active" data-section="dashboard">
                             <i class="fas fa-home"></i>
                             <span>Dashboard</span>
                         </li>
-                        <li class="menu-item">
+                        <li class="menu-item" data-section="analytics">
                             <i class="fas fa-tachometer-alt"></i>
                             <span>Analytics</span>
                         </li>
@@ -566,25 +730,25 @@
                 <div class="menu-section">
                     <div class="menu-title">Clients & Loans</div>
                     <ul class="menu-items">
-                        <li class="menu-item">
+                        <li class="menu-item" data-section="client-management">
                             <i class="fas fa-users"></i>
                             <span>Client Management</span>
                             <span class="menu-badge">24</span>
                         </li>
-                        <li class="menu-item">
+                        <li class="menu-item" data-section="loan-products">
                             <i class="fas fa-file-invoice-dollar"></i>
                             <span>Loan Products</span>
                         </li>
-                        <li class="menu-item">
+                        <li class="menu-item" data-section="loan-applications">
                             <i class="fas fa-clipboard-list"></i>
                             <span>Loan Applications</span>
                             <span class="menu-badge">12</span>
                         </li>
-                        <li class="menu-item">
+                        <li class="menu-item" data-section="active-loans">
                             <i class="fas fa-hand-holding-usd"></i>
                             <span>Active Loans</span>
                         </li>
-                        <li class="menu-item">
+                        <li class="menu-item" data-section="loan-history">
                             <i class="fas fa-history"></i>
                             <span>Loan History</span>
                         </li>
@@ -594,19 +758,19 @@
                 <div class="menu-section">
                     <div class="menu-title">Financial Operations</div>
                     <ul class="menu-items">
-                        <li class="menu-item">
+                        <li class="menu-item" data-section="payments">
                             <i class="fas fa-money-check"></i>
                             <span>Payments</span>
                         </li>
-                        <li class="menu-item">
+                        <li class="menu-item" data-section="disbursements">
                             <i class="fas fa-cash-register"></i>
                             <span>Disbursements</span>
                         </li>
-                        <li class="menu-item">
+                        <li class="menu-item" data-section="accounting">
                             <i class="fas fa-file-invoice"></i>
                             <span>Accounting</span>
                         </li>
-                        <li class="menu-item">
+                        <li class="menu-item" data-section="financial-reports">
                             <i class="fas fa-chart-line"></i>
                             <span>Financial Reports</span>
                         </li>
@@ -616,30 +780,26 @@
                 <div class="menu-section">
                     <div class="menu-title">System</div>
                     <ul class="menu-items">
-                        <li class="menu-item">
+                        <li class="menu-item" data-section="user-management">
                             <i class="fas fa-user-shield"></i>
                             <span>User Management</span>
                         </li>
-                        <li class="menu-item">
+                        <li class="menu-item" data-section="system-settings">
                             <i class="fas fa-cogs"></i>
                             <span>System Settings</span>
                         </li>
                         <li class="menu-item">
-                            <i class="fas fa-cms"></i>
-                            <span>CMS System</span>
-                        </li>
-                        <li class="menu-item">
-                            <a href="cms/cms-admin.html" target="_blank" style="color: inherit; text-decoration: none;">
+                            <a href="cms/cms-admin.html" target="_blank" style="color: inherit; text-decoration: none; display: flex; align-items: center; gap: 12px; width: 100%;">
                                 <i class="fas fa-cogs"></i>
                                 <span>Content Management</span>
                                 <span class="menu-badge cms-link" style="background: linear-gradient(45deg, #FF6B6B, #4ECDC4) !important;">NEW</span>
                             </a>
                         </li>
-                        <li class="menu-item">
+                        <li class="menu-item" data-section="api-integration">
                             <i class="fas fa-plug"></i>
                             <span>API Integration</span>
                         </li>
-                        <li class="menu-item">
+                        <li class="menu-item" data-section="security">
                             <i class="fas fa-shield-alt"></i>
                             <span>Security</span>
                         </li>
@@ -685,125 +845,694 @@
                 </div>
             </div>
 
-            <!-- Content -->
-            <div class="content">
-                <div class="page-header">
-                    <div class="page-title">
-                        <h2>Enterprise Dashboard</h2>
-                        <div class="breadcrumb">
-                            <a href="#">Home</a> / <span>Dashboard</span>
-                        </div>
-                    </div>
-                    <div class="page-actions">
-                        <button class="btn btn-outline">
-                            <i class="fas fa-download"></i> Export Report
-                        </button>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-plus"></i> New Loan
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Stats Grid -->
-                <div class="dashboard-grid">
-                    <div class="stat-card" id="portfolio-card">
-                        <div class="stat-header">
-                            <div class="stat-title">Total Loan Portfolio</div>
-                            <div class="stat-icon">
-                                <i class="fas fa-wallet"></i>
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="content-section active">
+                <div class="content">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Enterprise Dashboard</h2>
+                            <div class="breadcrumb">
+                                <a href="#">Home</a> / <span>Dashboard</span>
                             </div>
                         </div>
-                        <div class="stat-value">Loading...</div>
-                        <div class="stat-change positive">
-                            <i class="fas fa-arrow-up"></i> <span class="change-text">Updating...</span>
+                        <div class="page-actions">
+                            <button class="btn btn-outline">
+                                <i class="fas fa-download"></i> Export Report
+                            </button>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-plus"></i> New Loan
+                            </button>
                         </div>
                     </div>
 
-                    <div class="stat-card success" id="clients-card">
-                        <div class="stat-header">
-                            <div class="stat-title">Active Clients</div>
-                            <div class="stat-icon">
-                                <i class="fas fa-users"></i>
+                    <!-- Stats Grid -->
+                    <div class="dashboard-grid">
+                        <div class="stat-card" id="portfolio-card">
+                            <div class="stat-header">
+                                <div class="stat-title">Total Loan Portfolio</div>
+                                <div class="stat-icon">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">Loading...</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> <span class="change-text">Updating...</span>
                             </div>
                         </div>
-                        <div class="stat-value">Loading...</div>
-                        <div class="stat-change positive">
-                            <i class="fas fa-arrow-up"></i> <span class="change-text">Updating...</span>
-                        </div>
-                    </div>
 
-                    <div class="stat-card warning" id="applications-card">
-                        <div class="stat-header">
-                            <div class="stat-title">Pending Applications</div>
-                            <div class="stat-icon">
-                                <i class="fas fa-clipboard-list"></i>
+                        <div class="stat-card success" id="clients-card">
+                            <div class="stat-header">
+                                <div class="stat-title">Active Clients</div>
+                                <div class="stat-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">Loading...</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> <span class="change-text">Updating...</span>
                             </div>
                         </div>
-                        <div class="stat-value">Loading...</div>
-                        <div class="stat-change negative">
-                            <i class="fas fa-arrow-down"></i> <span class="change-text">Updating...</span>
-                        </div>
-                    </div>
 
-                    <div class="stat-card danger" id="delinquent-card">
-                        <div class="stat-header">
-                            <div class="stat-title">Delinquent Loans</div>
-                            <div class="stat-icon">
-                                <i class="fas fa-exclamation-triangle"></i>
+                        <div class="stat-card warning" id="applications-card">
+                            <div class="stat-header">
+                                <div class="stat-title">Pending Applications</div>
+                                <div class="stat-icon">
+                                    <i class="fas fa-clipboard-list"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">Loading...</div>
+                            <div class="stat-change negative">
+                                <i class="fas fa-arrow-down"></i> <span class="change-text">Updating...</span>
                             </div>
                         </div>
-                        <div class="stat-value">Loading...</div>
-                        <div class="stat-change positive">
-                            <i class="fas fa-arrow-down"></i> <span class="change-text">Updating...</span>
+
+                        <div class="stat-card danger" id="delinquent-card">
+                            <div class="stat-header">
+                                <div class="stat-title">Delinquent Loans</div>
+                                <div class="stat-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value">Loading...</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-down"></i> <span class="change-text">Updating...</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Charts -->
-                <div class="chart-grid">
+                    <!-- Charts -->
+                    <div class="chart-grid">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <div class="chart-title">Loan Portfolio Performance</div>
+                                <div class="chart-actions">
+                                    <select class="btn btn-outline" style="padding: 5px 10px;" id="timeRange">
+                                        <option value="30">Last 30 days</option>
+                                        <option value="90">Last 90 days</option>
+                                        <option value="365">This Year</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="performanceChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <div class="chart-title">Loan Status Distribution</div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="statusChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
                     <div class="chart-card">
                         <div class="chart-header">
-                            <div class="chart-title">Loan Portfolio Performance</div>
-                            <div class="chart-actions">
-                                <select class="btn btn-outline" style="padding: 5px 10px;" id="timeRange">
-                                    <option value="30">Last 30 days</option>
-                                    <option value="90">Last 90 days</option>
-                                    <option value="365">This Year</option>
-                                </select>
+                            <div class="chart-title">Recent Activity</div>
+                            <a href="#" style="color: var(--secondary); text-decoration: none;" id="refreshActivities">Refresh</a>
+                        </div>
+                        <div class="activity-list" id="activityList">
+                            <div class="activity-item">
+                                <div class="activity-content">
+                                    <div class="activity-title">Loading activities...</div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="performanceChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <div class="chart-title">Loan Status Distribution</div>
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="statusChart"></canvas>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Recent Activity -->
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <div class="chart-title">Recent Activity</div>
-                        <a href="#" style="color: var(--secondary); text-decoration: none;" id="refreshActivities">Refresh</a>
-                    </div>
-                    <div class="activity-list" id="activityList">
-                        <div class="activity-item">
-                            <div class="activity-content">
-                                <div class="activity-title">Loading activities...</div>
+            <!-- Analytics Section -->
+            <div id="analytics-section" class="content-section">
+                <div class="content">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Advanced Analytics</h2>
+                            <div class="breadcrumb">
+                                <a href="#">Home</a> / <span>Analytics</span>
                             </div>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-outline">
+                                <i class="fas fa-download"></i> Export Report
+                            </button>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-sync"></i> Refresh Data
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="chart-grid">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <div class="chart-title">Portfolio Performance Over Time</div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="analyticsChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <div class="chart-title">Risk Analysis</div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="riskChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Key Performance Indicators</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="dashboard-grid">
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Portfolio at Risk</div>
+                                    </div>
+                                    <div class="stat-value">4.2%</div>
+                                    <div class="stat-change negative">
+                                        <i class="fas fa-arrow-up"></i> 0.3%
+                                    </div>
+                                </div>
+                                <div class="stat-card success">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Return on Portfolio</div>
+                                    </div>
+                                    <div class="stat-value">18.5%</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 2.1%
+                                    </div>
+                                </div>
+                                <div class="stat-card warning">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Average Loan Size</div>
+                                    </div>
+                                    <div class="stat-value">P 45,200</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 5.2%
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Client Retention</div>
+                                    </div>
+                                    <div class="stat-value">87%</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 3%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Client Management Section -->
+            <div id="client-management-section" class="content-section">
+                <div class="content">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Client Management</h2>
+                            <div class="breadcrumb">
+                                <a href="#">Home</a> / <span>Client Management</span>
+                            </div>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" onclick="showAddClientModal()">
+                                <i class="fas fa-user-plus"></i> Add Client
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>All Clients</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Client ID</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Status</th>
+                                            <th>Loans</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>CL001</td>
+                                            <td>John Smith</td>
+                                            <td>john@example.com</td>
+                                            <td>+267 123 4567</td>
+                                            <td><span class="status-badge status-active">Active</span></td>
+                                            <td>3</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-warning">Edit</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>CL002</td>
+                                            <td>Maria Garcia</td>
+                                            <td>maria@example.com</td>
+                                            <td>+267 765 4321</td>
+                                            <td><span class="status-badge status-active">Active</span></td>
+                                            <td>1</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-warning">Edit</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>CL003</td>
+                                            <td>David Johnson</td>
+                                            <td>david@example.com</td>
+                                            <td>+267 555 1234</td>
+                                            <td><span class="status-badge status-pending">Pending</span></td>
+                                            <td>0</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-warning">Edit</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loan Products Section -->
+            <div id="loan-products-section" class="content-section">
+                <div class="content">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Loan Products Management</h2>
+                            <div class="breadcrumb">
+                                <a href="#">Home</a> / <span>Loan Products</span>
+                            </div>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" onclick="showAddProductModal()">
+                                <i class="fas fa-plus"></i> Add Product
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="loan-products-table">
+                                <!-- Will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loan Applications Section -->
+            <div id="loan-applications-section" class="content-section">
+                <div class="content">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Loan Applications</h2>
+                            <div class="breadcrumb">
+                                <a href="#">Home</a> / <span>Loan Applications</span>
+                            </div>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-outline">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>All Applications</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Application ID</th>
+                                            <th>Client</th>
+                                            <th>Product</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Submitted</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>APP001</td>
+                                            <td>John Smith</td>
+                                            <td>Micro Loan</td>
+                                            <td>P 50,000</td>
+                                            <td><span class="status-badge status-pending">Under Review</span></td>
+                                            <td>2023-10-15</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">Review</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>APP002</td>
+                                            <td>Maria Garcia</td>
+                                            <td>Purchase Order</td>
+                                            <td>P 120,000</td>
+                                            <td><span class="status-badge status-active">Approved</span></td>
+                                            <td>2023-10-12</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-success">Disburse</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Loans Section -->
+            <div id="active-loans-section" class="content-section">
+                <div class="content">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Active Loans</h2>
+                            <div class="breadcrumb">
+                                <a href="#">Home</a> / <span>Active Loans</span>
+                            </div>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-outline">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Current Loan Portfolio</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Loan ID</th>
+                                            <th>Client</th>
+                                            <th>Product</th>
+                                            <th>Amount</th>
+                                            <th>Disbursed</th>
+                                            <th>Due Date</th>
+                                            <th>Balance</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>LN001</td>
+                                            <td>John Smith</td>
+                                            <td>Micro Loan</td>
+                                            <td>P 75,000</td>
+                                            <td>2023-09-01</td>
+                                            <td>2024-03-01</td>
+                                            <td>P 42,500</td>
+                                            <td><span class="status-badge status-active">Current</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>LN002</td>
+                                            <td>Maria Garcia</td>
+                                            <td>Purchase Order</td>
+                                            <td>P 150,000</td>
+                                            <td>2023-08-15</td>
+                                            <td>2024-02-15</td>
+                                            <td>P 89,000</td>
+                                            <td><span class="status-badge status-active">Current</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add more sections for other menu items -->
+            <!-- Loan History, Payments, Disbursements, Accounting, Financial Reports, User Management, System Settings, API Integration, Security -->
+
+            <!-- Placeholder sections for other menu items -->
+            <div id="loan-history-section" class="content-section">
+                <div class="content">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Loan History</h2>
+                            <div class="breadcrumb">
+                                <a href="#">Home</a> / <span>Loan History</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <p>Loan history records and analytics will be displayed here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="payments-section" class="content-section">
+                <div class="content">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Payments</h2>
+                            <div class="breadcrumb">
+                                <a href="#">Home</a> / <span>Payments</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <p>Payment processing and tracking will be displayed here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="disbursements-section" class="content-section">
+                <div class="content">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Disbursements</h2>
+                            <div class="breadcrumb">
+                                <a href="#">Home</a> / <span>Disbursements</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <p>Loan disbursement management will be displayed here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="accounting-section" class="content-section">
+                <div class="content">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Accounting</h2>
+                            <div class="breadcrumb">
+                                <a href="#">Home</a> / <span>Accounting</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <p>Accounting and financial records will be displayed here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="financial-reports-section" class="content-section">
+                <div class="content">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Financial Reports</h2>
+                            <div class="breadcrumb">
+                                <a href="#">Home</a> / <span>Financial Reports</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <p>Financial reports and analytics will be displayed here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="user-management-section" class="content-section">
+                <div class="content">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>User Management</h2>
+                            <div class="breadcrumb">
+                                <a href="#">Home</a> / <span>User Management</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <p>User account management will be displayed here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="system-settings-section" class="content-section">
+                <div class="content">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>System Settings</h2>
+                            <div class="breadcrumb">
+                                <a href="#">Home</a> / <span>System Settings</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <p>System configuration and settings will be displayed here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="api-integration-section" class="content-section">
+                <div class="content">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>API Integration</h2>
+                            <div class="breadcrumb">
+                                <a href="#">Home</a> / <span>API Integration</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <p>API integration management will be displayed here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="security-section" class="content-section">
+                <div class="content">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h2>Security</h2>
+                            <div class="breadcrumb">
+                                <a href="#">Home</a> / <span>Security</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <p>Security settings and audit logs will be displayed here.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Add Client Modal -->
+    <div id="add-client-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Client</h3>
+                <button class="close-modal" onclick="closeModal('add-client-modal')">&times;</button>
+            </div>
+            <form id="add-client-form">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Business</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Add Client</button>
+                    <button type="button" class="btn btn-outline" onclick="closeModal('add-client-modal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div id="add-product-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Loan Product</h3>
+                <button class="close-modal" onclick="closeModal('add-product-modal')">&times;</button>
+            </div>
+            <form id="add-product-form">
+                <div class="form-group">
+                    <label class="form-label">Product Name</label>
+                    <input type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" rows="3"></textarea>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Min Amount</label>
+                            <input type="number" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-label">Max Amount</label>
+                            <input type="number" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Add Product</button>
+                    <button type="button" class="btn btn-outline" onclick="closeModal('add-product-modal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container"></div>
 
     <script>
         // CMS Configuration
@@ -812,7 +1541,7 @@
         // Load CMS Configuration
         async function loadCMSConfig() {
             try {
-                const response = await fetch('cms-config.json');
+                const response = await fetch('cms/cms-config.json');
                 cmsConfig = await response.json();
                 console.log('CMS Configuration loaded in admin:', cmsConfig);
             } catch (error) {
@@ -839,6 +1568,266 @@
                 minimumFractionDigits: cmsConfig.currency.decimalDigits,
                 maximumFractionDigits: cmsConfig.currency.decimalDigits,
             }).format(amount);
+        }
+
+        // Navigation System
+        const navigationManager = {
+            currentSection: 'dashboard',
+            
+            init() {
+                this.setupMenuListeners();
+                this.loadInitialData();
+                this.setupEventListeners();
+            },
+            
+            setupMenuListeners() {
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    if (item.getAttribute('data-section')) {
+                        item.addEventListener('click', () => {
+                            const section = item.getAttribute('data-section');
+                            this.showSection(section);
+                            this.setActiveMenuItem(item);
+                        });
+                    }
+                });
+            },
+            
+            showSection(sectionId) {
+                // Hide all sections
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show target section
+                const targetSection = document.getElementById(sectionId + '-section');
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                    this.currentSection = sectionId;
+                    
+                    // Update breadcrumb
+                    this.updateBreadcrumb(sectionId);
+                    
+                    // Load section-specific data
+                    this.loadSectionData(sectionId);
+                }
+            },
+            
+            setActiveMenuItem(activeItem) {
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                activeItem.classList.add('active');
+            },
+            
+            updateBreadcrumb(sectionId) {
+                const sectionNames = {
+                    'dashboard': 'Dashboard',
+                    'analytics': 'Analytics',
+                    'client-management': 'Client Management',
+                    'loan-products': 'Loan Products',
+                    'loan-applications': 'Loan Applications',
+                    'active-loans': 'Active Loans',
+                    'loan-history': 'Loan History',
+                    'payments': 'Payments',
+                    'disbursements': 'Disbursements',
+                    'accounting': 'Accounting',
+                    'financial-reports': 'Financial Reports',
+                    'user-management': 'User Management',
+                    'system-settings': 'System Settings',
+                    'api-integration': 'API Integration',
+                    'security': 'Security'
+                };
+                
+                const breadcrumb = document.querySelector('.breadcrumb');
+                if (breadcrumb) {
+                    breadcrumb.innerHTML = `<a href="#">Home</a> / <span>${sectionNames[sectionId] || sectionId}</span>`;
+                }
+            },
+            
+            loadSectionData(sectionId) {
+                switch(sectionId) {
+                    case 'dashboard':
+                        app.loadDashboardData();
+                        break;
+                    case 'loan-products':
+                        this.loadLoanProductsData();
+                        break;
+                    case 'analytics':
+                        this.loadAnalyticsData();
+                        break;
+                    // Add more cases for other sections
+                }
+            },
+            
+            loadAnalyticsData() {
+                // Initialize analytics charts
+                if (typeof analyticsChart === 'undefined') {
+                    const ctx = document.getElementById('analyticsChart').getContext('2d');
+                    window.analyticsChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                            datasets: [{
+                                label: 'Portfolio Growth',
+                                data: [2200000, 2350000, 2450000, 2600000, 2720000, 2845000, 2950000, 3100000, 3250000, 3400000],
+                                borderColor: '#3498db',
+                                backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                                tension: 0.4,
+                                fill: true
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: false,
+                                    ticks: {
+                                        callback: function(value) {
+                                            return formatCurrency(value);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+                
+                if (typeof riskChart === 'undefined') {
+                    const ctx2 = document.getElementById('riskChart').getContext('2d');
+                    window.riskChart = new Chart(ctx2, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Low Risk', 'Medium Risk', 'High Risk'],
+                            datasets: [{
+                                label: 'Loan Distribution',
+                                data: [65, 25, 10],
+                                backgroundColor: [
+                                    '#27ae60',
+                                    '#f39c12',
+                                    '#e74c3c'
+                                ]
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false
+                        }
+                    });
+                }
+            },
+            
+            loadLoanProductsData() {
+                if (cmsConfig.loanProducts && cmsConfig.loanProducts.length > 0) {
+                    const productsHtml = cmsConfig.loanProducts.map(product => `
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h5>${product.product_name}</h5>
+                                        <p class="text-muted">${product.description}</p>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <small><strong>Amount Range:</strong><br>${formatCurrency(product.min_amount)} - ${formatCurrency(product.max_amount)}</small>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <small><strong>Interest Rate:</strong><br>${(product.min_interest_rate * 100).toFixed(1)}% - ${(product.max_interest_rate * 100).toFixed(1)}%</small>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <small><strong>Term:</strong><br>${product.min_term_days} - ${product.max_term_days} days</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 text-end">
+                                        <div class="form-check form-switch mb-2">
+                                            <input class="form-check-input" type="checkbox" ${product.active ? 'checked' : ''}>
+                                            <label class="form-check-label">Active</label>
+                                        </div>
+                                        <button class="btn btn-sm btn-outline-primary" onclick="editProduct(${product.id})">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    document.getElementById('loan-products-table').innerHTML = productsHtml;
+                } else {
+                    document.getElementById('loan-products-table').innerHTML = `
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> No loan products configured. 
+                            <a href="cms/cms-admin.html" target="_blank" class="alert-link">Configure loan products in CMS</a>
+                        </div>
+                    `;
+                }
+            },
+            
+            loadInitialData() {
+                // Preload data for better user experience
+                this.loadLoanProductsData();
+            },
+            
+            setupEventListeners() {
+                // Toggle sidebar on mobile
+                document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+                    document.querySelector('.sidebar').classList.toggle('active');
+                });
+                
+                // Modal form submissions
+                document.getElementById('add-client-form').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    showToast('Client added successfully!', 'success');
+                    closeModal('add-client-modal');
+                });
+                
+                document.getElementById('add-product-form').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    showToast('Loan product added successfully!', 'success');
+                    closeModal('add-product-modal');
+                });
+            }
+        };
+
+        // Modal Functions
+        function showAddClientModal() {
+            document.getElementById('add-client-modal').style.display = 'flex';
+        }
+        
+        function showAddProductModal() {
+            document.getElementById('add-product-modal').style.display = 'flex';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Toast Notification System
+        function showToast(message, type = 'info') {
+            const toastContainer = document.querySelector('.toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <i class="fas fa-${getToastIcon(type)}"></i>
+                <span>${message}</span>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Remove toast after 5 seconds
+            setTimeout(() => {
+                toast.remove();
+            }, 5000);
+        }
+        
+        function getToastIcon(type) {
+            const icons = {
+                'success': 'check-circle',
+                'error': 'exclamation-circle',
+                'warning': 'exclamation-triangle',
+                'info': 'info-circle'
+            };
+            return icons[type] || 'info-circle';
         }
 
         // API Configuration
@@ -1155,17 +2144,19 @@
                 // Load CMS config first
                 await loadCMSConfig();
                 
+                // Initialize navigation
+                navigationManager.init();
+                
                 // Initialize charts
                 chartManager.init();
                 
-                // Load initial data
+                // Load initial dashboard data
                 await this.loadDashboardData();
-                
-                // Set up event listeners
-                this.setupEventListeners();
                 
                 // Set up auto-refresh
                 this.setupAutoRefresh();
+                
+                console.log('Admin dashboard fully initialized with navigation');
             },
 
             async loadDashboardData() {
@@ -1223,55 +2214,12 @@
                 this.updateDashboard(demoStats, demoPerformance, demoActivities);
             },
 
-            setupEventListeners() {
-                // Time range selector
-                document.getElementById('timeRange').addEventListener('change', (e) => {
-                    this.loadPerformanceData(parseInt(e.target.value));
-                });
-                
-                // Refresh activities button
-                document.getElementById('refreshActivities').addEventListener('click', () => {
-                    this.loadActivities();
-                });
-
-                // Toggle sidebar on mobile
-                document.querySelector('.toggle-sidebar').addEventListener('click', function() {
-                    document.querySelector('.sidebar').classList.toggle('active');
-                });
-
-                // Menu item activation
-                document.querySelectorAll('.menu-item').forEach(item => {
-                    item.addEventListener('click', function() {
-                        document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-                        this.classList.add('active');
-                    });
-                });
-            },
-
-            async loadPerformanceData(days) {
-                try {
-                    const performance = await apiService.getPerformanceData(days);
-                    if (performance && performance.labels && performance.data) {
-                        chartManager.updatePerformanceChart(performance.labels, performance.data);
-                    }
-                } catch (error) {
-                    console.error('Failed to load performance data:', error);
-                }
-            },
-
-            async loadActivities() {
-                try {
-                    const activities = await apiService.getRecentActivities();
-                    uiManager.updateActivities(activities);
-                } catch (error) {
-                    console.error('Failed to load activities:', error);
-                }
-            },
-
             setupAutoRefresh() {
                 // Refresh data every 5 minutes
                 setInterval(() => {
-                    this.loadDashboardData();
+                    if (navigationManager.currentSection === 'dashboard') {
+                        this.loadDashboardData();
+                    }
                 }, 5 * 60 * 1000);
             }
         };
@@ -1283,6 +2231,7 @@
 
         // Export for debugging
         window.MoneiDashboard = app;
+        window.navigationManager = navigationManager;
     </script>
 </body>
 </html>
