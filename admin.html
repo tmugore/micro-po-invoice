@@ -33,13 +33,11 @@
             overflow-x: hidden;
         }
 
-        /* Layout */
         .app-container {
             display: flex;
             min-height: 100vh;
         }
 
-        /* Sidebar */
         .sidebar {
             width: var(--sidebar-width);
             background: linear-gradient(180deg, var(--primary), #1a2530);
@@ -129,14 +127,12 @@
             font-size: 12px;
         }
 
-        /* Main Content */
         .main-content {
             flex: 1;
             margin-left: var(--sidebar-width);
             transition: all 0.3s;
         }
 
-        /* Header */
         .header {
             height: var(--header-height);
             background: white;
@@ -229,7 +225,6 @@
             font-weight: bold;
         }
 
-        /* Content Area */
         .content {
             padding: 30px;
         }
@@ -290,13 +285,27 @@
             color: white;
         }
 
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
         .btn-outline {
             background: transparent;
             border: 1px solid var(--secondary);
             color: var(--secondary);
         }
 
-        /* Dashboard Grid */
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -368,7 +377,6 @@
             color: var(--danger);
         }
 
-        /* Charts */
         .chart-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -405,7 +413,6 @@
             position: relative;
         }
 
-        /* Recent Activity */
         .activity-list {
             background: white;
             border-radius: 10px;
@@ -460,7 +467,6 @@
             pointer-events: none;
         }
 
-        /* Status Indicators */
         .status-badge {
             display: inline-block;
             padding: 5px 10px;
@@ -484,7 +490,11 @@
             color: var(--secondary);
         }
 
-        /* Content Sections */
+        .status-inactive {
+            background: rgba(149, 165, 166, 0.2);
+            color: #95a5a6;
+        }
+
         .content-section {
             display: none;
         }
@@ -493,7 +503,6 @@
             display: block;
         }
 
-        /* Table Styles */
         .data-table {
             width: 100%;
             border-collapse: collapse;
@@ -520,7 +529,6 @@
             background-color: #f8f9fa;
         }
 
-        /* Form Styles */
         .form-group {
             margin-bottom: 20px;
         }
@@ -546,7 +554,12 @@
             border-color: var(--secondary);
         }
 
-        /* Modal Styles */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -554,7 +567,7 @@
             right: 0;
             bottom: 0;
             background: rgba(0,0,0,0.5);
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             z-index: 10000;
@@ -590,70 +603,87 @@
             color: #999;
         }
 
-        /* Responsive */
-        @media (max-width: 992px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.active {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-
-            .toggle-sidebar {
-                display: block;
-            }
-
-            .search-box input {
-                width: 200px;
-            }
-
-            .chart-grid {
-                grid-template-columns: 1fr;
-            }
+        .tab-container {
+            margin-bottom: 20px;
         }
 
-        @media (max-width: 768px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .search-box {
-                display: none;
-            }
-
-            .header {
-                padding: 0 15px;
-            }
-
-            .page-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-
-            .page-actions {
-                width: 100%;
-                justify-content: flex-end;
-            }
-        }
-        
-        .cms-link {
-            background: linear-gradient(45deg, #FF6B6B, #4ECDC4) !important;
-            color: white !important;
-            border: none !important;
-        }
-        
-        .cms-link:hover {
-            background: linear-gradient(45deg, #FF5252, #26A69A) !important;
-            transform: translateY(-2px);
+        .tab-nav {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
         }
 
-        /* Toast Styles */
+        .tab-nav-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-nav-item.active {
+            border-bottom-color: var(--secondary);
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .alert-info {
+            background: rgba(52, 152, 219, 0.1);
+            border: 1px solid rgba(52, 152, 219, 0.2);
+            color: var(--secondary);
+        }
+
+        .alert-success {
+            background: rgba(39, 174, 96, 0.1);
+            border: 1px solid rgba(39, 174, 96, 0.2);
+            color: var(--success);
+        }
+
+        .alert-warning {
+            background: rgba(243, 156, 18, 0.1);
+            border: 1px solid rgba(243, 156, 18, 0.2);
+            color: var(--warning);
+        }
+
         .toast-container {
             position: fixed;
             top: 20px;
@@ -698,6 +728,100 @@
 
         .toast.info {
             border-left: 4px solid var(--secondary);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .badge-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .badge-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .badge-info {
+            background: var(--secondary);
+            color: white;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .toggle-sidebar {
+                display: block;
+            }
+
+            .search-box input {
+                width: 200px;
+            }
+
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box {
+                display: none;
+            }
+
+            .header {
+                padding: 0 15px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .page-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+        
+        .cms-link {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4) !important;
+            color: white !important;
+            border: none !important;
+        }
+        
+        .cms-link:hover {
+            background: linear-gradient(45deg, #FF5252, #26A69A) !important;
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -874,9 +998,9 @@
                                     <i class="fas fa-wallet"></i>
                                 </div>
                             </div>
-                            <div class="stat-value">Loading...</div>
+                            <div class="stat-value">P 2,845,000</div>
                             <div class="stat-change positive">
-                                <i class="fas fa-arrow-up"></i> <span class="change-text">Updating...</span>
+                                <i class="fas fa-arrow-up"></i> <span class="change-text">12.5% from last month</span>
                             </div>
                         </div>
 
@@ -887,9 +1011,9 @@
                                     <i class="fas fa-users"></i>
                                 </div>
                             </div>
-                            <div class="stat-value">Loading...</div>
+                            <div class="stat-value">1,247</div>
                             <div class="stat-change positive">
-                                <i class="fas fa-arrow-up"></i> <span class="change-text">Updating...</span>
+                                <i class="fas fa-arrow-up"></i> <span class="change-text">8.3% from last month</span>
                             </div>
                         </div>
 
@@ -900,9 +1024,9 @@
                                     <i class="fas fa-clipboard-list"></i>
                                 </div>
                             </div>
-                            <div class="stat-value">Loading...</div>
+                            <div class="stat-value">87</div>
                             <div class="stat-change negative">
-                                <i class="fas fa-arrow-down"></i> <span class="change-text">Updating...</span>
+                                <i class="fas fa-arrow-down"></i> <span class="change-text">5.2% from last month</span>
                             </div>
                         </div>
 
@@ -913,9 +1037,9 @@
                                     <i class="fas fa-exclamation-triangle"></i>
                                 </div>
                             </div>
-                            <div class="stat-value">Loading...</div>
+                            <div class="stat-value">23</div>
                             <div class="stat-change positive">
-                                <i class="fas fa-arrow-down"></i> <span class="change-text">Updating...</span>
+                                <i class="fas fa-arrow-down"></i> <span class="change-text">15.2% from last month</span>
                             </div>
                         </div>
                     </div>
@@ -956,9 +1080,34 @@
                         </div>
                         <div class="activity-list" id="activityList">
                             <div class="activity-item">
-                                <div class="activity-content">
-                                    <div class="activity-title">Loading activities...</div>
+                                <div class="activity-icon">
+                                    <i class="fas fa-user-plus"></i>
                                 </div>
+                                <div class="activity-content">
+                                    <div class="activity-title">New Client Registered</div>
+                                    <div class="activity-desc">John Smith registered for a new loan account</div>
+                                </div>
+                                <div class="activity-time">2 hours ago</div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Loan Disbursed</div>
+                                    <div class="activity-desc">Loan #LN-00432 for P 50,000 was disbursed to Sarah Johnson</div>
+                                </div>
+                                <div class="activity-time">5 hours ago</div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-title">Payment Received</div>
+                                    <div class="activity-desc">Michael Brown made a payment of P 1,250 for loan #LN-00321</div>
+                                </div>
+                                <div class="activity-time">1 day ago</div>
                             </div>
                         </div>
                     </div>
@@ -1006,7 +1155,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h5>Key Performance Indicators</h5>
+                            <h5 class="card-title">Key Performance Indicators</h5>
                         </div>
                         <div class="card-body">
                             <div class="dashboard-grid">
@@ -1049,6 +1198,57 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Geographic Distribution</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Region</th>
+                                            <th>Active Clients</th>
+                                            <th>Loan Portfolio</th>
+                                            <th>Growth Rate</th>
+                                            <th>Risk Level</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Gaborone</td>
+                                            <td>547</td>
+                                            <td>P 1,245,000</td>
+                                            <td>+12.3%</td>
+                                            <td><span class="badge badge-success">Low</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Francistown</td>
+                                            <td>234</td>
+                                            <td>P 587,500</td>
+                                            <td>+8.7%</td>
+                                            <td><span class="badge badge-warning">Medium</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Maun</td>
+                                            <td>189</td>
+                                            <td>P 452,300</td>
+                                            <td>+15.2%</td>
+                                            <td><span class="badge badge-success">Low</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Selibe-Phikwe</td>
+                                            <td>156</td>
+                                            <td>P 321,800</td>
+                                            <td>+5.4%</td>
+                                            <td><span class="badge badge-danger">High</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1066,12 +1266,19 @@
                             <button class="btn btn-primary" onclick="showAddClientModal()">
                                 <i class="fas fa-user-plus"></i> Add Client
                             </button>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-download"></i> Export Clients
+                            </button>
                         </div>
                     </div>
 
                     <div class="card">
                         <div class="card-header">
-                            <h5>All Clients</h5>
+                            <h5 class="card-title">All Clients</h5>
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Search clients...">
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -1082,8 +1289,10 @@
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Phone</th>
+                                            <th>Business</th>
                                             <th>Status</th>
                                             <th>Loans</th>
+                                            <th>Joined</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -1093,8 +1302,10 @@
                                             <td>John Smith</td>
                                             <td>john@example.com</td>
                                             <td>+267 123 4567</td>
+                                            <td>Smith Enterprises</td>
                                             <td><span class="status-badge status-active">Active</span></td>
                                             <td>3</td>
+                                            <td>2023-05-15</td>
                                             <td>
                                                 <button class="btn btn-sm btn-outline-primary">View</button>
                                                 <button class="btn btn-sm btn-outline-warning">Edit</button>
@@ -1105,8 +1316,10 @@
                                             <td>Maria Garcia</td>
                                             <td>maria@example.com</td>
                                             <td>+267 765 4321</td>
+                                            <td>Garcia Boutique</td>
                                             <td><span class="status-badge status-active">Active</span></td>
                                             <td>1</td>
+                                            <td>2023-08-22</td>
                                             <td>
                                                 <button class="btn btn-sm btn-outline-primary">View</button>
                                                 <button class="btn btn-sm btn-outline-warning">Edit</button>
@@ -1117,8 +1330,24 @@
                                             <td>David Johnson</td>
                                             <td>david@example.com</td>
                                             <td>+267 555 1234</td>
+                                            <td>Johnson Trading</td>
                                             <td><span class="status-badge status-pending">Pending</span></td>
                                             <td>0</td>
+                                            <td>2023-10-05</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-warning">Edit</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>CL004</td>
+                                            <td>Sarah Williams</td>
+                                            <td>sarah@example.com</td>
+                                            <td>+267 444 5678</td>
+                                            <td>Williams Manufacturing</td>
+                                            <td><span class="status-badge status-active">Active</span></td>
+                                            <td>2</td>
+                                            <td>2023-03-18</td>
                                             <td>
                                                 <button class="btn btn-sm btn-outline-primary">View</button>
                                                 <button class="btn btn-sm btn-outline-warning">Edit</button>
@@ -1126,6 +1355,64 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Client Statistics</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="dashboard-grid">
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Total Clients</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">1,247</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 8.3%
+                                    </div>
+                                </div>
+                                <div class="stat-card success">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Active Clients</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-user-check"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">1,089</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 6.7%
+                                    </div>
+                                </div>
+                                <div class="stat-card warning">
+                                    <div class="stat-header">
+                                        <div class="stat-title">New This Month</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-user-plus"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">42</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 12.5%
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Avg. Client Value</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-chart-line"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">P 45,200</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 5.2%
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1146,13 +1433,27 @@
                             <button class="btn btn-primary" onclick="showAddProductModal()">
                                 <i class="fas fa-plus"></i> Add Product
                             </button>
+                            <a href="cms/cms-admin.html" target="_blank" class="btn btn-outline">
+                                <i class="fas fa-cogs"></i> Configure in CMS
+                            </a>
                         </div>
                     </div>
 
                     <div class="card">
                         <div class="card-body">
                             <div id="loan-products-table">
-                                <!-- Will be populated by JavaScript -->
+                                <!-- Products loaded from CMS will appear here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Product Performance</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="productsChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -1179,49 +1480,146 @@
                         </div>
                     </div>
 
+                    <div class="tab-container">
+                        <div class="tab-nav">
+                            <div class="tab-nav-item active" data-tab="all-applications">All Applications</div>
+                            <div class="tab-nav-item" data-tab="pending">Pending Review</div>
+                            <div class="tab-nav-item" data-tab="approved">Approved</div>
+                            <div class="tab-nav-item" data-tab="rejected">Rejected</div>
+                        </div>
+
+                        <div class="tab-content active" id="all-applications">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="data-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Application ID</th>
+                                                    <th>Client</th>
+                                                    <th>Product</th>
+                                                    <th>Amount</th>
+                                                    <th>Status</th>
+                                                    <th>Submitted</th>
+                                                    <th>Reviewer</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>APP001</td>
+                                                    <td>John Smith</td>
+                                                    <td>Micro Loan</td>
+                                                    <td>P 50,000</td>
+                                                    <td><span class="status-badge status-pending">Under Review</span></td>
+                                                    <td>2023-10-15</td>
+                                                    <td>-</td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-outline-primary">Review</button>
+                                                        <button class="btn btn-sm btn-outline-warning">Edit</button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>APP002</td>
+                                                    <td>Maria Garcia</td>
+                                                    <td>Purchase Order</td>
+                                                    <td>P 120,000</td>
+                                                    <td><span class="status-badge status-active">Approved</span></td>
+                                                    <td>2023-10-12</td>
+                                                    <td>Admin User</td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-outline-success">Disburse</button>
+                                                        <button class="btn btn-sm btn-outline-primary">View</button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>APP003</td>
+                                                    <td>David Johnson</td>
+                                                    <td>Invoice Discount</td>
+                                                    <td>P 75,000</td>
+                                                    <td><span class="status-badge status-pending">Documents Required</span></td>
+                                                    <td>2023-10-10</td>
+                                                    <td>-</td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-outline-primary">Review</button>
+                                                        <button class="btn btn-sm btn-outline-warning">Edit</button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>APP004</td>
+                                                    <td>Sarah Williams</td>
+                                                    <td>Micro Loan</td>
+                                                    <td>P 35,000</td>
+                                                    <td><span class="status-badge status-completed">Rejected</span></td>
+                                                    <td>2023-10-08</td>
+                                                    <td>Admin User</td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-outline-primary">View</button>
+                                                        <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="card">
                         <div class="card-header">
-                            <h5>All Applications</h5>
+                            <h5 class="card-title">Application Statistics</h5>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="data-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Application ID</th>
-                                            <th>Client</th>
-                                            <th>Product</th>
-                                            <th>Amount</th>
-                                            <th>Status</th>
-                                            <th>Submitted</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>APP001</td>
-                                            <td>John Smith</td>
-                                            <td>Micro Loan</td>
-                                            <td>P 50,000</td>
-                                            <td><span class="status-badge status-pending">Under Review</span></td>
-                                            <td>2023-10-15</td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-primary">Review</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>APP002</td>
-                                            <td>Maria Garcia</td>
-                                            <td>Purchase Order</td>
-                                            <td>P 120,000</td>
-                                            <td><span class="status-badge status-active">Approved</span></td>
-                                            <td>2023-10-12</td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-success">Disburse</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="dashboard-grid">
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Total Applications</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-file-alt"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">156</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 12.3%
+                                    </div>
+                                </div>
+                                <div class="stat-card warning">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Pending Review</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">23</div>
+                                    <div class="stat-change negative">
+                                        <i class="fas fa-arrow-down"></i> 5.2%
+                                    </div>
+                                </div>
+                                <div class="stat-card success">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Approval Rate</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">68%</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 3.1%
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Avg. Processing Time</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-stopwatch"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">2.3 days</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-down"></i> 0.4 days
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1242,12 +1640,15 @@
                             <button class="btn btn-outline">
                                 <i class="fas fa-filter"></i> Filter
                             </button>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-download"></i> Export Report
+                            </button>
                         </div>
                     </div>
 
                     <div class="card">
                         <div class="card-header">
-                            <h5>Current Loan Portfolio</h5>
+                            <h5 class="card-title">Current Loan Portfolio</h5>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -1262,6 +1663,7 @@
                                             <th>Due Date</th>
                                             <th>Balance</th>
                                             <th>Status</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1274,6 +1676,10 @@
                                             <td>2024-03-01</td>
                                             <td>P 42,500</td>
                                             <td><span class="status-badge status-active">Current</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-warning">Statement</button>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>LN002</td>
@@ -1284,19 +1690,106 @@
                                             <td>2024-02-15</td>
                                             <td>P 89,000</td>
                                             <td><span class="status-badge status-active">Current</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-warning">Statement</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>LN003</td>
+                                            <td>David Johnson</td>
+                                            <td>Invoice Discount</td>
+                                            <td>P 95,000</td>
+                                            <td>2023-10-01</td>
+                                            <td>2024-01-01</td>
+                                            <td>P 95,000</td>
+                                            <td><span class="status-badge status-active">Current</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-warning">Statement</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>LN004</td>
+                                            <td>Sarah Williams</td>
+                                            <td>Micro Loan</td>
+                                            <td>P 45,000</td>
+                                            <td>2023-07-20</td>
+                                            <td>2023-12-20</td>
+                                            <td>P 12,500</td>
+                                            <td><span class="status-badge status-warning">Due Soon</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-warning">Statement</button>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Portfolio Overview</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="dashboard-grid">
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Total Active Loans</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-hand-holding-usd"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">284</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 8.7%
+                                    </div>
+                                </div>
+                                <div class="stat-card success">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Portfolio Value</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-wallet"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">P 2.84M</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 12.5%
+                                    </div>
+                                </div>
+                                <div class="stat-card warning">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Delinquent Loans</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">12</div>
+                                    <div class="stat-change negative">
+                                        <i class="fas fa-arrow-down"></i> 15.2%
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Avg. Loan Size</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-chart-bar"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">P 45,200</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 5.2%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Add more sections for other menu items -->
-            <!-- Loan History, Payments, Disbursements, Accounting, Financial Reports, User Management, System Settings, API Integration, Security -->
-
-            <!-- Placeholder sections for other menu items -->
+            <!-- Loan History Section -->
             <div id="loan-history-section" class="content-section">
                 <div class="content">
                     <div class="page-header">
@@ -1306,51 +1799,433 @@
                                 <a href="#">Home</a> / <span>Loan History</span>
                             </div>
                         </div>
+                        <div class="page-actions">
+                            <button class="btn btn-outline">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-download"></i> Export History
+                            </button>
+                        </div>
                     </div>
+
                     <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Completed Loans</h5>
+                        </div>
                         <div class="card-body">
-                            <p>Loan history records and analytics will be displayed here.</p>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Loan ID</th>
+                                            <th>Client</th>
+                                            <th>Product</th>
+                                            <th>Amount</th>
+                                            <th>Disbursed</th>
+                                            <th>Completed</th>
+                                            <th>Status</th>
+                                            <th>Total Interest</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>LN201</td>
+                                            <td>Michael Brown</td>
+                                            <td>Micro Loan</td>
+                                            <td>P 60,000</td>
+                                            <td>2023-01-15</td>
+                                            <td>2023-07-15</td>
+                                            <td><span class="status-badge status-completed">Paid Off</span></td>
+                                            <td>P 7,200</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View Details</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>LN202</td>
+                                            <td>Lisa Anderson</td>
+                                            <td>Purchase Order</td>
+                                            <td>P 120,000</td>
+                                            <td>2023-02-01</td>
+                                            <td>2023-08-01</td>
+                                            <td><span class="status-badge status-completed">Paid Off</span></td>
+                                            <td>P 18,000</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View Details</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>LN203</td>
+                                            <td>Robert Wilson</td>
+                                            <td>Invoice Discount</td>
+                                            <td>P 85,000</td>
+                                            <td>2023-03-10</td>
+                                            <td>2023-06-10</td>
+                                            <td><span class="status-badge status-completed">Paid Off</span></td>
+                                            <td>P 12,750</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View Details</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>LN204</td>
+                                            <td>Jennifer Lee</td>
+                                            <td>Micro Loan</td>
+                                            <td>P 40,000</td>
+                                            <td>2023-04-05</td>
+                                            <td>2023-10-05</td>
+                                            <td><span class="status-badge status-completed">Paid Off</span></td>
+                                            <td>P 4,800</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View Details</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Historical Performance</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="historyChart"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Payments Section -->
             <div id="payments-section" class="content-section">
                 <div class="content">
                     <div class="page-header">
                         <div class="page-title">
-                            <h2>Payments</h2>
+                            <h2>Payments Management</h2>
                             <div class="breadcrumb">
                                 <a href="#">Home</a> / <span>Payments</span>
                             </div>
                         </div>
+                        <div class="page-actions">
+                            <button class="btn btn-outline">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
                     </div>
+
                     <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Recent Payments</h5>
+                        </div>
                         <div class="card-body">
-                            <p>Payment processing and tracking will be displayed here.</p>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Payment ID</th>
+                                            <th>Loan ID</th>
+                                            <th>Client</th>
+                                            <th>Amount</th>
+                                            <th>Due Date</th>
+                                            <th>Paid Date</th>
+                                            <th>Status</th>
+                                            <th>Method</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>PMT001</td>
+                                            <td>LN001</td>
+                                            <td>John Smith</td>
+                                            <td>P 5,250</td>
+                                            <td>2023-10-15</td>
+                                            <td>2023-10-14</td>
+                                            <td><span class="status-badge status-active">Paid</span></td>
+                                            <td>Bank Transfer</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-success">Receipt</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>PMT002</td>
+                                            <td>LN002</td>
+                                            <td>Maria Garcia</td>
+                                            <td>P 8,750</td>
+                                            <td>2023-10-20</td>
+                                            <td>2023-10-18</td>
+                                            <td><span class="status-badge status-active">Paid</span></td>
+                                            <td>Mobile Money</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-success">Receipt</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>PMT003</td>
+                                            <td>LN003</td>
+                                            <td>David Johnson</td>
+                                            <td>P 6,500</td>
+                                            <td>2023-10-25</td>
+                                            <td>-</td>
+                                            <td><span class="status-badge status-pending">Pending</span></td>
+                                            <td>-</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-warning">Remind</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>PMT004</td>
+                                            <td>LN004</td>
+                                            <td>Sarah Williams</td>
+                                            <td>P 3,250</td>
+                                            <td>2023-10-10</td>
+                                            <td>-</td>
+                                            <td><span class="status-badge status-warning">Overdue</span></td>
+                                            <td>-</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-danger">Escalate</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Payment Statistics</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="dashboard-grid">
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Total Collected</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-money-bill-wave"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">P 245,800</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 15.3%
+                                    </div>
+                                </div>
+                                <div class="stat-card success">
+                                    <div class="stat-header">
+                                        <div class="stat-title">On-time Payments</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">89%</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 4.2%
+                                    </div>
+                                </div>
+                                <div class="stat-card warning">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Pending Payments</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">18</div>
+                                    <div class="stat-change negative">
+                                        <i class="fas fa-arrow-up"></i> 2.1%
+                                    </div>
+                                </div>
+                                <div class="stat-card danger">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Overdue Payments</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">7</div>
+                                    <div class="stat-change negative">
+                                        <i class="fas fa-arrow-down"></i> 12.5%
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Disbursements Section -->
             <div id="disbursements-section" class="content-section">
                 <div class="content">
                     <div class="page-header">
                         <div class="page-title">
-                            <h2>Disbursements</h2>
+                            <h2>Loan Disbursements</h2>
                             <div class="breadcrumb">
                                 <a href="#">Home</a> / <span>Disbursements</span>
                             </div>
                         </div>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" onclick="showDisbursementModal()">
+                                <i class="fas fa-plus"></i> New Disbursement
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-download"></i> Export
+                            </button>
+                        </div>
                     </div>
+
                     <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Recent Disbursements</h5>
+                        </div>
                         <div class="card-body">
-                            <p>Loan disbursement management will be displayed here.</p>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Disbursement ID</th>
+                                            <th>Loan ID</th>
+                                            <th>Client</th>
+                                            <th>Amount</th>
+                                            <th>Date</th>
+                                            <th>Method</th>
+                                            <th>Status</th>
+                                            <th>Approved By</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>DIS001</td>
+                                            <td>LN005</td>
+                                            <td>James Miller</td>
+                                            <td>P 80,000</td>
+                                            <td>2023-10-16</td>
+                                            <td>Bank Transfer</td>
+                                            <td><span class="status-badge status-active">Completed</span></td>
+                                            <td>Admin User</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-success">Receipt</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>DIS002</td>
+                                            <td>LN006</td>
+                                            <td>Emma Davis</td>
+                                            <td>P 65,000</td>
+                                            <td>2023-10-14</td>
+                                            <td>Mobile Money</td>
+                                            <td><span class="status-badge status-active">Completed</span></td>
+                                            <td>Admin User</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-success">Receipt</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>DIS003</td>
+                                            <td>LN007</td>
+                                            <td>Thomas Wilson</td>
+                                            <td>P 120,000</td>
+                                            <td>2023-10-12</td>
+                                            <td>Bank Transfer</td>
+                                            <td><span class="status-badge status-active">Completed</span></td>
+                                            <td>Admin User</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-success">Receipt</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>DIS004</td>
+                                            <td>LN008</td>
+                                            <td>Olivia Brown</td>
+                                            <td>P 45,000</td>
+                                            <td>2023-10-10</td>
+                                            <td>Cash</td>
+                                            <td><span class="status-badge status-active">Completed</span></td>
+                                            <td>Admin User</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-success">Receipt</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Disbursement Statistics</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="dashboard-grid">
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">This Month</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-calendar"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">P 310,000</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 18.7%
+                                    </div>
+                                </div>
+                                <div class="stat-card success">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Total YTD</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-chart-line"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">P 2.45M</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 22.3%
+                                    </div>
+                                </div>
+                                <div class="stat-card warning">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Avg. Disbursement</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-calculator"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">P 67,500</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 8.2%
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Pending Approval</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-hourglass-half"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">3</div>
+                                    <div class="stat-change negative">
+                                        <i class="fas fa-arrow-down"></i> 25%
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Accounting Section -->
             <div id="accounting-section" class="content-section">
                 <div class="content">
                     <div class="page-header">
@@ -1360,15 +2235,138 @@
                                 <a href="#">Home</a> / <span>Accounting</span>
                             </div>
                         </div>
+                        <div class="page-actions">
+                            <button class="btn btn-outline">
+                                <i class="fas fa-download"></i> Export Report
+                            </button>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-sync"></i> Refresh
+                            </button>
+                        </div>
                     </div>
+
                     <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Financial Summary</h5>
+                        </div>
                         <div class="card-body">
-                            <p>Accounting and financial records will be displayed here.</p>
+                            <div class="dashboard-grid">
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Total Assets</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-landmark"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">P 3.2M</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 12.8%
+                                    </div>
+                                </div>
+                                <div class="stat-card success">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Net Income</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-money-bill-wave"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">P 245,800</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 18.3%
+                                    </div>
+                                </div>
+                                <div class="stat-card warning">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Operating Expenses</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-receipt"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">P 87,500</div>
+                                    <div class="stat-change negative">
+                                        <i class="fas fa-arrow-up"></i> 5.2%
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Cash Balance</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-piggy-bank"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">P 452,300</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 8.7%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Recent Transactions</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Transaction ID</th>
+                                            <th>Date</th>
+                                            <th>Description</th>
+                                            <th>Type</th>
+                                            <th>Amount</th>
+                                            <th>Balance</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>TXN001</td>
+                                            <td>2023-10-16</td>
+                                            <td>Loan Disbursement - LN005</td>
+                                            <td>Debit</td>
+                                            <td>P 80,000</td>
+                                            <td>P 372,300</td>
+                                            <td><span class="status-badge status-active">Completed</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>TXN002</td>
+                                            <td>2023-10-15</td>
+                                            <td>Payment Received - LN001</td>
+                                            <td>Credit</td>
+                                            <td>P 5,250</td>
+                                            <td>P 452,300</td>
+                                            <td><span class="status-badge status-active">Completed</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>TXN003</td>
+                                            <td>2023-10-14</td>
+                                            <td>Operating Expenses</td>
+                                            <td>Debit</td>
+                                            <td>P 12,500</td>
+                                            <td>P 447,050</td>
+                                            <td><span class="status-badge status-active">Completed</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>TXN004</td>
+                                            <td>2023-10-13</td>
+                                            <td>Payment Received - LN002</td>
+                                            <td>Credit</td>
+                                            <td>P 8,750</td>
+                                            <td>P 459,550</td>
+                                            <td><span class="status-badge status-active">Completed</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Financial Reports Section -->
             <div id="financial-reports-section" class="content-section">
                 <div class="content">
                     <div class="page-header">
@@ -1378,15 +2376,145 @@
                                 <a href="#">Home</a> / <span>Financial Reports</span>
                             </div>
                         </div>
+                        <div class="page-actions">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Generate Report
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-download"></i> Export All
+                            </button>
+                        </div>
                     </div>
+
                     <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Available Reports</h5>
+                        </div>
                         <div class="card-body">
-                            <p>Financial reports and analytics will be displayed here.</p>
+                            <div class="dashboard-grid">
+                                <div class="stat-card" onclick="generateReport('income-statement')" style="cursor: pointer;">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Income Statement</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-file-invoice-dollar"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">Q3 2023</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> Updated Today
+                                    </div>
+                                </div>
+                                <div class="stat-card success" onclick="generateReport('balance-sheet')" style="cursor: pointer;">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Balance Sheet</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-balance-scale"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">Sep 2023</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> Updated Today
+                                    </div>
+                                </div>
+                                <div class="stat-card warning" onclick="generateReport('cash-flow')" style="cursor: pointer;">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Cash Flow</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-money-bill-wave"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">Q3 2023</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> Updated Today
+                                    </div>
+                                </div>
+                                <div class="stat-card" onclick="generateReport('portfolio-performance')" style="cursor: pointer;">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Portfolio Performance</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-chart-line"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">Monthly</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> Updated Today
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Recent Reports</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Report Name</th>
+                                            <th>Period</th>
+                                            <th>Generated</th>
+                                            <th>Size</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Income Statement Q3 2023</td>
+                                            <td>Jul 2023 - Sep 2023</td>
+                                            <td>2023-10-16</td>
+                                            <td>2.4 MB</td>
+                                            <td><span class="status-badge status-active">Ready</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-success">Download</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Balance Sheet September 2023</td>
+                                            <td>Sep 2023</td>
+                                            <td>2023-10-01</td>
+                                            <td>1.8 MB</td>
+                                            <td><span class="status-badge status-active">Ready</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-success">Download</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Portfolio Performance Q3 2023</td>
+                                            <td>Jul 2023 - Sep 2023</td>
+                                            <td>2023-10-05</td>
+                                            <td>3.2 MB</td>
+                                            <td><span class="status-badge status-active">Ready</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-success">Download</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Cash Flow Statement Q3 2023</td>
+                                            <td>Jul 2023 - Sep 2023</td>
+                                            <td>2023-10-10</td>
+                                            <td>2.1 MB</td>
+                                            <td><span class="status-badge status-active">Ready</span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">View</button>
+                                                <button class="btn btn-sm btn-outline-success">Download</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- User Management Section -->
             <div id="user-management-section" class="content-section">
                 <div class="content">
                     <div class="page-header">
@@ -1396,15 +2524,155 @@
                                 <a href="#">Home</a> / <span>User Management</span>
                             </div>
                         </div>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" onclick="showAddUserModal()">
+                                <i class="fas fa-user-plus"></i> Add User
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-download"></i> Export Users
+                            </button>
+                        </div>
                     </div>
+
                     <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">System Users</h5>
+                        </div>
                         <div class="card-body">
-                            <p>User account management will be displayed here.</p>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>User ID</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Role</th>
+                                            <th>Department</th>
+                                            <th>Status</th>
+                                            <th>Last Login</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>USR001</td>
+                                            <td>Admin User</td>
+                                            <td>admin@monei.co.bw</td>
+                                            <td><span class="badge badge-danger">Administrator</span></td>
+                                            <td>Management</td>
+                                            <td><span class="status-badge status-active">Active</span></td>
+                                            <td>2023-10-16 14:30</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">Edit</button>
+                                                <button class="btn btn-sm btn-outline-warning">Reset Password</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>USR002</td>
+                                            <td>Loan Officer 1</td>
+                                            <td>officer1@monei.co.bw</td>
+                                            <td><span class="badge badge-warning">Loan Officer</span></td>
+                                            <td>Operations</td>
+                                            <td><span class="status-badge status-active">Active</span></td>
+                                            <td>2023-10-16 09:15</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">Edit</button>
+                                                <button class="btn btn-sm btn-outline-warning">Reset Password</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>USR003</td>
+                                            <td>Finance Manager</td>
+                                            <td>finance@monei.co.bw</td>
+                                            <td><span class="badge badge-info">Finance</span></td>
+                                            <td>Finance</td>
+                                            <td><span class="status-badge status-active">Active</span></td>
+                                            <td>2023-10-15 16:45</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">Edit</button>
+                                                <button class="btn btn-sm btn-outline-warning">Reset Password</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>USR004</td>
+                                            <td>Support Staff</td>
+                                            <td>support@monei.co.bw</td>
+                                            <td><span class="badge badge-success">Support</span></td>
+                                            <td>Customer Service</td>
+                                            <td><span class="status-badge status-inactive">Inactive</span></td>
+                                            <td>2023-10-10 11:20</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">Edit</button>
+                                                <button class="btn btn-sm btn-outline-success">Activate</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">User Statistics</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="dashboard-grid">
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Total Users</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">24</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 8.3%
+                                    </div>
+                                </div>
+                                <div class="stat-card success">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Active Users</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-user-check"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">21</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 12.5%
+                                    </div>
+                                </div>
+                                <div class="stat-card warning">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Online Now</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-circle"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">8</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 2.1%
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Avg. Session</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">2.4h</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 0.3h
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- System Settings Section -->
             <div id="system-settings-section" class="content-section">
                 <div class="content">
                     <div class="page-header">
@@ -1414,15 +2682,107 @@
                                 <a href="#">Home</a> / <span>System Settings</span>
                             </div>
                         </div>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" onclick="saveSystemSettings()">
+                                <i class="fas fa-save"></i> Save Settings
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-undo"></i> Reset to Default
+                            </button>
+                        </div>
                     </div>
+
                     <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">General Settings</h5>
+                        </div>
                         <div class="card-body">
-                            <p>System configuration and settings will be displayed here.</p>
+                            <div class="form-group">
+                                <label class="form-label">Platform Name</label>
+                                <input type="text" class="form-control" value="Monei Enterprise Platform">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Default Currency</label>
+                                <select class="form-control">
+                                    <option value="BWP" selected>Botswana Pula (BWP)</option>
+                                    <option value="USD">US Dollar (USD)</option>
+                                    <option value="EUR">Euro (EUR)</option>
+                                    <option value="ZAR">South African Rand (ZAR)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Time Zone</label>
+                                <select class="form-control">
+                                    <option value="+2" selected>Central Africa Time (CAT) UTC+2</option>
+                                    <option value="+1">West Africa Time (WAT) UTC+1</option>
+                                    <option value="0">Greenwich Mean Time (GMT)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Date Format</label>
+                                <select class="form-control">
+                                    <option value="dd/mm/yyyy" selected>DD/MM/YYYY</option>
+                                    <option value="mm/dd/yyyy">MM/DD/YYYY</option>
+                                    <option value="yyyy-mm-dd">YYYY-MM-DD</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Loan Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label">Maximum Loan Amount</label>
+                                <input type="number" class="form-control" value="250000">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Minimum Loan Amount</label>
+                                <input type="number" class="form-control" value="5000">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Default Interest Rate (%)</label>
+                                <input type="number" class="form-control" value="12.5" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Late Payment Fee (%)</label>
+                                <input type="number" class="form-control" value="2.5" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Notification Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <input type="checkbox" checked> Email Notifications
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <input type="checkbox" checked> SMS Notifications
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <input type="checkbox"> Push Notifications
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Auto-reminder Days Before Due</label>
+                                <input type="number" class="form-control" value="3" min="1" max="7">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- API Integration Section -->
             <div id="api-integration-section" class="content-section">
                 <div class="content">
                     <div class="page-header">
@@ -1432,15 +2792,166 @@
                                 <a href="#">Home</a> / <span>API Integration</span>
                             </div>
                         </div>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" onclick="generateApiKey()">
+                                <i class="fas fa-key"></i> Generate API Key
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-book"></i> API Documentation
+                            </button>
+                        </div>
                     </div>
+
                     <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">API Configuration</h5>
+                        </div>
                         <div class="card-body">
-                            <p>API integration management will be displayed here.</p>
+                            <div class="form-group">
+                                <label class="form-label">API Base URL</label>
+                                <input type="text" class="form-control" value="https://api.monei.co.bw/v1" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">API Key</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" value="sk_live_1234567890abcdef" id="apiKey" readonly>
+                                    <button class="btn btn-outline" onclick="toggleApiKey()">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-outline" onclick="copyApiKey()">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">API Status</label>
+                                <div>
+                                    <span class="status-badge status-active">Active</span>
+                                    <span class="text-muted ml-2">Last checked: 2023-10-16 15:30</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Integration Services</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="dashboard-grid">
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Bank Integration</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-university"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">Active</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-check-circle"></i> Connected
+                                    </div>
+                                </div>
+                                <div class="stat-card success">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Mobile Money</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-mobile-alt"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">Active</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-check-circle"></i> Connected
+                                    </div>
+                                </div>
+                                <div class="stat-card warning">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Credit Bureau</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-chart-bar"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">Pending</div>
+                                    <div class="stat-change negative">
+                                        <i class="fas fa-clock"></i> Setup Required
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">SMS Gateway</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-sms"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">Active</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-check-circle"></i> Connected
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">API Usage Statistics</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="dashboard-grid">
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Total Requests</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-exchange-alt"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">24,587</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 12.3%
+                                    </div>
+                                </div>
+                                <div class="stat-card success">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Success Rate</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">98.7%</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 0.8%
+                                    </div>
+                                </div>
+                                <div class="stat-card warning">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Average Response</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-stopwatch"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">142ms</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-down"></i> 18ms
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Active Endpoints</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-plug"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">24</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-arrow-up"></i> 3
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Security Section -->
             <div id="security-section" class="content-section">
                 <div class="content">
                     <div class="page-header">
@@ -1450,10 +2961,166 @@
                                 <a href="#">Home</a> / <span>Security</span>
                             </div>
                         </div>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" onclick="runSecurityScan()">
+                                <i class="fas fa-shield-alt"></i> Run Security Scan
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-history"></i> View Audit Log
+                            </button>
+                        </div>
                     </div>
+
                     <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Security Overview</h5>
+                        </div>
                         <div class="card-body">
-                            <p>Security settings and audit logs will be displayed here.</p>
+                            <div class="dashboard-grid">
+                                <div class="stat-card success">
+                                    <div class="stat-header">
+                                        <div class="stat-title">System Status</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-shield-alt"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">Secure</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-check-circle"></i> All Systems OK
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Last Scan</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-search"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">2 hours ago</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-check-circle"></i> No Threats
+                                    </div>
+                                </div>
+                                <div class="stat-card warning">
+                                    <div class="stat-header">
+                                        <div class="stat-title">Failed Logins</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">3</div>
+                                    <div class="stat-change negative">
+                                        <i class="fas fa-arrow-up"></i> 2 today
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-header">
+                                        <div class="stat-title">SSL Certificate</div>
+                                        <div class="stat-icon">
+                                            <i class="fas fa-lock"></i>
+                                        </div>
+                                    </div>
+                                    <div class="stat-value">Valid</div>
+                                    <div class="stat-change positive">
+                                        <i class="fas fa-check-circle"></i> Expires in 89 days
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Security Settings</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label">Password Policy</label>
+                                <select class="form-control">
+                                    <option value="high" selected>High Security (12+ characters, special chars)</option>
+                                    <option value="medium">Medium Security (8+ characters)</option>
+                                    <option value="low">Basic Security (6+ characters)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Two-Factor Authentication</label>
+                                <select class="form-control">
+                                    <option value="required" selected>Required for all users</option>
+                                    <option value="optional">Optional for users</option>
+                                    <option value="disabled">Disabled</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Session Timeout</label>
+                                <select class="form-control">
+                                    <option value="15">15 minutes</option>
+                                    <option value="30">30 minutes</option>
+                                    <option value="60" selected>1 hour</option>
+                                    <option value="120">2 hours</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">IP Whitelist</label>
+                                <textarea class="form-control" rows="3" placeholder="Enter allowed IP addresses (one per line)">192.168.1.1
+10.0.0.1
+41.185.8.61</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Recent Security Events</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Timestamp</th>
+                                            <th>Event Type</th>
+                                            <th>User</th>
+                                            <th>IP Address</th>
+                                            <th>Details</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>2023-10-16 14:25</td>
+                                            <td>Login Success</td>
+                                            <td>Admin User</td>
+                                            <td>192.168.1.1</td>
+                                            <td>Successful login from trusted IP</td>
+                                            <td><span class="status-badge status-active">Normal</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2023-10-16 12:30</td>
+                                            <td>Failed Login</td>
+                                            <td>Unknown</td>
+                                            <td>103.45.67.89</td>
+                                            <td>3 failed login attempts</td>
+                                            <td><span class="status-badge status-warning">Suspicious</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2023-10-16 09:15</td>
+                                            <td>Password Change</td>
+                                            <td>Loan Officer 1</td>
+                                            <td>192.168.1.5</td>
+                                            <td>Password successfully updated</td>
+                                            <td><span class="status-badge status-active">Normal</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2023-10-15 16:40</td>
+                                            <td>API Access</td>
+                                            <td>System</td>
+                                            <td>10.0.0.1</td>
+                                            <td>API key used for data export</td>
+                                            <td><span class="status-badge status-active">Normal</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1462,16 +3129,22 @@
     </div>
 
     <!-- Add Client Modal -->
-    <div id="add-client-modal" class="modal-overlay" style="display: none;">
+    <div id="add-client-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">Add New Client</h3>
                 <button class="close-modal" onclick="closeModal('add-client-modal')">&times;</button>
             </div>
             <form id="add-client-form">
-                <div class="form-group">
-                    <label class="form-label">Full Name</label>
-                    <input type="text" class="form-control" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-control" required>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Email</label>
@@ -1482,8 +3155,12 @@
                     <input type="tel" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Business</label>
+                    <label class="form-label">Business Name</label>
                     <input type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Address</label>
+                    <textarea class="form-control" rows="3"></textarea>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Add Client</button>
@@ -1494,7 +3171,7 @@
     </div>
 
     <!-- Add Product Modal -->
-    <div id="add-product-modal" class="modal-overlay" style="display: none;">
+    <div id="add-product-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">Add New Loan Product</h3>
@@ -1509,23 +3186,87 @@
                     <label class="form-label">Description</label>
                     <textarea class="form-control" rows="3"></textarea>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="form-label">Min Amount</label>
-                            <input type="number" class="form-control" required>
-                        </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Min Amount</label>
+                        <input type="number" class="form-control" required>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="form-label">Max Amount</label>
-                            <input type="number" class="form-control" required>
-                        </div>
+                    <div class="form-group">
+                        <label class="form-label">Max Amount</label>
+                        <input type="number" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Min Interest Rate (%)</label>
+                        <input type="number" class="form-control" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Max Interest Rate (%)</label>
+                        <input type="number" class="form-control" step="0.1" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Min Term (days)</label>
+                        <input type="number" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Max Term (days)</label>
+                        <input type="number" class="form-control" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Add Product</button>
                     <button type="button" class="btn btn-outline" onclick="closeModal('add-product-modal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div id="add-user-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New User</h3>
+                <button class="close-modal" onclick="closeModal('add-user-modal')">&times;</button>
+            </div>
+            <form id="add-user-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <select class="form-control" required>
+                        <option value="">Select Role</option>
+                        <option value="admin">Administrator</option>
+                        <option value="officer">Loan Officer</option>
+                        <option value="finance">Finance</option>
+                        <option value="support">Support</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Department</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Initial Password</label>
+                    <input type="password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Add User</button>
+                    <button type="button" class="btn btn-outline" onclick="closeModal('add-user-modal')">Cancel</button>
                 </div>
             </form>
         </div>
@@ -1578,6 +3319,7 @@
                 this.setupMenuListeners();
                 this.loadInitialData();
                 this.setupEventListeners();
+                this.initializeCharts();
             },
             
             setupMenuListeners() {
@@ -1647,7 +3389,7 @@
             loadSectionData(sectionId) {
                 switch(sectionId) {
                     case 'dashboard':
-                        app.loadDashboardData();
+                        this.loadDashboardData();
                         break;
                     case 'loan-products':
                         this.loadLoanProductsData();
@@ -1655,65 +3397,27 @@
                     case 'analytics':
                         this.loadAnalyticsData();
                         break;
-                    // Add more cases for other sections
+                    case 'financial-reports':
+                        this.loadFinancialReportsData();
+                        break;
+                    case 'api-integration':
+                        this.loadAPIIntegrationData();
+                        break;
+                    // Add more cases for other sections as needed
+                }
+            },
+            
+            loadDashboardData() {
+                // Initialize dashboard charts if not already initialized
+                if (typeof performanceChart === 'undefined') {
+                    this.initializeDashboardCharts();
                 }
             },
             
             loadAnalyticsData() {
                 // Initialize analytics charts
                 if (typeof analyticsChart === 'undefined') {
-                    const ctx = document.getElementById('analyticsChart').getContext('2d');
-                    window.analyticsChart = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
-                            datasets: [{
-                                label: 'Portfolio Growth',
-                                data: [2200000, 2350000, 2450000, 2600000, 2720000, 2845000, 2950000, 3100000, 3250000, 3400000],
-                                borderColor: '#3498db',
-                                backgroundColor: 'rgba(52, 152, 219, 0.1)',
-                                tension: 0.4,
-                                fill: true
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                                y: {
-                                    beginAtZero: false,
-                                    ticks: {
-                                        callback: function(value) {
-                                            return formatCurrency(value);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
-                }
-                
-                if (typeof riskChart === 'undefined') {
-                    const ctx2 = document.getElementById('riskChart').getContext('2d');
-                    window.riskChart = new Chart(ctx2, {
-                        type: 'bar',
-                        data: {
-                            labels: ['Low Risk', 'Medium Risk', 'High Risk'],
-                            datasets: [{
-                                label: 'Loan Distribution',
-                                data: [65, 25, 10],
-                                backgroundColor: [
-                                    '#27ae60',
-                                    '#f39c12',
-                                    '#e74c3c'
-                                ]
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false
-                        }
-                    });
+                    this.initializeAnalyticsCharts();
                 }
             },
             
@@ -1763,6 +3467,188 @@
                 }
             },
             
+            loadFinancialReportsData() {
+                // Initialize financial reports charts
+                if (typeof reportsChart === 'undefined') {
+                    this.initializeReportsCharts();
+                }
+            },
+            
+            loadAPIIntegrationData() {
+                // Load API integration data
+                console.log('Loading API integration data...');
+            },
+            
+            initializeCharts() {
+                this.initializeDashboardCharts();
+            },
+            
+            initializeDashboardCharts() {
+                // Performance Chart
+                const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+                window.performanceChart = new Chart(performanceCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                        datasets: [{
+                            label: 'Portfolio Value',
+                            data: [2200000, 2350000, 2450000, 2600000, 2720000, 2845000, 2950000, 3100000, 3250000, 3400000],
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                ticks: {
+                                    callback: function(value) {
+                                        return formatCurrency(value);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Status Chart
+                const statusCtx = document.getElementById('statusChart').getContext('2d');
+                window.statusChart = new Chart(statusCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Active', 'Pending', 'Delinquent', 'Paid Off'],
+                        datasets: [{
+                            data: [65, 15, 5, 15],
+                            backgroundColor: [
+                                '#27ae60',
+                                '#e67e22',
+                                '#e74c3c',
+                                '#3498db'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            },
+            
+            initializeAnalyticsCharts() {
+                // Analytics Chart
+                const analyticsCtx = document.getElementById('analyticsChart').getContext('2d');
+                window.analyticsChart = new Chart(analyticsCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                        datasets: [{
+                            label: 'Portfolio Growth',
+                            data: [2200000, 2350000, 2450000, 2600000, 2720000, 2845000, 2950000, 3100000, 3250000, 3400000],
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                ticks: {
+                                    callback: function(value) {
+                                        return formatCurrency(value);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Risk Chart
+                const riskCtx = document.getElementById('riskChart').getContext('2d');
+                window.riskChart = new Chart(riskCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Low Risk', 'Medium Risk', 'High Risk'],
+                        datasets: [{
+                            label: 'Loan Distribution',
+                            data: [65, 25, 10],
+                            backgroundColor: [
+                                '#27ae60',
+                                '#f39c12',
+                                '#e74c3c'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            },
+            
+            initializeReportsCharts() {
+                // Products Chart
+                const productsCtx = document.getElementById('productsChart').getContext('2d');
+                window.productsChart = new Chart(productsCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Micro Loan', 'Purchase Order', 'Invoice Discount', 'Equipment Finance'],
+                        datasets: [{
+                            label: 'Number of Loans',
+                            data: [45, 28, 32, 15],
+                            backgroundColor: '#3498db'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+
+                // History Chart
+                const historyCtx = document.getElementById('historyChart').getContext('2d');
+                window.historyChart = new Chart(historyCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Q1 2022', 'Q2 2022', 'Q3 2022', 'Q4 2022', 'Q1 2023', 'Q2 2023', 'Q3 2023'],
+                        datasets: [{
+                            label: 'Portfolio Performance',
+                            data: [1800000, 1950000, 2100000, 2250000, 2400000, 2650000, 2845000],
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                ticks: {
+                                    callback: function(value) {
+                                        return formatCurrency(value);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            },
+            
             loadInitialData() {
                 // Preload data for better user experience
                 this.loadLoanProductsData();
@@ -1772,6 +3658,14 @@
                 // Toggle sidebar on mobile
                 document.querySelector('.toggle-sidebar').addEventListener('click', function() {
                     document.querySelector('.sidebar').classList.toggle('active');
+                });
+                
+                // Tab navigation
+                document.querySelectorAll('.tab-nav-item').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const tabId = tab.getAttribute('data-tab');
+                        this.showTab(tabId);
+                    });
                 });
                 
                 // Modal form submissions
@@ -1786,6 +3680,47 @@
                     showToast('Loan product added successfully!', 'success');
                     closeModal('add-product-modal');
                 });
+                
+                document.getElementById('add-user-form').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    showToast('User added successfully!', 'success');
+                    closeModal('add-user-modal');
+                });
+                
+                // Time range selector
+                document.getElementById('timeRange')?.addEventListener('change', (e) => {
+                    this.loadPerformanceData(parseInt(e.target.value));
+                });
+            },
+            
+            showTab(tabId) {
+                // Hide all tab contents
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Remove active class from all tab nav items
+                document.querySelectorAll('.tab-nav-item').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                
+                // Show selected tab content
+                const targetTab = document.getElementById(tabId);
+                if (targetTab) {
+                    targetTab.classList.add('active');
+                }
+                
+                // Activate selected tab nav item
+                const activeTabNav = document.querySelector(`[data-tab="${tabId}"]`);
+                if (activeTabNav) {
+                    activeTabNav.classList.add('active');
+                }
+            },
+            
+            loadPerformanceData(days) {
+                console.log('Loading performance data for', days, 'days');
+                // This would typically make an API call to get updated data
+                showToast(`Performance data updated for ${days} days`, 'info');
             }
         };
 
@@ -1796,6 +3731,14 @@
         
         function showAddProductModal() {
             document.getElementById('add-product-modal').style.display = 'flex';
+        }
+        
+        function showAddUserModal() {
+            document.getElementById('add-user-modal').style.display = 'flex';
+        }
+        
+        function showDisbursementModal() {
+            showToast('Disbursement modal would open here', 'info');
         }
         
         function closeModal(modalId) {
@@ -1830,408 +3773,70 @@
             return icons[type] || 'info-circle';
         }
 
-        // API Configuration
-        const API_CONFIG = {
-            baseUrl: 'https://monei-app.tmugore.workers.dev',
-            endpoints: {
-                dashboard: '/api/dashboard',
-                portfolio: '/api/portfolio',
-                clients: '/api/clients',
-                activities: '/api/activities',
-                performance: '/api/performance'
+        // API Integration Functions
+        function toggleApiKey() {
+            const apiKeyInput = document.getElementById('apiKey');
+            if (apiKeyInput.type === 'password') {
+                apiKeyInput.type = 'text';
+            } else {
+                apiKeyInput.type = 'password';
             }
-        };
+        }
+        
+        function copyApiKey() {
+            const apiKeyInput = document.getElementById('apiKey');
+            apiKeyInput.select();
+            document.execCommand('copy');
+            showToast('API key copied to clipboard!', 'success');
+        }
+        
+        function generateApiKey() {
+            showToast('New API key generated successfully!', 'success');
+        }
 
-        // Authentication
-        const API_HEADERS = {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + (localStorage.getItem('authToken') || 'UlLzfLjkCE2Ozixy_eBc8ky_e9wTYqKbiSh6mjWn')
-        };
+        // Security Functions
+        function runSecurityScan() {
+            showToast('Security scan initiated...', 'info');
+            // Simulate scan completion
+            setTimeout(() => {
+                showToast('Security scan completed successfully! No threats found.', 'success');
+            }, 3000);
+        }
 
-        // Chart instances
-        let performanceChart, statusChart;
+        // System Settings Functions
+        function saveSystemSettings() {
+            showToast('System settings saved successfully!', 'success');
+        }
 
-        // API Service
-        const apiService = {
-            async fetchData(endpoint) {
-                try {
-                    const url = `${API_CONFIG.baseUrl}${endpoint}`;
-                    console.log('Fetching:', url);
-                    
-                    const response = await fetch(url, {
-                        headers: API_HEADERS
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error(`API error: ${response.status}`);
-                    }
-                    
-                    return await response.json();
-                } catch (error) {
-                    console.error('API fetch error:', error);
-                    throw error;
-                }
-            },
-
-            async getDashboardStats() {
-                try {
-                    return await this.fetchData(API_CONFIG.endpoints.dashboard);
-                } catch (error) {
-                    console.warn('Dashboard endpoint failed, using demo data');
-                    return this.getDemoData();
-                }
-            },
-
-            async getPerformanceData(days = 30) {
-                try {
-                    return await this.fetchData(`${API_CONFIG.endpoints.performance}?days=${days}`);
-                } catch (error) {
-                    console.warn('Performance endpoint failed, using demo data');
-                    return this.getDemoPerformanceData();
-                }
-            },
-
-            async getRecentActivities() {
-                try {
-                    return await this.fetchData(API_CONFIG.endpoints.activities);
-                } catch (error) {
-                    console.warn('Activities endpoint failed, using demo data');
-                    return this.getDemoActivities();
-                }
-            },
-
-            getDemoData() {
-                return {
-                    portfolio: { value: 2845000, change: 12.5 },
-                    clients: { active: 1247, change: 8.3 },
-                    applications: { pending: 87, change: -5.2 },
-                    delinquent: { count: 23, change: -15.2 }
-                };
-            },
-
-            getDemoPerformanceData() {
-                return {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    data: [2200000, 2350000, 2450000, 2600000, 2720000, 2845000]
-                };
-            },
-
-            getDemoActivities() {
-                return [
-                    {
-                        type: 'client',
-                        title: 'New Client Registered',
-                        description: 'John Smith registered for a new loan account',
-                        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-                        status: 'completed'
-                    },
-                    {
-                        type: 'loan',
-                        title: 'Loan Disbursed',
-                        description: `Loan #LN-00432 for ${formatCurrency(5000)} was disbursed to Sarah Johnson`,
-                        timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
-                        status: 'completed'
-                    },
-                    {
-                        type: 'payment',
-                        title: 'Payment Received',
-                        description: `Michael Brown made a payment of ${formatCurrency(1250)} for loan #LN-00321`,
-                        timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-                        status: 'completed'
-                    },
-                    {
-                        type: 'alert',
-                        title: 'Delinquent Loan Alert',
-                        description: 'Loan #LN-00214 is 15 days overdue',
-                        timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-                        status: 'pending'
-                    }
-                ];
-            }
-        };
-
-        // UI Manager
-        const uiManager = {
-            updateStatCard(cardId, value, change, formatter = 'number') {
-                const card = document.getElementById(cardId);
-                const valueElement = card.querySelector('.stat-value');
-                const changeElement = card.querySelector('.change-text');
-                const changeContainer = card.querySelector('.stat-change');
-                
-                // Format value
-                if (formatter === 'currency') {
-                    valueElement.textContent = formatCurrency(value);
-                } else {
-                    valueElement.textContent = this.formatNumber(value);
-                }
-                
-                // Update change indicator
-                const isPositive = change >= 0;
-                changeElement.textContent = `${Math.abs(change).toFixed(1)}% from last month`;
-                
-                // Update classes based on change direction
-                if (isPositive) {
-                    changeContainer.classList.add('positive');
-                    changeContainer.classList.remove('negative');
-                    changeContainer.querySelector('i').className = 'fas fa-arrow-up';
-                } else {
-                    changeContainer.classList.add('negative');
-                    changeContainer.classList.remove('positive');
-                    changeContainer.querySelector('i').className = 'fas fa-arrow-down';
-                }
-            },
-
-            formatNumber(num) {
-                return new Intl.NumberFormat('en-US').format(num);
-            },
-
-            updateActivities(activities) {
-                const container = document.getElementById('activityList');
-                
-                if (!activities || activities.length === 0) {
-                    container.innerHTML = '<div class="activity-item"><div class="activity-details"><div class="activity-title">No recent activities</div></div></div>';
-                    return;
-                }
-
-                container.innerHTML = activities.map(activity => `
-                    <div class="activity-item">
-                        <div class="activity-icon" style="background-color: ${this.getActivityColor(activity.type)};">
-                            <i class="fas ${this.getActivityIcon(activity.type)}"></i>
-                        </div>
-                        <div class="activity-content">
-                            <div class="activity-title">${activity.title}</div>
-                            <div class="activity-desc">${activity.description}</div>
-                        </div>
-                        <div class="activity-time">${this.formatTime(activity.timestamp)}</div>
-                    </div>
-                `).join('');
-            },
-
-            getActivityColor(type) {
-                const colors = {
-                    client: 'rgba(46, 204, 113, 0.1)',
-                    loan: 'rgba(52, 152, 219, 0.1)',
-                    payment: 'rgba(243, 156, 18, 0.1)',
-                    alert: 'rgba(231, 76, 60, 0.1)',
-                    system: 'rgba(155, 89, 182, 0.1)'
-                };
-                return colors[type] || 'rgba(52, 152, 219, 0.1)';
-            },
-
-            getActivityIcon(type) {
-                const icons = {
-                    client: 'fa-user-plus',
-                    loan: 'fa-money-bill-wave',
-                    payment: 'fa-check-circle',
-                    alert: 'fa-exclamation-triangle',
-                    system: 'fa-cog'
-                };
-                return icons[type] || 'fa-info-circle';
-            },
-
-            formatTime(timestamp) {
-                const date = new Date(timestamp);
-                const now = new Date();
-                const diffMs = now - date;
-                const diffMins = Math.floor(diffMs / 60000);
-                const diffHours = Math.floor(diffMs / 3600000);
-                const diffDays = Math.floor(diffMs / 86400000);
-
-                if (diffMins < 60) {
-                    return `${diffMins} min ago`;
-                } else if (diffHours < 24) {
-                    return `${diffHours} hours ago`;
-                } else {
-                    return `${diffDays} days ago`;
-                }
-            },
-
-            showLoading() {
-                document.body.classList.add('loading');
-            },
-
-            hideLoading() {
-                document.body.classList.remove('loading');
-            }
-        };
-
-        // Chart Manager
-        const chartManager = {
-            init() {
-                this.initPerformanceChart();
-                this.initStatusChart();
-            },
-
-            initPerformanceChart() {
-                const ctx = document.getElementById('performanceChart').getContext('2d');
-                performanceChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: [],
-                        datasets: [{
-                            label: 'Portfolio Value',
-                            data: [],
-                            borderColor: '#3498db',
-                            backgroundColor: 'rgba(52, 152, 219, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: true
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: false,
-                                ticks: {
-                                    callback: function(value) {
-                                        return formatCurrency(value);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            },
-
-            initStatusChart() {
-                const ctx = document.getElementById('statusChart').getContext('2d');
-                statusChart = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Active', 'Pending', 'Delinquent', 'Paid Off'],
-                        datasets: [{
-                            data: [65, 15, 5, 15],
-                            backgroundColor: [
-                                '#27ae60',
-                                '#e67e22',
-                                '#e74c3c',
-                                '#3498db'
-                            ]
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom'
-                            }
-                        }
-                    }
-                });
-            },
-
-            updatePerformanceChart(labels, data) {
-                if (performanceChart) {
-                    performanceChart.data.labels = labels;
-                    performanceChart.data.datasets[0].data = data;
-                    performanceChart.update();
-                }
-            }
-        };
-
-        // Main Application
-        const app = {
-            async init() {
-                console.log('Initializing Monei Enterprise Dashboard with CMS...');
-                
-                // Load CMS config first
-                await loadCMSConfig();
-                
-                // Initialize navigation
-                navigationManager.init();
-                
-                // Initialize charts
-                chartManager.init();
-                
-                // Load initial dashboard data
-                await this.loadDashboardData();
-                
-                // Set up auto-refresh
-                this.setupAutoRefresh();
-                
-                console.log('Admin dashboard fully initialized with navigation');
-            },
-
-            async loadDashboardData() {
-                try {
-                    uiManager.showLoading();
-                    
-                    // Load all dashboard data
-                    const [stats, performance, activities] = await Promise.all([
-                        apiService.getDashboardStats(),
-                        apiService.getPerformanceData(30),
-                        apiService.getRecentActivities()
-                    ]);
-                    
-                    this.updateDashboard(stats, performance, activities);
-                    
-                } catch (error) {
-                    console.error('Failed to load dashboard data:', error);
-                    this.loadDemoData();
-                } finally {
-                    uiManager.hideLoading();
-                }
-            },
-
-            updateDashboard(stats, performance, activities) {
-                // Update stat cards
-                if (stats.portfolio) {
-                    uiManager.updateStatCard('portfolio-card', stats.portfolio.value, stats.portfolio.change, 'currency');
-                }
-                if (stats.clients) {
-                    uiManager.updateStatCard('clients-card', stats.clients.active, stats.clients.change);
-                }
-                if (stats.applications) {
-                    uiManager.updateStatCard('applications-card', stats.applications.pending, stats.applications.change);
-                }
-                if (stats.delinquent) {
-                    uiManager.updateStatCard('delinquent-card', stats.delinquent.count, stats.delinquent.change);
-                }
-                
-                // Update performance chart
-                if (performance && performance.labels && performance.data) {
-                    chartManager.updatePerformanceChart(performance.labels, performance.data);
-                }
-                
-                // Update activities
-                if (activities) {
-                    uiManager.updateActivities(activities);
-                }
-            },
-
-            loadDemoData() {
-                const demoStats = apiService.getDemoData();
-                const demoPerformance = apiService.getDemoPerformanceData();
-                const demoActivities = apiService.getDemoActivities();
-                
-                this.updateDashboard(demoStats, demoPerformance, demoActivities);
-            },
-
-            setupAutoRefresh() {
-                // Refresh data every 5 minutes
-                setInterval(() => {
-                    if (navigationManager.currentSection === 'dashboard') {
-                        this.loadDashboardData();
-                    }
-                }, 5 * 60 * 1000);
-            }
-        };
+        // Report Generation
+        function generateReport(reportType) {
+            const reportNames = {
+                'income-statement': 'Income Statement',
+                'balance-sheet': 'Balance Sheet',
+                'cash-flow': 'Cash Flow Statement',
+                'portfolio-performance': 'Portfolio Performance Report'
+            };
+            
+            showToast(`Generating ${reportNames[reportType]}...`, 'info');
+            // Simulate report generation
+            setTimeout(() => {
+                showToast(`${reportNames[reportType]} generated successfully!`, 'success');
+            }, 2000);
+        }
 
         // Initialize the application when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            app.init();
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Load CMS config first
+            await loadCMSConfig();
+            
+            // Initialize navigation and charts
+            navigationManager.init();
+            
+            console.log('Monei Enterprise Dashboard fully initialized');
         });
 
         // Export for debugging
-        window.MoneiDashboard = app;
-        window.navigationManager = navigationManager;
+        window.MoneiDashboard = navigationManager;
     </script>
 </body>
 </html>
