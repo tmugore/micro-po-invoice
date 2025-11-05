@@ -11,12 +11,28 @@ database_name = "monei-db"
 database_id = "28504df2-c888-4b8d-a419-97ad6a351968"
 migrations_dir = "migrations"
 
-[routes]
+[[r2_buckets]]
+binding = "DOCUMENTS"
+bucket_name = "kyc-documents"[routes]
 pattern = "api/cms/*"
 custom_domain = "monei.co.bw"
 
+# For background tasks and queues
+[[queues.producers]]
+binding = "BACKGROUND_QUEUE"
+queue = "background-tasks"
+
+[[queues.consumers]]
+queue = "background-tasks"
+max_batch_size = 10
+max_batch_timeout = 30
+max_retries = 3
+
 [env.production]
-vars = { ADMIN_TOKEN = "Kutapira@3902809" }
+[vars]
+ADMIN_TOKEN = "Kutapira@3902809"
+MAX_FILE_SIZE = "10485760"
+JWT_SECRET = "your-jwt-secret-here"
 
 [site]
 bucket = "./cms"
